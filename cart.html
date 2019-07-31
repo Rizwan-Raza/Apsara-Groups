@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +27,9 @@
         .cart-item img.w-100 {
             height: 150px;
             object-fit: cover;
+        }
+        .price-brief {
+            transition: all ease 300ms;
         }
     </style>
 
@@ -91,11 +97,15 @@
                         </div>
                         <div class="divider my-2"></div>
                         <div>
-                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
-                                in</button>
-                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger"
-                                data-target="guestCheckout">Guest
-                                Checkout</button>
+                            <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
+                                <a class="btn btn-large btn-block my-2 w-100" href="javascript:;">
+                                    Checkout</a>
+                            <?php } else { ?>
+                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
+                                    in</button>
+                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="guestCheckout">Guest
+                                    Checkout</button>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -106,9 +116,7 @@
     <!-- Modal Structure -->
     <div id="guestCheckout" class="modal modal-fixed-footer" style="max-width: 500px">
         <div class="modal-content">
-            <h4 class="fw-500 truncate m-0">Guest Checkout<button
-                    class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
-                        class="material-icons black-text">close</i></button>
+            <h4 class="fw-500 truncate m-0">Guest Checkout<button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button>
             </h4>
             <br />
             <form id="guestForm">
@@ -256,7 +264,9 @@
                 }
             });
             localStorage.setItem("cart", JSON.stringify(list));
-            M.toast({ html: "Quantity updated to " + newNum });
+            M.toast({
+                html: "Quantity updated to " + newNum
+            });
             changePricePanel();
         }
 
@@ -274,7 +284,9 @@
                 }
             });
             if (!done) {
-                M.toast({ html: "Something went wrong, try again" })
+                M.toast({
+                    html: "Something went wrong, try again"
+                })
             }
             changePricePanel();
 
@@ -288,18 +300,24 @@
                 elem.value = max;
                 $(elem).siblings(".add").attr("disabled", "disabled");
                 $(elem).siblings(".remove").removeAttr("disabled");
-                M.toast({ html: "Quantity updated Max: " + max });
+                M.toast({
+                    html: "Quantity updated Max: " + max
+                });
                 newNum = max;
             } else if (elem.value < +min) {
                 elem.value = min;
                 $(elem).siblings(".remove").attr("disabled", "disabled");
                 $(elem).siblings(".add").removeAttr("disabled");
-                M.toast({ html: "Quantity updated Min: " + min });
+                M.toast({
+                    html: "Quantity updated Min: " + min
+                });
                 newNum = min;
             } else {
                 $(elem).siblings(".remove").removeAttr("disabled");
                 $(elem).siblings(".add").removeAttr("disabled");
-                M.toast({ html: "Quantity updated to " + elem.value });
+                M.toast({
+                    html: "Quantity updated to " + elem.value
+                });
             }
             var list = localStorage.getItem("cart");
             list = JSON.parse(list);

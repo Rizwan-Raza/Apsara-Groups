@@ -1,10 +1,10 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-print_r($_REQUEST);
-return;
+// print_r($_REQUEST);
+// return;
 $data = array("message" => "Unknown method", "status" => "server_error");
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    if (isset($_POST['name']) and isset($_POST['email']) and isset($_POST['password'])) {
+    if (isset($_POST['email']) and isset($_POST['password'])) {
         error_reporting(0);
         extract($_POST, EXTR_SKIP);
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 $_SESSION['u_id'] = $user['_uid'];
                 $_SESSION['u_name'] = $user['name'];
                 $_SESSION['u_email'] = $user['email'];
-                $data = array("message" => "User registered successfully", "status" => "success", "user" => json_encode($user));
+                $data = array("message" => "Logged in successfully", "status" => "success", "user" => json_encode($user));
             } else {
                 $data = array("message" => "Email and Password combination mismatch!", "status" => "pass_error");
             }

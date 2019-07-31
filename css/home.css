@@ -243,6 +243,11 @@ nav .select-wrapper {
         0 2px 8px 0 rgba(0, 0, 0, 0.12);
 }
 
+.nav-wrapper .drop.drop-right ul {
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+}
+
 .nav-wrapper .drop ul li {
     display: block;
     width: 100%;

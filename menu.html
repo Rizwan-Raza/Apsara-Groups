@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (isset($_GET) and isset($_GET['url'])) {
     require_once "services/db.inc.php";
     $sql = "SELECT * FROM `types` WHERE `url`='$_GET[url]'";
@@ -66,7 +67,7 @@ if (isset($_GET) and isset($_GET['url'])) {
                                 <button class="btn right btn-small red"
                                     onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>
-                                    <br clear="all" />
+                                <br clear="all" />
                             </div>
                             <?php }
                                         } ?>

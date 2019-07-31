@@ -1,0 +1,139 @@
+<?php
+if (isset($_GET) and isset($_GET['url'])) {
+    require_once "services/db.inc.php";
+    $sql = "SELECT * FROM `types` WHERE `url`='$_GET[url]'";
+    $result = DB::getConnection()->query($sql);
+    if ($result->num_rows > 0) {
+        $cat = $result->fetch_assoc();
+        ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <?= $cat['title'] ?> | Apsara Groups
+    </title>
+    <meta name="description" content=" " />
+    <meta name="keywords" content=" " />
+    <base href="./../" />
+    <?php include "includes/head.inc.php"; ?>
+</head>
+
+<body>
+    <?php include "layouts/nav.inc.html"; ?>
+    <header class="pos-rel home-banner">
+        <div class="pos-abs grey darken-3 full"></div>
+        <div class="pos-abs full banner-img"></div>
+        <div class="full p-4 container">
+            <h2 class="fw-500 white-text my-4"><?= $cat['title'] ?></h2>
+            <hr class="short-border white left" />
+            <br />
+        </div>
+    </header>
+    <section class="py-4">
+        <div class="container full px-4">
+            <h3 class="fw-500">All Products</h3>
+
+            <?php if (strlen($cat['description']) > 0) {
+                        echo "<br /><p>$cat[description]</p>";
+                    } ?>
+            <div class="row products d-flex">
+                <?php
+                        require_once "services/db.inc.php";
+                        $sql = "SELECT * FROM `products` WHERE `has_image`=1 AND `products`.`_tid`=$cat[_tid]";
+                        $result = DB::getConnection()->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($value = $result->fetch_assoc()) {
+                                extract($value, EXTR_OVERWRITE) ?>
+                <div class="col s12 m6 l4 xl3 d-flex mx-auto">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="<?= $image ?>" class="grey lighten-3 full">
+                        </div>
+                        <div class="card-content">
+                            <h5 class="fw-500 truncate"><?= $title ?></h5>
+                            <?php $count = strlen($description); ?>
+                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                        </div>
+                        <div class="fix"></div>
+                        <div class="card-action">
+                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                                        $result2 = DB::getConnection()->query($sqlV);
+                                        if ($result2->num_rows > 0) {
+                                            while ($valueV = $result2->fetch_assoc()) { ?>
+                            <div class="my-1"><span class="left fw-700">&#8377;
+                                    <?= number_format($valueV['price'], 2) ?> (<?= $valueV['size'] ?>)</span>
+                                <button class="btn right btn-small red"
+                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                    Cart</button>
+                                    <br clear="all" />
+                            </div>
+                            <?php }
+                                        } ?>
+                            <br clear="all" />
+                        </div>
+                    </div>
+                </div>
+                <?php }
+                        } else {
+                            $numI = 0;
+                        } ?>
+
+            </div>
+
+            <div class="row products d-flex">
+                <?php
+                        require_once "services/db.inc.php";
+                        $sql = "SELECT * FROM `products` WHERE `has_image`=0 AND `products`.`_tid`=$cat[_tid]";
+                        $result = DB::getConnection()->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($value = $result->fetch_assoc()) {
+                                extract($value, EXTR_OVERWRITE) ?>
+                <div class="col s12 m6 d-flex mx-auto">
+                    <div class="card w-100">
+                        <div class="card-content">
+                            <h5 class="fw-500 truncate m-0"><?= $title ?></h5>
+                            <?php $count = strlen($description); ?>
+                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                                        $result2 = DB::getConnection()->query($sqlV);
+                                        if ($result2->num_rows > 0) {
+                                            while ($valueV = $result2->fetch_assoc()) { ?>
+                            <div class="my-1"><span class="left fw-700">&#8377;
+                                    <?= number_format($valueV['price'], 2) ?> (<?= $valueV['size'] ?>)</span>
+                                <button class="btn right btn-small red"
+                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                    Cart</button>
+                                <br clear="all" />
+                            </div>
+                            <?php }
+                                        } ?>
+                        </div>
+                    </div>
+                </div>
+                <?php }
+                        } else {
+                            $numNI = 0;
+                        } ?>
+
+            </div>
+            <?php if (isset($numI) and $numI == 0 and isset($numNI) and $numNI == 0) { ?>
+            <div>No Products to be shown</div>
+            <?php } ?>
+        </div>
+        </div>
+    </section>
+    <?php require_once "layouts/footer.inc.html"; ?>
+
+    <?php require_once "includes/scripts.inc.php" ?>
+</body>
+
+</html>
+<?php } else {
+        header("Location: gallery?ref=menu&url=500");
+    }
+} else {
+    header("Location: gallery?ref=menu&url=404");
+}
+
+?>

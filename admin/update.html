@@ -1,0 +1,66 @@
+<?php 
+if(!isset($_SESSION)) {session_start();}
+if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Digital Marketing Company | Web Design Company</title>
+    <base href="../">
+    <?php include "includes/head.inc.php"; ?>
+    <link rel="stylesheet" href="admin/css/upload.css" />
+</head>
+
+<body>
+    <!-- Page Layout here -->
+    <section class="row m-0 p-0">
+
+        <?php include "includes/sidenav.inc.html"; ?>
+
+        <div class="col s12 m9 grey lighten-3 m-0 p-0" style="height:100vh;overflow:auto">
+            <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons">menu</i></a>
+            <div class="px-4">
+                <h4 class="my-1">
+                    Update Brochure
+                </h4>
+            </div>
+            <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
+            <div class="white pos-rel" id="userInfo">
+                <div class="progress-holder hide border-radius-0">
+                    <div class="progress border-radius-0">
+                        <div class="indeterminate bg-primary"></div>
+                    </div>
+                </div>
+                <div class="prevent-overlay hide full"></div>
+                <div class="container p-4">
+                    <input type="file" name="file" id="file" accept="application/pdf">
+
+                    <!-- Drag and Drop container-->
+                    <div class="grey lighten-3 flex full p-4 upload-area border-2 border-radius-8 grey-border border-lighten-1"
+                        id="uploadfile" style="border-style:dashed">
+                        <h4 class="grey-text w-full flex" style="align-content: center; justify-content: center">
+                            <div class="w-full my-4"><i class="material-icons" style="font-size: 5rem;">save_alt</i>
+                            </div>
+                            <div class="w-full">Drag
+                                and Drop brochure
+                                here<br />Or<br />Click to select file</div>
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <?php include "includes/scripts.inc.php"; ?>
+    <script src="admin/js/upload.js"></script>
+
+</body>
+
+</html>
+
+<?php } else {
+    header("Location: /admin/?redirect_to=".$_SERVER['REDIRECT_URL']);
+} ?>

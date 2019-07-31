@@ -1,0 +1,151 @@
+<section class="grey darken-3 white-text p-4" id="footer">
+    <div class="row my-2">
+        <div class="col s12 m6">
+            <h4 class="m-0">
+                Apsara
+            </h4>
+        </div>
+        <div class="col s12 m6">
+            <a target="_blank" href="#"
+                class="btn-floating mx-1 right transparent btn-flat waves-effect waves-light waves-circle linkedin tooltipped"
+                data-tooltip="LinkedIn">
+                <img src="images/socials/l.svg" alt="LinkedIn" />
+            </a>
+
+            <a target="_blank" href="#"
+                class="btn-floating mx-1 right transparent btn-flat waves-effect waves-light waves-circle instagram tooltipped"
+                data-tooltip="Instgram">
+                <img src="images/socials/i.svg" alt="Instgram" />
+            </a>
+            <a target="_blank" href="#"
+                class="btn-floating mx-1 right transparent btn-flat waves-effect waves-light waves-circle twitter tooltipped"
+                data-tooltip="Twitter">
+                <img src="images/socials/t.svg" alt="Twitter" />
+            </a>
+            <a target="_blank" href="#"
+                class="btn-floating mx-1 right transparent btn-flat waves-effect waves-light waves-circle facebook tooltipped"
+                data-tooltip="Facebook">
+                <img src="images/socials/f.svg" alt="Facebook" />
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m3">
+            <h5>Heading</h5>
+            <ul>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+            </ul>
+        </div>
+        <div class="col s12 m3">
+            <h5>Heading</h5>
+            <ul>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+            </ul>
+        </div>
+        <div class="col s12 m3">
+            <h5>Quick Links</h5>
+            <ul>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+            </ul>
+        </div>
+        <div class="col s12 m3">
+            <h5>Contact Us</h5>
+            <ul>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+                <li>Lorem ipsum</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<footer class="grey darken-4 px-4 white-text">
+    <div class="left my-2">
+        Designed and Developed by
+        <strong><a href="https://www.wampinfotech.com" class="white-text">WAMP Infotech Pvt Ltd.</a></strong>
+    </div>
+    <div class="clearfix"></div>
+</footer>
+
+<!-- Modal Structure -->
+<div id="signIn" class="modal" style="max-width: 500px">
+    <div class="progress-holder hide" id="progress">
+        <div class="progress m-0">
+            <div class="indeterminate bg-primary"></div>
+        </div>
+    </div>
+    <div class="prevent-overlay hide full"></div>
+    <div class="modal-content">
+        <h4 class="fw-500 m-0">Sign in<button
+                class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                    class="material-icons black-text">close</i></button>
+        </h4>
+        <br />
+        <br />
+        <form id="signInForm">
+            <div class="input-field">
+                <label for="si_email">Email</label>
+                <input type="email" name="email" required id="si_email" />
+            </div>
+            <div class="input-field">
+                <label for="si_password">Password</label>
+                <input type="password" name="password" required id="si_password" />
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="model-close waves-effect btn-flat btn left transparent"
+            onclick="openModal(this, '#signUp')">Create
+            account</button>
+        <button type="reset" class="modal-close waves-effect transparent waves-red btn-flat btn mr-1">Not
+            now</button>
+        <button type="submit" class="waves-effect waves-light btn ml-1" form="signIn">Sign in</button>
+    </div>
+</div>
+<!-- Modal Structure -->
+<div id="signUp" class="modal" style="max-width: 500px">
+    <div class="progress-holder hide" id="progress">
+        <div class="progress m-0">
+            <div class="indeterminate bg-primary"></div>
+        </div>
+    </div>
+    <div class="prevent-overlay hide full"></div>
+    <div class="modal-content">
+        <h4 class="fw-500 m-0">Create an account<button
+                class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                    class="material-icons black-text">close</i></button>
+        </h4>
+        <br />
+        <br />
+        <form id="signUpForm">
+            <div class="input-field">
+                <label for="su_name">Name</label>
+                <input type="text" name="name" required id="su_name" />
+            </div>
+            <div class="input-field">
+                <label for="su_email">Email</label>
+                <input type="email" name="email" required id="su_email" />
+            </div>
+            <div class="input-field">
+                <label for="su_password">Password</label>
+                <input type="password" name="password" required id="su_password" />
+            </div>
+            <div class="input-field">
+                <label for="su_rpassword">Password</label>
+                <input type="password" name="rpassword" required id="su_rpassword" />
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="waves-effect btn-flat btn left transparent" onclick="openModal(this, '#signIn')">Sign in
+            instead</button>
+        <button type="reset" class="modal-close waves-effect transparent waves-red btn-flat btn mr-1">Not
+            now</button>
+        <button type="submit" class="waves-effect waves-light btn ml-1" form="signUpForm">Create Account</button>
+    </div>
+</div>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Cart | Apsara Groups
+    </title>
+    <meta name="description" content=" " />
+    <meta name="keywords" content=" " />
+
+    <?php include "includes/head.inc.php"; ?>
+    <style>
+        .cart-items input[type=number]::-webkit-inner-spin-button,
+        .cart-items input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .cart-qty {
+            width: 50px !important;
+            text-align: center;
+        }
+
+        .cart-item img.w-100 {
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
+
+</head>
+
+<body class="grey lighten-4">
+    <?php include "layouts/nav.inc.html"; ?>
+    <!-- <header class="grey darken-3 p-4">
+        <div class="px-m-4 mx-m-4">
+            <h2 class="white-text">Cart</h2>
+        </div>
+    </header> -->
+    <section class="grey lighten-4 p-4">
+        <div class="px-m-4 mx-m-4">
+            <div class="row enhanced">
+                <div class="col s12 m8" id="cartPanel">
+                    <div class="card-panel border-radius-8">
+                        <h5 class="cart m-0 mb-2">My Cart (<span class="num">0</span>)
+                        </h5>
+                        <div class="divider"></div>
+                        <div class="center py-4 mx-auto loader">
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-blue-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-items">
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m4" id="pricePanel">
+                    <div class="card-panel border-radius-8">
+                        <h5 class="cart m-0 mb-2">Price Details
+                        </h5>
+                        <div class="divider"></div>
+                        <div class="price-brief my-2">
+                        </div>
+                        <div class="divider my-2"></div>
+                        <div class="center mx-auto py-4 loader">
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-blue-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="fw-500">Total Payable <span class="right t-price">&#8377; <b>0.00</b></span></h6>
+                        </div>
+                        <div class="divider my-2"></div>
+                        <div>
+                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
+                                in</button>
+                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger"
+                                data-target="guestCheckout">Guest
+                                Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Structure -->
+    <div id="guestCheckout" class="modal modal-fixed-footer" style="max-width: 500px">
+        <div class="modal-content">
+            <h4 class="fw-500 truncate m-0">Guest Checkout<button
+                    class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                        class="material-icons black-text">close</i></button>
+            </h4>
+            <br />
+            <form id="guestForm">
+                <div class="input-field">
+                    <label for="co_email">Email</label>
+                    <input type="email" name="email" required id="co_email" />
+                </div>
+                <div class="input-field">
+                    <label for="co_password">Password</label>
+                    <input type="password" name="password" required id="co_password" />
+                </div>
+                <div class="input-field">
+                    <label for="co_s_name">Sender&apos;s Name</label>
+                    <input type="text" name="sname" required id="co_s_name" />
+                </div>
+                <div class="divider"></div>
+                <div class="input-field">
+                    <label for="co_r_name">Receiver&apos;s Name</label>
+                    <input type="text" name="rname" required id="co_r_name" />
+                </div>
+                <div class="input-field">
+                    <label for="co_address">Delivery Address</label>
+                    <input type="text" name="address" required id="co_address" />
+                </div>
+                <div class="input-field">
+                    <label for="co_landmark">Landmark</label>
+                    <input type="text" name="landmark" required id="co_landmark" />
+                </div>
+                <div class="input-field">
+                    <label for="co_pincode">Pincode</label>
+                    <input type="number" name="pincode" required id="co_pincode" />
+                </div>
+                <div class="input-field">
+                    <label for="co_r_number">Receiver&apos;s Number</label>
+                    <input type="text" name="rnumber" required id="co_r_number" />
+                </div>
+                <div class="input-field">
+                    <label for="co_s_number">Sender&apos;s Number</label>
+                    <input type="text" name="rnumber" required id="co_s_number" />
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="reset" class="modal-close waves-effect waves-red btn-flat btn transparent">Not now</button>
+            <button type="submit" class="waves-effect waves-light btn ml-1" form="guestForm">Checkout</button>
+        </div>
+    </div>
+    <?php require_once "layouts/footer.inc.html";
+    ?>
+
+    <?php require_once "includes/scripts.inc.php" ?>
+    <script>
+        $(() => {
+            const cart = localStorage.getItem("cart");
+            if (cart != null && cart.length != 0 && cart.length > 2) {
+                const list = JSON.parse(cart);
+                list.sort((a, b) => {
+                    return a - b;
+                });
+                $("#cartPanel .loader").removeClass("hide");
+                $(".cart-items").empty();
+                var tPrice = 0;
+                list.forEach(elem => {
+                    var query = elem.v == -1 ? "?what={products}&filter={products._pid}&with={" + elem.id + "}" : "?what={products,varients}&filter={products._pid,varients._vid}&with={" + elem.id + "," + elem.v + "}";
+                    $.get("services/get.php" + query, (data, status) => {
+                        let dataObj = JSON.parse(data)[0];
+                        $("#cartPanel .loader").addClass("hide");
+                        $("#pricePanel .loader").addClass("hide");
+                        $(".cart-items").append(getCartItem(dataObj, elem.qty));
+                        $(".price-brief").append(`<h6><span>${dataObj.title} x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
+                        tPrice += elem.qty * dataObj.price;
+                        $(".t-price b").text(tPrice.toFixed(2).toLocaleString());
+                    });
+                });
+                $("#pricePanel").removeClass("hide");
+            } else {
+                $("#cartPanel .loader").addClass("hide");
+                $(".cart-items").html("<div class='my-2'>No Items Added on Cart.</div>");
+                $(".price-brief").closest(".col").remove();
+            }
+        });
+
+
+        function getCartItem(e, qty) {
+            return `<div class="py-4 cart-item">
+                <div class="row valign-wrapper m-0">
+                    <div class="col s3">
+                        <img src="${e.has_image == 0 ? 'uploads/products/placeholder.jpg' : e.image}" alt="${e.title}" class="responsive-img w-100 grey lighten-3" />
+                    </div>
+                    <div class="col s9 row">
+                        <div class="col s12 l8">
+                            <h5 class="m-0 fw-500">${e.title}</h5>
+                            <p class="black-text">${e.description}</p>
+                            <h6 class="fw-700">&#8377; ${(+e.price).toFixed(2).toLocaleString()}</h6>
+                        </div>
+                        <div class="col s12 l4">
+                            <button class="btn-floating btn-small white waves-effect waves-dark remove" ${qty <= 1 ? 'disabled' : ''} onclick="changeQ(this, -1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">remove</i></button>
+                            <input type="number" name="qty" class="cart-qty" value="${qty}" min="1" max="${e.qty}" onblur="check(this, ${e._pid})" />
+                            <button class="btn-floating btn-small white waves-effect waves-dark add mr-2" ${qty >= e.qty ? 'disabled' : ''} onclick="changeQ(this, 1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">add</i></button>
+                            <button class="btn red waves-effect my-2" onclick="removeItem(${e._pid}, this)"><i class="material-icons left">delete</i>Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>`;
+        }
+
+        function changeQ(elem, num, max, id) {
+            let inputElem = $(elem).closest("div").find("input");
+            const newNum = +inputElem.val() + num;
+            inputElem.val(newNum);
+
+            if (newNum == 1) {
+                if ($(elem).hasClass("remove")) {
+                    $(elem).attr("disabled", "disabled");
+                } else {
+                    $(elem).siblings(".remove").attr("disabled", "disabled");
+                }
+            } else {
+                if ($(elem).hasClass("remove")) {
+                    $(elem).removeAttr("disabled");
+                } else {
+                    $(elem).siblings(".remove").removeAttr("disabled");
+                }
+            }
+
+            if (newNum == max) {
+                if ($(elem).hasClass("add")) {
+                    $(elem).attr("disabled", "disabled");
+                } else {
+                    $(elem).siblings(".add").attr("disabled", "disabled");
+                }
+            } else {
+                if ($(elem).hasClass("add")) {
+                    $(elem).removeAttr("disabled");
+                } else {
+                    $(elem).siblings(".add").removeAttr("disabled");
+                }
+            }
+            var list = localStorage.getItem("cart");
+            list = JSON.parse(list);
+            list.forEach(item => {
+                if (item.id == id) {
+                    item.qty = +newNum;
+                }
+            });
+            localStorage.setItem("cart", JSON.stringify(list));
+            M.toast({ html: "Quantity updated to " + newNum });
+            changePricePanel();
+        }
+
+        function removeItem(id, elem) {
+            var list = localStorage.getItem("cart");
+            list = JSON.parse(list);
+            var done = false;
+            list.forEach(item => {
+                if (item.id == id) {
+                    list.splice(list.indexOf(item), 1);
+                    localStorage.setItem("cart", JSON.stringify(list));
+                    $(".cart .num").text(list.length);
+                    $(elem).closest(".cart-item").slideUp();
+                    done = true;
+                }
+            });
+            if (!done) {
+                M.toast({ html: "Something went wrong, try again" })
+            }
+            changePricePanel();
+
+        }
+
+        function check(elem, id) {
+            let newNum = elem.value;
+            const max = elem.getAttribute("max");
+            const min = elem.getAttribute("min");
+            if (elem.value >= +max) {
+                elem.value = max;
+                $(elem).siblings(".add").attr("disabled", "disabled");
+                $(elem).siblings(".remove").removeAttr("disabled");
+                M.toast({ html: "Quantity updated Max: " + max });
+                newNum = max;
+            } else if (elem.value < +min) {
+                elem.value = min;
+                $(elem).siblings(".remove").attr("disabled", "disabled");
+                $(elem).siblings(".add").removeAttr("disabled");
+                M.toast({ html: "Quantity updated Min: " + min });
+                newNum = min;
+            } else {
+                $(elem).siblings(".remove").removeAttr("disabled");
+                $(elem).siblings(".add").removeAttr("disabled");
+                M.toast({ html: "Quantity updated to " + elem.value });
+            }
+            var list = localStorage.getItem("cart");
+            list = JSON.parse(list);
+            list.forEach(item => {
+                if (item.id == id) {
+                    item.qty = newNum;
+                }
+            });
+            localStorage.setItem("cart", JSON.stringify(list));
+            changePricePanel();
+        }
+
+        function changePricePanel() {
+            const cart = localStorage.getItem("cart");
+            if (cart != null && cart.length != 0 && cart.length > 2) {
+                const list = JSON.parse(cart);
+                list.sort((a, b) => {
+                    return a - b;
+                });
+                var tPrice = 0;
+                $(".price-brief").empty();
+                $("#pricePanel .loader").removeClass("hide");
+                list.forEach(elem => {
+                    var query = elem.v == -1 ? "?what={products}&filter={products._pid}&with={" + elem.id + "}" : "?what={products,varients}&filter={products._pid,varients._vid}&with={" + elem.id + "," + elem.v + "}";
+                    $.get("services/get.php" + query, (data, status) => {
+                        let dataObj = JSON.parse(data)[0];
+                        $("#pricePanel .loader").addClass("hide");
+                        $(".price-brief").append(`<h6><span>${dataObj.title} x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
+                        tPrice += elem.qty * dataObj.price;
+                        $(".t-price b").text(tPrice.toFixed(2).toLocaleString());
+                    });
+                });
+                $("#pricePanel").removeClass("hide");
+            } else {
+                $(".cart-items").html("<div class='my-2'>No Items Added on Cart.</div>");
+                $(".price-brief").closest(".col").remove();
+            }
+        }
+    </script>
+</body>
+
+</html>

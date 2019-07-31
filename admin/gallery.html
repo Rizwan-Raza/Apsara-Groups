@@ -1,0 +1,223 @@
+<?php if (!isset($_SESSION)) {
+    session_start();
+}
+if (
+    isset($_SESSION['admin']) and
+    $_SESSION['admin'] == true
+) {
+    ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Digital Marketing Company | Web Design Company</title>
+    <base href="../" />
+    <?php include "includes/head.inc.php"; ?>
+    <!-- <link rel="stylesheet" href="admin/css/queries.css" /> -->
+    <style>
+        .grey .row .col .card .card-image {
+            height: 200px;
+        }
+
+        .grey .row .col .card .card-image img {
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Layout here -->
+    <section class="row m-0 p-0">
+        <?php include "includes/sidenav.inc.html" ?>
+
+        <div class="col s12 m9 white m-0 p-0" style="height:100vh;overflow:auto">
+            <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons text-primary">menu</i></a>
+            <div class="px-4">
+                <h4 class="my-1">Gallery</h4>
+            </div>
+            <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
+            <div class="grey lighten-3">
+                <?php $sql = "SELECT * FROM `gallery` ORDER BY `time` ASC";
+                    require "../services/db.inc.php";
+                    include "includes/functions.inc.php";
+                    date_default_timezone_set("Asia/Kolkata");
+                    $conn =
+                        DB::getConnection();
+                    $result = $conn->query($sql); ?>
+
+                <div class="row my-2 mx-1">
+                    <?php if ($result and ($num = $result->num_rows) > 0) {
+                        for ($i = 0; $i < $num; $i++) {
+                            $image = $result->fetch_assoc(); ?>
+                    <div class="col s12 m6 l4 xl3">
+                        <div class="card p-0 m-0" style="overflow:hidden">
+                            <div class="card-image">
+                                <img src="<?= $image['image'] ?>" class="grey lighten-3 full">
+                            </div>
+                            <div class="card-content">
+                                <div class="pos-abs circle"
+                                    style="background-color:rgba(0,0,0,0.5);top:-60px;left:-60px;width:120px;height:120px;padding:55px 0px 0px 45px">
+                                    <h5 class="center fw-700 white-text text-z-depth-2">#<?= $i + 1 ?></h5>
+                                </div>
+                                <span class="tooltipped"
+                                    data-tooltip="<?= date_format(date_create($image['time']), "M jS, Y \a\\t g:i:s A") ?>">
+                                    <?= daysUntilToday($image['time']) ?>
+                                </span>
+                                <button
+                                    class="right btn-flat circle btn-floating tooltipped waves-effect waves-circle waves-dark red"
+                                    style="margin: -8px 0px" onclick="deleteImage(<?= $image['_gid'] ?>, this, 0)"
+                                    data-tooltip="Delete"><i class="material-icons lh-5">delete</i></button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                            } ?>
+                    <?php
+                        } else {
+                            ?>
+                    <div class="col s12">
+                        <h6 class="center my-4 fw-500">No Gallery Images found</h6>
+                    </div>
+                    <?php
+                        } ?>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Structure -->
+    <div id="imageAdd" class="modal  modal-fixed-footer" style="max-width: 500px">
+        <div class="progress-holder hide border-radius-0">
+            <div class="progress border-radius-0">
+                <div class="indeterminate bg-primary"></div>
+            </div>
+        </div>
+        <div class="prevent-overlay hide full"></div>
+        <div class="modal-content card p-0 m-0">
+            <div class="card-image">
+                <img src="images/card.jpg" class="grey lighten-3 full" id="holder">
+            </div>
+            <div class="card-content">
+                <form id="gallery" enctype="multipart/form-data">
+                    <div class="file-field input-field">
+                        <div class="btn bg-primary">
+                            <span>Select Image</span>
+                            <input type="file" name="image" accept="image/*" onchange="readURL(this, '#holder');"
+                                required>
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload product image file">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="reset" class="modal-close waves-effect waves-red btn-flat btn">Not now</button>
+            <button type="submit" class="waves-effect waves-light bg-primary btn ml-1" form="gallery">Add Image</button>
+        </div>
+    </div>
+
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large bg-primary waves-effect waves-light modal-trigger" data-target="imageAdd">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
+
+
+    <?php include "includes/scripts.inc.php"; ?>
+    <!-- <script src="admin/js/queries.js"></script> -->
+    <script>
+        function readURL(input, query) {
+            var files = !!input.files ? input.files : [];
+            if (!files.length || !window.FileReader) return;
+            if (/^image/.test(files[0].type)) {
+                var reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+                reader.onloadend = function () {
+                    $(query).attr("src", this.result);
+                    $(query).removeClass("hide");
+                }
+            }
+        }
+
+        $(() => {
+            $("#imageAdd form").submit(e => {
+                e.preventDefault();
+                $.ajax({
+                    url: "admin/services/add-image.php",
+                    contentType: false,
+                    processData: false,
+                    method: "POST",
+                    type: "POST",
+                    data: new FormData(e.target),
+                    beforeSend: () => {
+                        $("#imageAdd .progress-holder, #imageAdd .prevent-overlay").removeClass("hide");
+                    },
+                    success: (data, status) => {
+                        var object = JSON.parse(data);
+                        M.toast({
+                            html: object.message
+                        });
+
+                        if (object.status == "success") {
+                            e.target.reset();
+                            $("#imageAdd").modal("close");
+                        }
+                    },
+                    error: (data, status) => {
+                        console.log(data, status);
+                    },
+                    complete: () => {
+                        $("#imageAdd .progress-holder, #imageAdd .prevent-overlay").addClass("hide");
+                    }
+                });
+            });
+        });
+
+        function deleteImage(id, elem) {
+            let answer = confirm("Are you sure, you want to delete this image?");
+            if (answer) {
+                elem = $(elem).closest(".col");
+                $.ajax({
+                    url: "admin/services/delete-image.php",
+                    method: "POST",
+                    data: {
+                        _gid: id
+                    },
+                    beforeSend: () => {
+                        elem.css("opacity", 0.5);
+                        // $("#progress, .prevent-overlay").removeClass("hide");
+                    },
+                    success: (data, status) => {
+                        // console.log(data, status);
+                        var object = JSON.parse(data);
+                        M.toast({
+                            html: object.message
+                        });
+                        if (object.status == "server_error") {
+                            elem.css("opacity", 1);
+                            return;
+                        } else if (object.status == "success") {
+                            elem.slideUp();
+                        }
+                    },
+                    error: (data, status) => {
+                        elem.css("opacity", 1);
+                        console.log(data, status);
+                    }
+                });
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+
+<?php
+} else {
+    header("Location: /admin/?redirect_to=" . $_SERVER['REDIRECT_URL']);
+} ?>

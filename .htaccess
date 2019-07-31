@@ -1,0 +1,15 @@
+RewriteEngine On
+
+RewriteRule ^/?menu/(.*?)/?$ /menu.html?url=$1 [L]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /menu\.html\?url=([^\&\ ]+)
+RewriteRule ^/?menu\.html$ /menu/%1? [L,R=301]
+
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [NC,L]
+
+#AddHandler application/x-httpd-lsphp .htm .html
+#AddHandler application/x-httpd-lsphp .htm .html
+AddType application/x-httpd-php .html

@@ -1,0 +1,357 @@
+<?php if (!isset($_SESSION)) {
+    session_start();
+}
+if (
+    isset($_SESSION['admin']) and
+    $_SESSION['admin'] == true
+) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <title>Digital Marketing Company | Web Design Company</title>
+        <base href="../../" />
+        <?php include "includes/head.inc.php"; ?>
+        <!-- <link rel="stylesheet" href="admin/css/queries.css" /> -->
+        <style>
+            .modal.full {
+                top: 0 !important;
+                max-height: 100%;
+            }
+
+
+            .row.enhanced {
+                margin-left: -0.75rem;
+                margin-right: -0.75rem;
+            }
+
+            #holder {
+                max-height: 300px;
+                object-fit: contain;
+            }
+
+            table tr td i {
+                visibility: hidden
+            }
+
+            table tr:hover td i {
+                visibility: visible
+            }
+
+            #productView .card-image img {
+                height: 300px;
+                object-fit: cover;
+            }
+
+            #productView table tr:last-child {
+                border-bottom: none;
+            }
+
+            h4.my-1 .select-wrapper input.select-dropdown {
+                margin-top: -1px;
+                margin-bottom: -1px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Page Layout here -->
+        <section class="row m-0 p-0">
+            <?php include "includes/sidenav.inc.html" ?>
+
+            <div class="col s12 m9 white m-0 p-0" style="height:100vh;overflow:auto">
+                <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons text-primary">menu</i></a>
+                <div class="px-4">
+                    <h4 class="my-1">Products
+                        <div class="right m-0"><select onchange="window.location.href='admin/products/'+this.value">
+                                <option value="all">All</option>
+                                <?php $sql = "SELECT * FROM `types`";
+                                require "../services/db.inc.php";
+                                $conn = DB::getConnection();
+                                $result = $conn->query($sql);
+                                while ($nav = $result->fetch_assoc()) { ?>
+                                    <option value="<?= $nav['url'] ?>" <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>><?= $nav['title'] ?></option>
+                                <?php } ?>
+                            </select></div>
+                    </h4>
+                </div>
+                <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
+                <div class="grey lighten-3">
+                    <?php $sql = "SELECT `products`.*, `types`.`title` AS `cat_title` FROM `products`, `types` WHERE `products`.`_tid`=`types`.`_tid` AND `types`.`url` LIKE '" . ((isset($_GET) and isset($_GET['url'])) ? ($_GET['url'] == "all" ? "%%" : $_GET['url']) : "%%") . "'";
+                    require_once "../services/db.inc.php";
+                    include "includes/functions.inc.php";
+                    date_default_timezone_set("Asia/Kolkata");
+                    $conn =
+                        DB::getConnection();
+                    $result = $conn->query($sql); ?>
+
+                    <table>
+                        <?php if ($result and ($num = $result->num_rows) > 0) {
+                            ?>
+                            <thead>
+                                <tr>
+                                    <th class="pl-4">#</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php for ($i = 0; $i <
+                                    $num; $i++) {
+                                    $prod = $result->fetch_assoc(); ?>
+                                    <tr>
+                                        <td class="pl-4">
+                                            <?= $i + 1 ?>
+                                        </td>
+                                        <td>
+                                            <?= $prod['title'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $prod['cat_title'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $prod['description'] ?>
+                                        </td>
+
+                                        <td>
+
+                                            <button class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark" onclick="viewProduct(<?= $prod['_pid'] ?>, '<?= $prod['title'] ?>', '<?= $prod['cat_title'] ?>', '<?= $prod['description'] ?>', '<?= $prod['image'] ?>', <?= $prod['has_image'] ?>)" data-tooltip="View"><i class="material-icons black-text lh-5">visibility</i></button>
+                                            <button class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark" onclick="editProduct(<?= $prod['_pid'] ?>, '<?= $prod['title'] ?>', <?= $prod['_tid'] ?>,'<?= $prod['description'] ?>', '<?= $prod['image'] ?>', <?= $prod['has_image'] ?>)" data-tooltip="Edit"><i class="material-icons black-text lh-5">edit</i></button>
+                                            <button class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark" onclick="deleteProduct(<?= $prod['_pid'] ?>, this)" data-tooltip="Delete"><i class="material-icons black-text lh-5">delete</i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            <?php
+                            } ?>
+                        <?php
+                        } else {
+                            ?>
+                            <tr>
+                                <td colspan="5" class="center-align">No
+                                    <?= ((isset($_GET) and isset($_GET['url'])) ? ($_GET['url'] == "all" ? "products" : $_GET['url']) : "products") ?>
+                                    found</td>
+                            </tr>
+                        <?php
+                        } ?>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Structure -->
+        <div id="productAdd" class="modal border-radius-0 full">
+            <div class="progress-holder hide border-radius-0">
+                <div class="progress border-radius-0">
+                    <div class="indeterminate bg-primary"></div>
+                </div>
+            </div>
+            <div class="prevent-overlay hide full"></div>
+            <div class="modal-content">
+                <h4>Add new Product <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button></h4>
+                <br />
+                <form enctype="multipart/form-data">
+                    <div class="input-field">
+                        <input id="title" type="text" class="validate" name="title" required minlength="3">
+                        <label for="title">Title</label>
+                    </div>
+                    <div class="input-field">
+                        <select name="cat_id" id="catId">
+                            <option value="" disabled selected>Choose Category</option>
+                            <?php $sql = "SELECT * FROM `types`";
+                            require_once "../services/db.inc.php";
+                            $conn = DB::getConnection();
+                            $result = $conn->query($sql);
+                            while ($user = $result->fetch_assoc()) { ?>
+                                <option value="<?= $user['_tid'] ?>"><?= $user['title'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="grey lighten-3 p-2" id="variety">
+                        <input type="text" class="hide" value="1" name="varities" id="varities" />
+                        <div class="varients">
+                            <div class="row enhanced">
+                                <div class="input-field col s12 m4">
+                                    <input id="size_1" type="text" class="validate" name="size_1" required value="Normal">
+                                    <label for="size_1">Size Varient (1 Pound, 2 Pound, Small, Medium, Large etc.)</label>
+                                </div>
+                                <div class="input-field col s12 m4">
+                                    <input id="price_1" type="number" class="validate" name="price_1" required>
+                                    <label for="price_1">Price per piece (&#8377;)</label>
+                                </div>
+                                <div class="input-field col s9 m3">
+                                    <input id="quantity_1" type="number" class="validate" name="quantity_1" required>
+                                    <label for="quantity_1">Quantity</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="center mx-auto add-btn">
+                            <button type="button" class="btn bg-primary" onclick="addMore(this, 1)">Add more Varient</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="switch">
+                        <label class="mr-4">Has Product Image?</label>
+                        <label>
+                            No
+                            <input type="checkbox" name="has_image" id="imageSwitch">
+                            <span class="lever"></span>
+                            Yes
+                        </label>
+                    </div>
+                    <div class="file-field input-field" style="display: none">
+                        <div class="btn bg-primary">
+                            <span>Browse Image</span>
+                            <input type="file" name="image" accept="image/*" onchange="readURL(this, '#holder');">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload product image file">
+                        </div>
+                        <div class="row enhanced my-2">
+                            <div class="col s12 m6 l4 xl2 push-m3 push-l4 push-xl5 center">
+                                <img src="#" id="holder" class="w-full hide mx-auto" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <textarea id="description" class="materialize-textarea" name="desc"></textarea>
+                        <label for="description">Description</label>
+                        <span class="helper-text">Optional</span>
+                    </div>
+                    <button type="submit" class="right waves-effect waves-light bg-primary btn ml-1">Add</button>
+                    <button type="reset" class="right modal-close waves-effect waves-red btn-flat btn">Not now</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="productEdit" class="modal border-radius-0 full">
+            <div class="progress-holder hide border-radius-0">
+                <div class="progress border-radius-0">
+                    <div class="indeterminate bg-primary"></div>
+                </div>
+            </div>
+            <div class="prevent-overlay hide full"></div>
+            <div class="modal-content">
+                <h4>Edit Product <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button></h4>
+                <br />
+                <form enctype="multipart/form-data">
+                    <input id="e_pid" type="text" class="hide" name="pid">
+                    <div class="input-field">
+                        <input id="etitle" type="text" class="validate" name="title" required minlength="3">
+                        <label for="etitle">Title</label>
+                    </div>
+                    <div class="input-field">
+                        <select name="cat_id" id="ecatId">
+                            <option value="" disabled selected>Choose Category</option>
+                            <?php $sql = "SELECT * FROM `types`";
+                            require_once "../services/db.inc.php";
+                            $conn = DB::getConnection();
+                            $result = $conn->query($sql);
+                            while ($user = $result->fetch_assoc()) { ?>
+                                <option value="<?= $user['_tid'] ?>"><?= $user['title'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="grey lighten-3 p-2" id="evariety">
+                        <input class="hide" value="1" name="varities" id="evarities" />
+                        <div class="varients">
+                        </div>
+                        <div class="center mx-auto add-btn">
+                            <button type="button" class="btn bg-primary" onclick="addMore(this, 1)">Add more Varient</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="switch">
+                        <label class="mr-4">Has Product Image?</label>
+                        <label>
+                            No
+                            <input type="checkbox" name="has_image" checked id="eimageSwitch">
+                            <span class="lever"></span>
+                            Yes
+                        </label>
+                    </div>
+                    <div class="file-field input-field">
+                        <div class="btn bg-primary">
+                            <span>Update Image</span>
+                            <input type="file" name="image" accept="image/*" onchange="readURL(this, '#eholder');">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload product image file">
+                        </div>
+                        <div class="row enhanced my-2">
+                            <div class="col s12 m6 l4 xl2 push-m3 push-l4 push-xl5 center">
+                                <img src="uploads/products/placeholder.jpg" id="eholder" class="w-full hide mx-auto" />
+                            </div>
+                        </div>
+                    </div>
+                    <input name="prev_image" type="text" id="prev_image" class="hide" />
+                    <div class="input-field">
+                        <textarea id="edescription" class="materialize-textarea" name="desc"></textarea>
+                        <label for="edescription">Description</label>
+                        <span class="helper-text">Optional</span>
+                    </div>
+                    <button type="submit" class="right waves-effect waves-light bg-primary btn ml-1">Update</button>
+                    <button type="reset" class="right modal-close waves-effect waves-red btn-flat btn">Not now</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Structure -->
+        <div id="productView" class="modal" style="max-width: 500px">
+            <div class="modal-content card p-0 m-0">
+                <div class="card-image">
+                    <img src="images/card.jpg" class="grey lighten-3 full">
+                </div>
+                <div class="card-content">
+                    <h5 class="fw-500 truncate m-0"><span id="vtitle">Product Title</span>
+                        <div class="chip right"><span id="vcat">Cakes</span></div>
+                    </h5>
+                    <p id="vdesc">Description goes here</p>
+                </div>
+                <div class="fix"></div>
+                <div class="card-action">
+                    <div class="center mx-auto py-4 loader">
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large bg-primary waves-effect waves-light modal-trigger" data-target="productAdd">
+                <i class="large material-icons">add</i>
+            </a>
+        </div>
+
+
+        <?php include "includes/scripts.inc.php"; ?>
+        <script src="admin/js/products.js"></script>
+    </body>
+
+    </html>
+
+<?php
+} else {
+    header("Location: /admin/?redirect_to=" . $_SERVER['REDIRECT_URL']);
+} ?>

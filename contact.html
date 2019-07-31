@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Contact | Apsara Groups
+    </title>
+    <meta name="description" content=" " />
+    <meta name="keywords" content=" " />
+    <?php include "includes/head.inc.php"; ?>
+    <style>
+        .flex {
+            flex-flow: wrap;
+            display: flex;
+        }
+
+        .map {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <?php include "layouts/nav.inc.html"; ?>
+    <header class="pos-rel home-banner">
+        <div class="pos-abs grey darken-3 full"></div>
+        <div class="pos-abs full banner-img"></div>
+        <div class="full p-4 container">
+            <h2 class="fw-500 white-text my-4">Contact Us</h2>
+            <hr class="short-border white left" />
+            <br />
+        </div>
+    </header>
+
+    <?php require_once "layouts/contact.inc.html"; ?>
+
+    <?php require_once "layouts/footer.inc.html"; ?>
+
+    <?php require_once "includes/scripts.inc.php" ?>
+    <script>
+        $("#contact_form").submit(e => {
+            e.preventDefault();
+            // console.log($(e.target).serialize());
+
+            $.ajax({
+                url: "services/contact.php",
+                method: "POST",
+                data: $(e.target).serialize(),
+                beforeSend: () => {
+                    $("#contact_form .progress-holder, #contact_form .prevent-overlay").removeClass("hide");
+                },
+                success: (data, status) => {
+                    console.log(data, status);
+                    var object = JSON.parse(data);
+                    M.toast({
+                        html: object.message
+                    });
+                },
+                error: (data, status) => {
+                    M.toast({
+                        html: data
+                    });
+                    console.log(data, status);
+                },
+                complete: () => {
+                    $("#contact_form .progress-holder, #contact_form .prevent-overlay").addClass("hide");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,580 @@
+/* theme */
+.bg-primary {
+    background-color: #337ab7;
+}
+
+.bg-accent {
+    background-color: #e91e63
+}
+
+/* margins */
+.m-0 {
+    margin: 0px;
+}
+
+.m-2 {
+    margin: 1rem;
+}
+
+.m-4 {
+    margin: 2rem;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.my-0 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.my-1 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.my-2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.my-4 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.mt-2 {
+    margin-top: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.mx-1 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.mx-auto {
+    margin: 0 auto;
+}
+
+.ml-2 {
+    margin-left: 1rem;
+}
+
+.mx-2 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.mx-4 {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.mx-m-4 {
+    margin-left: 0rem;
+    margin-right: 0rem;
+}
+
+/* paddings */
+.p-0 {
+    padding: 0;
+}
+
+.p-2 {
+    padding: 1rem;
+}
+
+.p-4 {
+    padding: 2rem;
+}
+
+.px-2 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.px-3 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.py-4 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.px-4 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.px-m-4 {
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+
+/* sizing */
+.w-100 {
+    width: 100%;
+}
+
+.full {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* typography */
+.lh-0 {
+    line-height: 0px;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+/* display */
+.d-block {
+    display: block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.btn {
+    text-transform: initial;
+    letter-spacing: .25px;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+.pos-rel {
+    position: relative;
+}
+
+.pos-abs {
+    position: absolute;
+}
+
+
+hr.short-border {
+    border: none;
+    height: 4px;
+    background-color: #000;
+    width: 100px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .px-m-4 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .mx-m-4 {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+}
+
+nav .select-wrapper {
+    margin-top: 0.5rem;
+}
+
+.brand-img {
+    height: 50px;
+    margin-bottom: -12px;
+}
+
+#mainNav {
+    position: sticky;
+    top: 0;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    z-index: 996;
+
+}
+
+#mainNav button i {
+    height: 36px;
+    line-height: 36px;
+}
+
+.sidenav .top-banner {
+    background-color: #444;
+    background-image: url(../images/card.jpg);
+    background-position: center;
+    height: 150px;
+    background-size: cover;
+    background-blend-mode: overlay;
+}
+
+.nav-wrapper .drop {
+    position: relative;
+}
+
+.small-drop {
+    height: 0;
+    opacity: 0;
+    transition: 0.2s all ease;
+}
+
+.nav-wrapper .drop ul {
+    z-index: 1001;
+    background-color: #ffffff;
+    color: #444;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+        0 2px 8px 0 rgba(0, 0, 0, 0.12);
+}
+
+.nav-wrapper .drop ul li {
+    display: block;
+    width: 100%;
+}
+
+.nav-wrapper .drop ul li a {
+    color: #444;
+    width: 100%;
+    display: inline-block;
+    white-space: pre;
+    box-sizing: border-box;
+}
+
+.nav-wrapper .drop:hover ul {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+nav button.btn-flat.transparent:hover img {
+    filter: invert(1);
+}
+
+nav button.facebook:hover {
+    background-color: #3b5998 !important;
+}
+
+nav button.twitter:hover {
+    background-color: #1da1f2 !important;
+}
+
+nav button.instagram:hover {
+    background-color: #e4405f !important;
+}
+
+.prevent-overlay {
+    background-color: rgba(255, 255, 255, 0.25);
+    position: absolute;
+    z-index: 2;
+    cursor: wait
+}
+
+#cakes .gallery .card .card-image img {
+
+    object-fit: cover;
+    height: 300px;
+    max-height: 300px
+}
+
+.products.d-flex {
+    flex-wrap: wrap;
+}
+
+.products .card .card-image img {
+    height: 200px !important;
+    object-fit: cover;
+}
+
+.products .card .card-action {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.products .card .fix {
+    height: 65px;
+}
+
+.products .card .card-content p {
+    line-height: 110%;
+    margin: 0.5rem 0;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.products .truncate {
+    overflow: visible !important;
+}
+
+.btn-floating img {
+    height: 20px;
+    width: 20px;
+    margin: 6px;
+}
+
+header img {
+    max-height: 600px;
+    object-fit: cover;
+}
+
+.home-banner {
+    max-height: 400px;
+}
+
+.home-banner .banner-img {
+    filter: invert(1);
+    opacity: 0.15;
+    background-size: 300px;
+    background-image: url('../images/cake_back.png');
+}
+
+.home-banner .pos-abs {
+    z-index: -1;
+}
+
+#belowBanner {
+    position: relative;
+}
+
+#belowBanner .row {
+    margin-top: -100px;
+}
+
+#home-about .col.m6 img {
+    max-height: 360px;
+    object-fit: cover;
+    object-position: top right;
+}
+
+#explore>div {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+}
+
+#explore .e-title {
+    position: absolute;
+    top: -45px;
+    background-color: #f5f5f5;
+    display: inline;
+}
+
+#explore .carousel {
+    height: 300px !important;
+}
+
+#explore .carousel-item {
+    width: 33%;
+    height: 250px;
+    min-height: 250px;
+}
+
+@media (max-width: 992px) {
+    #explore .carousel-item {
+        width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    #explore .carousel-item {
+        width: 100%;
+    }
+
+    #explore .carousel-item .card-content {
+        padding: 12px;
+    }
+
+    #explore .carousel-item h4 {
+        font-size: 1.5rem;
+    }
+}
+
+#explore .card {
+    min-height: 250px;
+}
+
+#explore .card.horizontal .card-stacked {
+    width: 50%;
+}
+
+#explore .card-image img.full {
+    object-fit: contain;
+    padding: 1rem;
+}
+
+#explore .btn-floating {
+    position: absolute;
+    top: calc(50% - 20px);
+}
+
+#explore .btn-floating.nav-left {
+    left: -20px;
+}
+
+#explore .btn-floating.nav-right {
+    right: -20px;
+}
+
+#explore .card-image div.full,
+#offers .card-image div.full {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+}
+
+#explore .card-image:hover div.full,
+#offers .card-image:hover div.full {
+    opacity: 1;
+}
+
+#cakes {
+    background-image: url("../images/back.jpg");
+}
+
+#cakes .card .card-image img {
+    max-height: 200px;
+    object-fit: contain;
+    background-repeat: repeat;
+}
+
+#subscription form {
+    max-width: 700px;
+}
+
+#subscription input {
+    height: 54px;
+    line-height: 54px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 0 1rem;
+}
+
+#subscription input::placeholder {
+    color: grey;
+}
+
+#instagram .left .col {
+    padding: 0.25rem;
+}
+
+#instagram .left img {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+    line-height: 0;
+}
+
+@media (max-width:600px) {
+
+    #instagram .left img {
+        height: 80px;
+    }
+}
+
+#instagram .right img {
+    height: 550px;
+    width: 80%;
+    object-fit: cover;
+    line-height: 0;
+}
+
+#instagram .right .pos-rel div.pos-abs {
+    width: 40%;
+    right: 0;
+    top: 150px;
+}
+
+@media (max-width: 600px) {
+    #instagram .right .pos-rel div.pos-abs {
+        width: 100%;
+        position: static;
+        top: 0px;
+    }
+}
+
+.card,
+.card-panel {
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.card.horizontal .card-image {
+    width: 50%;
+}
+
+.card.horizontal .card-image img {
+    object-fit: cover;
+}
+
+.row.enhanced {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+.card .w-100 {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.fixed-logo {
+    position: fixed;
+    height: 130px;
+    width: 130px;
+    left: 50%;
+    top: 0px;
+    margin-left: -65px;
+    z-index: 998;
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .fixed-logo {
+        width: 112px;
+        height: 112px;
+        margin-left: -56px;
+    }
+}
+
+.fixed-logo img {
+    object-fit: contain;
+}
+
+#footer a.btn-floating img {
+    filter: invert(1);
+}
+
+#footer a.btn-floating {
+    border: 1px solid white;
+}
+
+.cart .num.circle {
+    height: 16px;
+    font-size: 12px;
+    width: 16px;
+    float: right;
+    line-height: 16px;
+    text-align: center;
+    position: absolute;
+    top: 16px;
+    left: 8px;
+}

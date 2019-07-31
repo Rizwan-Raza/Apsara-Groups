@@ -1,0 +1,53 @@
+<section class="container full p-4" id="contact">
+    <h3 class="fw-500">Get in Touch with us</h3>
+    <br />
+    <br />
+    <div class="flex row mb-4">
+        <div class="col s12 m6 push-m6 p-m-3 my-4">
+            <div class="progress-holder hide" id="progress">
+                <div class="progress m-0">
+                    <div class="indeterminate bg-primary"></div>
+                </div>
+            </div>
+            <div class="prevent-overlay full border-radius-8 hide"></div>
+            <div class="card-panel m-0" id="contact_form">
+                <h5 class="px-m-4 fw-500">Quick Query</h5>
+                <form class="validate px-m-4 py-2">
+                    <div class="input-field">
+                        <input type="text" name="name" id="c_name" required />
+                        <label for="c_name">
+                            Name
+                        </label>
+                    </div>
+                    <div class="input-field">
+                        <input type="email" name="email" id="c_email" required />
+                        <label for="c_email">
+                            Email
+                        </label>
+                    </div>
+                    <div class="input-field">
+                        <input type="tel" name="number" id="c_number" required minlength="10" maxlength="12" />
+                        <label for="c_number">
+                            Number
+                        </label>
+                    </div>
+                    <div class="input-field">
+                        <textarea id="c_message" class="materialize-textarea" data-length="100" required
+                            name="message"></textarea>
+                        <label for="c_message">Message</label>
+                    </div>
+                    <button type="submit" class="btn right">
+                        Send Message
+                    </button>
+                    <br clear="both" />
+                    <br />
+                </form>
+            </div>
+        </div>
+        <div class="col s12 m6 pull-m6 p-m-3 my-4">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14015.453625052016!2d77.27247867726743!3d28.573864155478354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xdf07264ac61cd280!2sWAMP+InfoTech+Pvt+Ltd!5e0!3m2!1sen!2sin!4v1541507859537"
+                allowfullscreen class="map full border-1 grey-border border-lighten-2"></iframe>
+        </div>
+    </div>
+</section>

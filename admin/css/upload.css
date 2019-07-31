@@ -1,0 +1,24 @@
+.container {
+    height: calc(100vh - 64px);
+}
+
+.upload-area {
+    text-align: center;
+    overflow: auto;
+}
+
+.upload-area:hover {
+    cursor: pointer;
+}
+
+.upload-area h1 {
+    text-align: center;
+    font-weight: normal;
+    font-family: sans-serif;
+    /* line-height: 50px; */
+    color: darkslategray;
+}
+
+#file {
+    display: none;
+}

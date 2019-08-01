@@ -1,41 +1,167 @@
 <?php
 session_start();
-?>
-<!DOCTYPE html>
-<html lang="en">
+if (isset($_SESSION['u_id'])) { ?>
 
-<head>
-    <title>
-        Profile | Apsara Groups
-    </title>
-    <meta name="description" content=" " />
-    <meta name="keywords" content=" " />
-    <?php include "includes/head.inc.php"; ?>
-</head>
+    <!DOCTYPE html>
+    <html lang="en">
 
-<body>
-    <?php include "layouts/nav.inc.html"; ?>
-    <header class="pos-rel home-banner">
-        <div class="pos-abs grey darken-3 full"></div>
-        <div class="pos-abs full banner-img"></div>
-        <div class="full p-4 container">
-            <h2 class="fw-500 white-text my-4">Profile</h2>
-            <hr class="short-border white left" />
-            <br />
-        </div>
-    </header>
-    <section class="py-4">
-        <div class="container">
-            <h2 class="fw-500">Apsara Groups</h2>
-            <br />
-            <p>
-                <?php print_r($_SESSION)?>
-            </p>
-        </div>
-    </section>
-    <?php require_once "layouts/footer.inc.html"; ?>
+    <head>
+        <title>
+            Profile | Apsara Groups
+        </title>
+        <meta name="description" content=" " />
+        <meta name="keywords" content=" " />
+        <?php include "includes/head.inc.php"; ?>
+        <style>
+            #newAddress {
+                display: none;
+            }
+        </style>
+    </head>
 
-    <?php require_once "includes/scripts.inc.php" ?>
-</body>
+    <body>
+        <?php include "layouts/nav.inc.html"; ?>
+        <header class="pos-rel home-banner">
+            <div class="pos-abs grey darken-3 full"></div>
+            <div class="pos-abs full banner-img"></div>
+            <div class="full p-4 container">
+                <h2 class="fw-500 white-text my-4">Profile</h2>
+                <hr class="short-border white left" />
+                <br />
+            </div>
+        </header>
+        <section class="py-4">
+            <div class="container full p-4">
+                <div class="row">
+                    <?php
+                    $active = 1;
+                    if ($_SERVER['QUERY_STRING'] == "address") {
+                        $active = 2;
+                    }
+                    include "layouts/user-side.inc.php"; ?>
 
-</html>
+                    <div class="col s12 m8">
+                        <?php if ($active == 1) { ?>
+                            <div class="card-panel grey lighten-5 z-depth-1">
+                                <div class="field">
+                                    <h6 class="fw-700">Personal Information <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent" onclick="edit(this)"><i class="material-icons black-text">edit</i></button><button class="right btn waves-effect waves-dark btn-small">Save</button><button class="right btn-flat btn btn-small waves-effect waves-dark transparent" onclick="editCancel(this)">Cancel</button></h6>
+
+                                    <form>
+                                        <div class="input-field">
+                                            <input type="text" name="name" value="<?= $_SESSION['u_name'] ?>" disabled />
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <br />
+                                <div class="field">
+                                    <h6 class="fw-700">Email Address <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent" onclick="edit(this)"><i class="material-icons black-text">edit</i></button><button class="right btn waves-effect waves-dark btn-small">Save</button><button class="right btn-flat btn btn-small waves-effect waves-dark transparent" onclick="editCancel(this)">Cancel</button> <button class="right btn btn-flat waves-effect waves-dark transparent">Change Password</button>
+                                    </h6>
+                                    <form>
+                                        <div class="input-field">
+                                            <input type="email" name="email" value="<?= $_SESSION['u_email'] ?>" disabled />
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <br />
+
+                                <div class="field">
+                                    <h6 class="fw-700">Mobile Number <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent" onclick="edit(this)"><i class="material-icons black-text">edit</i></button><button class="right btn waves-effect waves-dark btn-small">Save</button><button class="right btn-flat btn btn-small waves-effect waves-dark transparent" onclick="editCancel(this)">Cancel</button>
+                                    </h6>
+                                    <form>
+                                        <div class="input-field">
+                                            <input type="tel" name="number" value="<?= $_SESSION['u_number'] ?>" disabled />
+
+                                        </div>
+                                    </form>
+                                </div><br />
+                            </div>
+                        <?php } else if ($active == 2) { ?>
+                            <div class="card-panel grey lighten-5 z-depth-1">
+                                <h6 class="fw-700">Manage Addresses</h6>
+                                <?php if (isset($_SESSION['u_addresses'])) { ?>
+                                    <div class="p-4 grey lighten-3"><?php print_r($_SESSION) ?></div>
+                                <?php } else { ?>
+                                    <h6 class="center my-4 fw-500" id="notice">You haven't added any address yet, add one below</h6>
+                                <?php } ?>
+                                <div id="newAddress" class="p-4 grey lighten-3 my-2">
+                                    <form>
+                                        <div class="input-field">
+                                            <select name="tag">
+                                                <option value="1" selected>Home</option>
+                                                <option value="2">Work</option>
+                                                <option value="3">Friend&apos;s Home</option>
+                                            </select>
+                                            <label> Address type</label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <div class="input-field">
+                                                    <input type="text" name="landmark" id="landmark">
+                                                    <label for="landmark">Receiver&apos;s Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <div class="input-field">
+                                                    <input type="text" name="landmark" id="landmark">
+                                                    <label for="landmark">Receiver&apos;s Number</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-field">
+                                            <textarea id="address" class="materialize-textarea" name="address"></textarea>
+                                            <label for="address">Address</label>
+                                        </div>
+                                        <div class="input-field">
+                                            <input type="text" name="landmark" id="landmark">
+                                            <label for="landmark">Landmark</label>
+                                        </div>
+                                        <div class="input-field">
+                                            <input type="text" name="landmark" id="pincode">
+                                            <label for="pincode">Pincode</label>
+                                        </div>
+                                        <button type="submit" class="btn right">Add</button>
+                                        <button type="reset" class="btn btn-flat transparent right" onclick="wipeItOut(this)">Cancel</button>
+                                        <br clear="all" />
+                                    </form>
+                                </div>
+                                <button class="btn btn-block center mx-auto" onclick="addNewAddress()">Add a new Address</button>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <?php require_once "layouts/footer.inc.html"; ?>
+
+        <?php require_once "includes/scripts.inc.php" ?>
+        <script>
+            function addNewAddress() {
+                $("#notice").slideUp();
+                $("#newAddress").slideDown();
+            }
+
+            function wipeItOut(elem) {
+                $(elem).closest("#newAddress").slideUp();
+                $("#notice").slideDown();
+            }
+
+            function edit(elem) {
+                $(elem).closest(".field").find("input").removeAttr("disabled");
+                $(elem).hide();
+            }
+
+            function editCancel(elem) {
+                $(elem).closest(".field").find("input").attr("disabled", "disabled");
+                $(elem).hide();
+
+            }
+        </script>
+    </body>
+
+    </html>
+
+<?php } else {
+    header("Location: /");
+} ?>

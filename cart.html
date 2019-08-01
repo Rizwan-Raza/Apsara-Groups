@@ -28,6 +28,7 @@ session_start();
             height: 150px;
             object-fit: cover;
         }
+
         .price-brief {
             transition: all ease 300ms;
         }
@@ -98,8 +99,8 @@ session_start();
                         <div class="divider my-2"></div>
                         <div>
                             <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
-                                <a class="btn btn-large btn-block my-2 w-100" href="javascript:;">
-                                    Checkout</a>
+                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="checkout">
+                                    Checkout</button>
                             <?php } else { ?>
                                 <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
                                     in</button>
@@ -161,9 +162,58 @@ session_start();
         </div>
         <div class="modal-footer">
             <button type="reset" class="modal-close waves-effect waves-red btn-flat btn transparent">Not now</button>
-            <button type="submit" class="waves-effect waves-light btn ml-1" form="guestForm">Checkout</button>
+            <button type="submit" class="waves-effect waves-light btn ml-1" form="guestForm">Proceed to Payment</button>
         </div>
     </div>
+    <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
+        <!-- Modal Structure -->
+        <div id="checkout" class="modal modal-fixed-footer" style="max-width: 500px">
+            <div class="modal-content">
+                <h4 class="fw-500 truncate m-0">Checkout <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button>
+                </h4>
+                <br />
+                <form id="checkoutForm">
+                    <div class="input-field">
+                        <label for="co_email">Email</label>
+                        <input type="email" name="email" readonly required class="grey lighten-3" id="co_email" value="<?= $_SESSION['u_email'] ?>" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_s_name">Sender&apos;s Name</label>
+                        <input type="text" name="sname" required class="grey lighten-3" id="co_s_name" readonly value="<?= $_SESSION['u_name'] ?>" />
+                    </div>
+                    <div class="divider"></div>
+                    <div class="input-field">
+                        <label for="co_r_name">Receiver&apos;s Name</label>
+                        <input type="text" name="rname" required id="co_r_name" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_address">Delivery Address</label>
+                        <input type="text" name="address" required id="co_address" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_landmark">Landmark</label>
+                        <input type="text" name="landmark" required id="co_landmark" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_pincode">Pincode</label>
+                        <input type="number" name="pincode" required id="co_pincode" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_r_number">Receiver&apos;s Number</label>
+                        <input type="text" name="rnumber" required id="co_r_number" />
+                    </div>
+                    <div class="input-field">
+                        <label for="co_s_number">Sender&apos;s Number</label>
+                        <input type="text" name="snumber" required id="co_s_number" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="modal-close waves-effect waves-red btn-flat btn transparent">Not now</button>
+                <button type="submit" class="waves-effect waves-light btn ml-1" form="guestForm">Proceed to Payment</button>
+            </div>
+        </div>
+    <?php } ?>
     <?php require_once "layouts/footer.inc.html";
     ?>
 
@@ -197,6 +247,40 @@ session_start();
                 $(".cart-items").html("<div class='my-2'>No Items Added on Cart.</div>");
                 $(".price-brief").closest(".col").remove();
             }
+
+            $("#guestCheckout form#guestForm").submit(e => {
+                e.preventDefault();
+                // console.log($(e.target).serialize());
+
+                $.ajax({
+                    url: "services/guest-checkout.php",
+                    method: "POST",
+                    data: $(e.target).serialize(),
+                    beforeSend: () => {
+                        $("#guestCheckout .progress-holder, #guestCheckout .prevent-overlay").removeClass("hide");
+                    },
+                    success: (data, status) => {
+                        console.log(data, status);
+                        return;
+                        var object = JSON.parse(data);
+                        M.toast({
+                            html: object.message
+                        });
+                        if (object.status == "success") {
+                            e.target.reset();
+                        }
+                    },
+                    error: (data, status) => {
+                        M.toast({
+                            html: data
+                        });
+                        console.log(data, status);
+                    },
+                    complete: () => {
+                        $("#guestCheckout .progress-holder, #guestCheckout .prevent-overlay").addClass("hide");
+                    }
+                });
+            });
         });
 
 

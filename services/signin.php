@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 $_SESSION['u_id'] = $user['_uid'];
                 $_SESSION['u_name'] = $user['name'];
                 $_SESSION['u_email'] = $user['email'];
+                $_SESSION['u_number'] = $user['number'];
                 $data = array("message" => "Logged in successfully", "status" => "success", "user" => json_encode($user));
             } else {
                 $data = array("message" => "Email and Password combination mismatch!", "status" => "pass_error");

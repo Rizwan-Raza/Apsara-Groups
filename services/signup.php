@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         }
         extract($_POST, EXTR_SKIP);
 
-        $sql = "INSERT INTO `users`(`name`, `email`, `password`, `time`) VALUES ('$name','$email','" . md5("*WAMP*" . $password . "*WAMP*") . "', CONVERT_TZ(CURRENT_TIMESTAMP, '-07:00', '+05:30'))";
+        $sql = "INSERT INTO `users`(`name`, `email`, `password`, `number`, `time`) VALUES ('$name','$email','" . md5("*WAMP*" . $password . "*WAMP*") . "', '$number', CONVERT_TZ(CURRENT_TIMESTAMP, '-07:00', '+05:30'))";
         require 'db.inc.php';
 
         $conn = DB::getConnection();

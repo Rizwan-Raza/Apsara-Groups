@@ -15,12 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $conn = DB::getConnection();
         if ($conn->query($sql) === true) {
             $uid = $conn->insert_id;
-            $sql = "INSERT INTO `addresses`(`_uid`, `address`, `landmark`, `pincode`) VALUES($uid, '$address', '$landmark', '$pincode');INSERT INTO `orders` (`_uid`, `r_name`, `r_number`, `is_guest`) VALUES($uid, '$rname', '$rnumber', 1)";
-            $result = $conn->multi_query($sql);
-            if ($result) {
-                $data = array("message" => "Order added successfully", "status" => "success", "oid" => $conn->insert_id);
+            $sql = "INSERT INTO `addresses`(`_uid`, `name`, `number`, `address`, `landmark`, `pincode`) VALUES($uid, '$rname', '$rnumber', '$address', '$landmark', '$pincode')";
+            if ($conn->query($sql)) {
+                $aid = $conn->insert_id;
+                $sql = "INSERT INTO `orders` (`_uid`, `_aid`, `is_guest`) VALUES($uid, $aid, 1)";
+                if ($conn->query($sql)) {
+                    $data = array("message" => "Order added successfully", "status" => "success", "oid" => $conn->insert_id);
+                } else {
+                    $data = array("message" => "Something went wrong, try to login", "status" => "order_error");
+                }
             } else {
-                $data = array("message" => "Something went wrong, try to login", "status" => "success");
+                $data = array("message" => "Something went wrong, try to login", "status" => "address_error");
             }
         } elseif (strpos($conn->error, "Duplicate entry") === 0) {
             $data = array("message" => "Email already exist, try to login.", "status" => "email_error");

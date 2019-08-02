@@ -116,6 +116,12 @@ session_start();
 
     <!-- Modal Structure -->
     <div id="guestCheckout" class="modal modal-fixed-footer" style="max-width: 500px">
+        <div class="progress-holder hide border-radius-0">
+            <div class="progress border-radius-0">
+                <div class="indeterminate bg-primary"></div>
+            </div>
+        </div>
+        <div class="prevent-overlay hide full"></div>
         <div class="modal-content">
             <h4 class="fw-500 truncate m-0">Guest Checkout<button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button>
             </h4>
@@ -133,10 +139,18 @@ session_start();
                     <label for="co_s_name">Sender&apos;s Name</label>
                     <input type="text" name="sname" required id="co_s_name" />
                 </div>
+                <div class="input-field">
+                    <label for="co_s_number">Sender&apos;s Number</label>
+                    <input type="text" name="rnumber" required id="co_s_number" />
+                </div>
                 <div class="divider"></div>
                 <div class="input-field">
                     <label for="co_r_name">Receiver&apos;s Name</label>
                     <input type="text" name="rname" required id="co_r_name" />
+                </div>
+                <div class="input-field">
+                    <label for="co_r_number">Receiver&apos;s Number</label>
+                    <input type="text" name="rnumber" required id="co_r_number" />
                 </div>
                 <div class="input-field">
                     <label for="co_address">Delivery Address</label>
@@ -149,14 +163,6 @@ session_start();
                 <div class="input-field">
                     <label for="co_pincode">Pincode</label>
                     <input type="number" name="pincode" required id="co_pincode" />
-                </div>
-                <div class="input-field">
-                    <label for="co_r_number">Receiver&apos;s Number</label>
-                    <input type="text" name="rnumber" required id="co_r_number" />
-                </div>
-                <div class="input-field">
-                    <label for="co_s_number">Sender&apos;s Number</label>
-                    <input type="text" name="rnumber" required id="co_s_number" />
                 </div>
             </form>
         </div>
@@ -260,8 +266,8 @@ session_start();
                         $("#guestCheckout .progress-holder, #guestCheckout .prevent-overlay").removeClass("hide");
                     },
                     success: (data, status) => {
-                        console.log(data, status);
-                        return;
+                        // console.log(data, status);
+                        // return;
                         var object = JSON.parse(data);
                         M.toast({
                             html: object.message

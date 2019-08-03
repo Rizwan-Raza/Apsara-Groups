@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-print_r($_REQUEST);
-return;
+// print_r($_REQUEST);
+// return;
 $data = array("message" => "Unknown method", "status" => "server_error");
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if (isset($_POST['sname']) and isset($_POST['email']) and isset($_POST['password']) and isset($_POST['address'])) {

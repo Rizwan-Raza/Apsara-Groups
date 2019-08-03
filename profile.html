@@ -55,7 +55,7 @@ if (isset($_SESSION['u_id'])) { ?>
                                 </div>
                                 <br />
                                 <div class="field">
-                                    <h6 class="fw-700">Email Address <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent" onclick="edit(this)"><i class="material-icons black-text">edit</i></button><button class="right btn waves-effect waves-dark btn-small hide" onclick="saveDetail(this, 'email')">Save</button><button class="right btn-flat btn btn-small waves-effect waves-dark transparent hide" onclick="editCancel(this)">Cancel</button> <button class="right btn btn-flat waves-effect waves-dark transparent">Change Password</button>
+                                    <h6 class="fw-700">Email Address <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent" onclick="edit(this)"><i class="material-icons black-text">edit</i></button><button class="right btn waves-effect waves-dark btn-small hide" onclick="saveDetail(this, 'email')">Save</button><button class="right btn-flat btn btn-small waves-effect waves-dark transparent hide" onclick="editCancel(this)">Cancel</button> <button class="right btn btn-flat waves-effect waves-dark transparent modal-trigger" data-target="changePassword">Change Password</button>
                                     </h6>
                                     <form data-id="email">
                                         <div class="input-field">
@@ -92,7 +92,7 @@ if (isset($_SESSION['u_id'])) { ?>
                                                     <i class="material-icons black-text">more_vert</i>
                                                     <ul style="right:0;top:0;left: auto;">
                                                         <li><button onclick="editAddress(this)" class="btn transparent btn-flat fw-500 waves-effect w-100" style="text-align:left">Edit</button></li>
-                                                        <li><button onclick="deleteAddress(<?= $row['_aid'] ?>, ?>this)" class="btn transparent btn-flat fw-500 waves-effect w-100">Delete</button></li>
+                                                        <li><button onclick="deleteAddress(<?= $row['_aid'] ?>, this)" class="btn transparent btn-flat fw-500 waves-effect w-100">Delete</button></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -160,6 +160,45 @@ if (isset($_SESSION['u_id'])) { ?>
                 </div>
             </div>
         </section>
+
+        <!-- Modal Structure -->
+        <div id="changePassword" class="modal" style="max-width: 500px">
+            <div class="progress-holder hide border-radius-0">
+                <div class="progress border-radius-0 m-0">
+                    <div class="indeterminate bg-primary"></div>
+                </div>
+            </div>
+            <div class="prevent-overlay hide full"></div>
+            <div class="modal-content">
+                <h4>Change Password <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button></h4>
+                <br />
+                <form>
+                    <div class="input-field">
+                        <input id="oldpassword" type="password" class="validate" name="oldpassword" required minlength="3">
+                        <label for="oldpassword">Old Password</label>
+                        <button type="button" onclick="passVisibility(this, '#oldpassword')" class="transparent btn-flat circle btn-floating tooltipped right waves-effect waves-circle waves-dark" data-tooltip="Show Password" style="margin-top: -45px;">
+                            <i class="material-icons grey-text text-darken-3" style="vertical-align: middle">visibility_off</i></button>
+                    </div>
+                    <div class="input-field">
+                        <input id="newpassword" type="password" class="validate" name="newpassword" required minlength="3">
+                        <label for="newpassword">New Password</label>
+                        <button type="button" onclick="passVisibility(this, '#newpassword')" class="transparent btn-flat circle btn-floating tooltipped right waves-effect waves-circle waves-dark" data-tooltip="Show Password" style="margin-top: -45px;">
+                            <i class="material-icons grey-text text-darken-3" style="vertical-align: middle">visibility_off</i></button>
+                    </div>
+                    <div class="input-field">
+                        <input id="rnewpassword" type="password" class="validate" name="rnewpassword" required minlength="3">
+                        <label for="rnewpassword">Re-enter new Password</label>
+                        <button type="button" onclick="passVisibility(this, '#rnewpassword')" class="transparent btn-flat circle btn-floating tooltipped right waves-effect waves-circle waves-dark" data-tooltip="Show Password" style="margin-top: -45px;">
+                            <i class="material-icons grey-text text-darken-3" style="vertical-align: middle">visibility_off</i></button>
+                    </div>
+                    <button type="submit" class="right waves-effect waves-light btn ml-1">Change Password</button>
+                    <button type="reset" class="right modal-close waves-effect waves-red transparent btn-flat btn">Not now</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+
+
         <?php require_once "layouts/footer.inc.html"; ?>
 
         <?php require_once "includes/scripts.inc.php" ?>
@@ -207,6 +246,48 @@ if (isset($_SESSION['u_id'])) { ?>
                         }
                     });
                 });
+
+                $("#changePassword form").submit(e => {
+                    e.preventDefault();
+                    // console.log($(e.target).serialize());
+                    if (e.target.newpassword.value != e.target.rnewpassword.value) {
+                        M.toast({
+                            html: "Password Mismatch"
+                        });
+                        e.target.newpassword.focus();
+                        return;
+                    }
+
+
+                    $.ajax({
+                        url: "services/change-password.php",
+                        method: "POST",
+                        data: $(e.target).serialize(),
+                        beforeSend: () => {
+                            $("#changePassword .progress-holder, #changePassword .prevent-overlay").removeClass("hide");
+                        },
+                        success: (data, status) => {
+                            // console.log(data, status);
+                            // return;
+                            var object = JSON.parse(data);
+                            M.toast({
+                                html: object.message
+                            });
+                            if (object.status == "success") {
+                                e.target.reset();
+                            }
+                        },
+                        error: (data, status) => {
+                            M.toast({
+                                html: data
+                            });
+                            console.log(data, status);
+                        },
+                        complete: () => {
+                            $("#changePassword .progress-holder, #changePassword .prevent-overlay").addClass("hide");
+                        }
+                    });
+                });
             });
 
             function addNewAddress() {
@@ -227,9 +308,9 @@ if (isset($_SESSION['u_id'])) { ?>
             function deleteAddress(aid, elem) {
                 let answer = confirm("Are you sure, you want to delete this address?");
                 if (answer) {
-                    elem = $(elem).closest("tr");
+                    elem = $(elem).closest(".grey.p-4");
                     $.ajax({
-                        url: "admin/services/delete-address.php",
+                        url: "services/delete-address.php",
                         method: "POST",
                         data: {
                             _pid: id

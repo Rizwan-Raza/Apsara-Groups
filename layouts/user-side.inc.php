@@ -20,7 +20,7 @@
             Addresses</a>
         <a href="orders" class="collection-item <?= (($active == 3) ? 'active' : '') ?>"><i class="material-icons left">shopping_cart</i> My
             Orders</a>
-        <a href="services/logout.php?log=true" class="collection-item"><i class="material-icons left">exit_to_app</i> Logout</a>
+        <a href="javascript:confirm('Are you sure, you want to logout?') ? window.location.href='services/logout.php?log=true' : console.log('cancelled');" class="collection-item"><i class="material-icons left">exit_to_app</i> Logout</a>
     </div>
 
 </div>

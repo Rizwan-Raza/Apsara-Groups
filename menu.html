@@ -63,7 +63,7 @@ if (isset($_GET) and isset($_GET['url'])) {
                                         if ($result2->num_rows > 0) {
                                             while ($valueV = $result2->fetch_assoc()) { ?>
                             <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?> (<?= $valueV['size'] ?>)</span>
+                                    <?= number_format($valueV['price'], 2) ?> <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
                                 <button class="btn right btn-small red"
                                     onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>
@@ -101,7 +101,7 @@ if (isset($_GET) and isset($_GET['url'])) {
                                         if ($result2->num_rows > 0) {
                                             while ($valueV = $result2->fetch_assoc()) { ?>
                             <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?> (<?= $valueV['size'] ?>)</span>
+                                    <?= number_format($valueV['price'], 2) ?> <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
                                 <button class="btn right btn-small red"
                                     onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>

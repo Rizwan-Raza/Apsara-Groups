@@ -1,52 +1,133 @@
 <?php
 session_start();
-if(isset($_SESSION['u_id'])) { ?>
+if (isset($_SESSION['u_id'])) { ?>
 
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <title>
-        Profile | Apsara Groups
-    </title>
-    <meta name="description" content=" " />
-    <meta name="keywords" content=" " />
-    <?php include "includes/head.inc.php"; ?>
-</head>
+    <head>
+        <title>
+            Profile | Apsara Groups
+        </title>
+        <meta name="description" content=" " />
+        <meta name="keywords" content=" " />
+        <?php include "includes/head.inc.php"; ?>
+    </head>
 
-<body>
-    <?php include "layouts/nav.inc.html"; ?>
-    <header class="pos-rel home-banner">
-        <div class="pos-abs grey darken-3 full"></div>
-        <div class="pos-abs full banner-img"></div>
-        <div class="full p-4 container">
-            <h2 class="fw-500 white-text my-4">My Orders</h2>
-            <hr class="short-border white left" />
-            <br />
-        </div>
-    </header>
-    <section class="py-4">
-        <div class="container full p-4">
-            <div class="row">
-                <?php 
-                $active = 3;
-                include "layouts/user-side.inc.php"; ?>
-                <div class="col s12 m8">
-                    <div class="card-panel grey lighten-5 z-depth-1">
-                        <h6 class="fw-500 center">
-                            You haven't purchased anything yet
-                        </h6>
+    <body>
+        <?php include "layouts/nav.inc.html"; ?>
+        <header class="pos-rel home-banner">
+            <div class="pos-abs grey darken-3 full"></div>
+            <div class="pos-abs full banner-img"></div>
+            <div class="full p-4 container">
+                <h2 class="fw-500 white-text my-4">My Orders</h2>
+                <hr class="short-border white left" />
+                <br />
+            </div>
+        </header>
+        <section class="py-4">
+            <div class="container full p-4">
+                <div class="row">
+                    <?php
+                    $active = 3;
+                    include "layouts/user-side.inc.php"; ?>
+                    <div class="col s12 m8">
+                        <div class="card-panel grey lighten-5 z-depth-1">
+                            <?php require_once "services/db.inc.php";
+                            include "admin/includes/functions.inc.php";
+                            date_default_timezone_set("Asia/Kolkata");
+                            $sql = "SELECT `products`.*, `orders`.*, `order_items`.*,`addresses`.*, `varients`.*, `types`.`url`, `types`.`title` AS `t_title`, `orders`.`time` AS `o_time`  FROM `orders`, `order_items`, `addresses`, `products`, `varients`, `types` WHERE `orders`.`_uid`=$_SESSION[u_id] AND `addresses`.`_uid`=`orders`.`_uid` AND `order_items`.`_oid`=`orders`.`_oid` AND `products`.`_pid`=`order_items`.`_pid` AND `varients`.`_vid`=`order_items`.`_vid` AND `types`.`_tid`=`products`.`_tid` ORDER BY `orders`.`time` DESC";
+                            $result = DB::getConnection()->query($sql);
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) { ?>
+                                    <div class="grey lighten-3 p-4 my-2">
+                                        <div class="row valign-wrapper m-0">
+                                            <div class="col s2">
+                                                <img src="<?= ($row['has_image'] == 0 ? 'uploads/products/placeholder-' . $row['_tid'] . '.jpg' : $row['has_image']) ?>" alt="" class="circle responsive-img">
+                                                <!-- notice the "circle" class -->
+                                            </div>
+                                            <div class="col s10">
+                                                <a class="right chip teal white-text" href="menu/<?= $row['url'] ?>">
+                                                    <?= $row['t_title'] ?>
+                                                </a>
+                                                <h6 class="fw-500 m-0"><?= $row['title'] ?> <?= $row['size'] != 'Normal' ? " | $row[size] " : '' ?> (x<?= $row['p_qty'] ?>, &#8377; <?= $row['price'] * $row['p_qty'] ?>)</h6>
+                                                <p><?= $row['address'] ?> - <?= $row['pincode'] ?><br />
+                                                    <b><?= $row['name'] ?></b>
+                                                    <b class="mx-2"><?= $row['number'] ?></b>
+                                                    <span class="chip right white-text <?= $row['paid'] == 0 ? 'red' : 'green' ?>"><?= $row['paid'] == 0 ? 'Unpaid' : 'Paid' ?></span>
+                                                </p>
+                                                <div class="row">
+                                                    <div class="col s9">
+                                                        <p class="range-field m-0">
+                                                            <input type="range" id="status" min="0" max="2" value="<?= $row['status'] ?>" disabled />
+                                                        </p>
+                                                        <p class="m-0 fw-500" style="text-align: <?= ($row['status'] == 0 ? 'left' : ($row['status'] == 1 ? 'center' : 'right')) ?>">Product <?= ($row['status'] == 0 ? 'Notified' : ($row['status'] == 1 ? 'Shipped' : 'Delivered')) ?></p>
+                                                    </div>
+                                                </div>
+                                                <p class="m-0"><span class="tooltipped" data-tooltip="<?= date_format(date_create($row['o_time']), "M jS, Y \a\\t g:i:s A") ?>">
+                                                        Ordered: <?= daysUntilToday($row['o_time']) ?>
+                                                    </span> -
+                                                    <span><?= $row['p_method'] != 2 ? 'Cash on Delivery' : 'via Instamojo' ?></span>
+                                                    <?php if ($row['status'] != 2) { ?><button class="btn right grey lighten-1 btn-small btn-flat tooltipped" data-tooltip="Cancel Order" onclick="rollbackOrder(<?= $row['_oid'] ?>, this)">Cancel Order</button><?php } ?></p>
+                                            </div>
+                                        </div>
+                                        <!-- <?php // print_r($row) 
+                                                ?> -->
+                                    </div>
+                                <?php }
+                            } else { ?>
+                                <h6 class="fw-500 center">
+                                    You haven't purchased anything yet
+                                </h6>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <?php require_once "layouts/footer.inc.html"; ?>
+        </section>
+        <?php require_once "layouts/footer.inc.html"; ?>
 
-    <?php require_once "includes/scripts.inc.php" ?>
-</body>
+        <?php require_once "includes/scripts.inc.php" ?>
+        <script>
+            function rollbackOrder(oid, elem) {
+                let answer = confirm("Are you sure, you want to delete this order?");
+                if (answer) {
+                    elem = $(elem).closest(".grey.lighten-3.p-4");
+                    $.ajax({
+                        url: "services/delete-order.php",
+                        method: "POST",
+                        data: {
+                            _oid: oid
+                        },
+                        beforeSend: () => {
+                            elem.css("opacity", 0.5);
+                            // $("#payMethod .progress-holder, #payMethod .prevent-overlay").addClass("hide");
+                        },
+                        success: (data, status) => {
+                            // console.log(data, status);
+                            var object = JSON.parse(data);
+                            M.toast({
+                                html: object.message
+                            });
+                            if (object.status == "success") {
+                                elem.slideUp();
+                            }
+                        },
+                        error: (data, status) => {
+                            console.log(data, status);
+                        },
+                        complete: () => {
+                            elem.css("opacity", 1);
+                            // $("#payMethod .progress-holder, #payMethod .prevent-overlay").addClass("hide");
+                        }
+                    });
+                }
+            }
+        </script>
 
-</html>
+    </body>
+
+    </html>
 
 <?php } else {
     header("Location: /");

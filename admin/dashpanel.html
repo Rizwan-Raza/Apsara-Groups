@@ -10,6 +10,13 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
     <base href="../">
     <?php include "includes/head.inc.php"; ?>
     <!-- <link rel="stylesheet" href="css/signin.css" /> -->
+    <style>
+        .card h4 {
+            height: 50px;
+            line-height: 50px;
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -38,6 +45,26 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
         $result = $conn->query($sql);
         $num_g = $result->fetch_assoc()['COUNT(`_gid`)'];
 
+        $sql = "SELECT COUNT(`_uid`) FROM `users`"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_u = $result->fetch_assoc()['COUNT(`_uid`)'];
+
+        $sql = "SELECT COUNT(`_oid`) FROM `orders` WHERE `status`!=2"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_od = $result->fetch_assoc()['COUNT(`_oid`)'];
+
+        $sql = "SELECT COUNT(`_oid`) FROM `orders` WHERE `paid`=0"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_op = $result->fetch_assoc()['COUNT(`_oid`)'];
+
+        $sql = "SELECT COUNT(`_oid`) FROM `orders`"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_ot = $result->fetch_assoc()['COUNT(`_oid`)'];
+
         $sql = "SELECT `types`.*, COUNT(`products`.`_tid`) AS `count` FROM `types`, `products` WHERE `types`.`_tid`=`products`.`_tid` GROUP BY `types`.`_tid`"; 
         $conn = DB::getConnection(); 
         $resultTypes = $conn->query($sql);
@@ -55,9 +82,81 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
             <div class="px-4">
                 <p>Here, we got some numbers: </p>
                 <div class="row">
-                    <div class="col s12 m6 l4 xl3">
-                        <a href="admin/categories" class="waves-effect waves-light w-full">
-                            <div class="card bg-primary">
+                    <?php if($num_op > 0 ) { ?><div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/orders?filter=unpaid" class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_op?>/<small><?=$num_ot?></small>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Unpaid Orders
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <?php } ?>
+                    <?php if($num_od > 0 ) { ?><div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/orders?filter=non-delivered" class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_od?>/<small><?=$num_ot?></small>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Non-delivered Orders
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <?php } ?>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/queries" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_q?>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Queries
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/users" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_u?>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Users
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/orders" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_ot?>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    All Orders
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/categories" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
                                         <?=$num_t?>
@@ -69,9 +168,9 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                             </div>
                         </a>
                     </div>
-                    <div class="col s12 m6 l4 xl3">
-                        <a href="admin/products/all" class="waves-effect waves-light w-full">
-                            <div class="card bg-primary">
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/products/all" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
                                         <?=$num_p?>
@@ -86,9 +185,9 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                     <?php
                     while($cat = $resultTypes->fetch_assoc()) {
                         ?>
-                    <div class="col s12 m6 l4 xl3">
-                        <a href="admin/products/<?=$cat['url']?>" class="waves-effect waves-light w-full">
-                            <div class="card bg-primary">
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/products/<?=$cat['url']?>" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
                                         <?=$cat['count']?>
@@ -103,9 +202,9 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                     <?php
                     }
                      ?>
-                    <div class="col s12 m6 l4 xl3">
-                        <a href="admin/gallery" class="waves-effect waves-light w-full">
-                            <div class="card bg-primary">
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/gallery" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
                                         <?=$num_g?>
@@ -113,20 +212,6 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                                 </div>
                                 <div class="card-action center-align">
                                     Gallery Images
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col s12 m6 l4 xl3">
-                        <a href="admin/queries" class="waves-effect waves-light w-full">
-                            <div class="card bg-primary">
-                                <div class="card-content white-text">
-                                    <h4 class="fw-500 center-align">
-                                        <?=$num_q?>
-                                    </h4>
-                                </div>
-                                <div class="card-action center-align">
-                                    Queries
                                 </div>
                             </div>
                         </a>

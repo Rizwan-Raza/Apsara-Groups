@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === "GET" and isset($_GET['what'])) {
     if (isset($filter) and isset($with)) {
         $sql .= " WHERE `$filter`=" . $with;
     }
+    // echo $sql;
     require '../../services/db.inc.php';
     if ($result = DB::getConnection()->query($sql)) {
         $data = array();

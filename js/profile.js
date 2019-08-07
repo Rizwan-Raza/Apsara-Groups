@@ -83,6 +83,41 @@ $(() => {
             }
         });
     });
+
+    $("#editAddress form").submit(e => {
+        e.preventDefault();
+        // console.log($(e.target).serialize());
+
+        $.ajax({
+            url: "services/edit-address.php",
+            method: "POST",
+            data: $(e.target).serialize(),
+            beforeSend: () => {
+                $("#editAddress .progress-holder, #editAddress .prevent-overlay").removeClass("hide");
+            },
+            success: (data, status) => {
+                // console.log(data, status);
+                // return;
+                var object = JSON.parse(data);
+                M.toast({
+                    html: object.message
+                });
+                if (object.status == "success") {
+                    e.target.reset();
+                    $("#editAddress").modal("close");
+                }
+            },
+            error: (data, status) => {
+                M.toast({
+                    html: data
+                });
+                console.log(data, status);
+            },
+            complete: () => {
+                $("#editAddress .progress-holder, #editAddress .prevent-overlay").addClass("hide");
+            }
+        });
+    });
 });
 
 function addNewAddress() {
@@ -175,4 +210,21 @@ function saveDetail(elem, what) {
         }
     });
 
+}
+
+function editAddress(data) {
+    console.log(data);
+    let obj = JSON.parse(data);
+    $("#editAddress #e_aid").val(obj._aid);
+    $("#editAddress #ername").val(obj.name);
+    $("#editAddress #ernumber").val(obj.number);
+    $("#editAddress #eaddress").val(obj.address);
+    $("#editAddress #elandmark").val(obj.landmark);
+    $("#editAddress #epincode").val(obj.pincode);
+
+    $("#editAddress #e_address_type option").removeAttr("selected");
+    $("#editAddress #e_address_type option[value='" + obj.tag + "']").attr("selected", "selected");
+    $("#editAddress #e_address_type input").val($("#editAddress #e_address_type option[value='" + obj.tag + "']").text());
+    M.updateTextFields();
+    $("#editAddress").modal("open");
 }

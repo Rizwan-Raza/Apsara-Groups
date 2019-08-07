@@ -26,7 +26,7 @@ $(() => {
         $("#pricePanel").removeClass("hide");
     } else {
         $("#cartPanel .loader").addClass("hide");
-        $(".cart-items").html("<div class='my-2'>No Items Added on Cart.</div>");
+        $(".cart-items").html("<div class='my-2'>No Items Added in Cart.</div>");
         $(".price-brief").closest(".col").remove();
     }
 

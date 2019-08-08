@@ -57,7 +57,8 @@
   require_once "services/db.inc.php";
   $sql = "SELECT * FROM `types`";
   $result = DB::getConnection()->query($sql);
-  if ($result->num_rows > 0) {  ?>
+  $numrows = $result->num_rows;
+  if ($numrows > 0) {  ?>
     <li class="waves-effect w-100" onclick="popOut(this, <?= $numrows ?>)">
       <a href="javascript:;"><i class="material-icons">local_dining</i>
         Menu</a>

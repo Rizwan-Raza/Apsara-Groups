@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         error_reporting(0);
         extract($_POST, EXTR_SKIP);
         // $sql = "INSERT INTO `queries`(`name`, `email`, `number`, `message`, `type`) VALUES ('$name','$email','$number', '$message', 0)";
-        $sql = "INSERT INTO `queries`(`name`, `email`, `number`, `message`, `time`) VALUES ('$name','$email','$number', '$message', CONVERT_TZ(CURRENT_TIMESTAMP, '-07:00', '+05:30'))";
-        // $sql = "INSERT INTO `queries`(`name`, `email`, `number`, `message`, `type`, `time`) VALUES ('$name','$email','$number', '$message', 0, CURRENT_TIMESTAMP)";
+        $sql = "INSERT INTO `queries`(`name`, `email`, `number`, `message`, `time`) VALUES ('$name','$email','$number', '$message', CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '+05:30'))";
+        // $sql = "INSERT INTO `queries`(`name`, `email`, `number`, `message`, `time`) VALUES ('$name','$email','$number', '$message', CURRENT_TIMESTAMP)";
         require 'db.inc.php';
         $conn = DB::getConnection();
         if ($conn->query($sql) === true) {

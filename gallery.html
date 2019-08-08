@@ -28,7 +28,7 @@ session_start();
         <div class="container full px-4">
             <h3 class="fw-500">All Products</h3>
             <br />
-            <div class="row">
+            <div class="row enhanced">
                 <?php
                 require_once "services/db.inc.php";
                 $sql = "SELECT * FROM `gallery`";
@@ -48,7 +48,7 @@ session_start();
                     <div>No Gallery Images available</div>
                 <?php } ?>
             </div>
-            <div class="row products d-flex" id="products">
+            <div class="row products d-flex enhanced" id="products">
                 <?php
                 require_once "services/db.inc.php";
                 $sql = "SELECT * FROM `products` WHERE `has_image`=1";
@@ -90,7 +90,7 @@ session_start();
 
             </div>
 
-            <div class="row products d-flex">
+            <div class="row products d-flex enhanced">
                 <?php
                 require_once "services/db.inc.php";
                 $sql = "SELECT `products`.*, `types`.`title` AS `cat_title` FROM `products`, `types` WHERE `products`.`_tid`=`types`.`_tid` AND `has_image`=0";

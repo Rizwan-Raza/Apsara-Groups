@@ -41,7 +41,7 @@ session_start();
 
     <?php require_once "includes/scripts.inc.php" ?>
     <script>
-        $("#contact_form").submit(e => {
+        $("#contact_form form").submit(e => {
             e.preventDefault();
             // console.log($(e.target).serialize());
 
@@ -50,7 +50,7 @@ session_start();
                 method: "POST",
                 data: $(e.target).serialize(),
                 beforeSend: () => {
-                    $("#contact_form .progress-holder, #contact_form .prevent-overlay").removeClass("hide");
+                    $("#contact .progress-holder, #contact .prevent-overlay").removeClass("hide");
                 },
                 success: (data, status) => {
                     console.log(data, status);
@@ -58,15 +58,18 @@ session_start();
                     M.toast({
                         html: object.message
                     });
+                    if (object.status == "success") {
+                        e.target.reset();
+                    }
                 },
                 error: (data, status) => {
                     M.toast({
-                        html: data
+                        html: JSON.parse(data).message
                     });
                     console.log(data, status);
                 },
                 complete: () => {
-                    $("#contact_form .progress-holder, #contact_form .prevent-overlay").addClass("hide");
+                    $("#contact .progress-holder, #contact .prevent-overlay").addClass("hide");
                 }
             });
         });

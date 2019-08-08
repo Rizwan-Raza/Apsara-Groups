@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_SESSION['u_id'])) {
         error_reporting(0);
         extract($_POST, EXTR_SKIP);
 
-        $sql = "INSERT INTO `addresses`(`_uid`, `name`, `number`, `tag`, `address`, `landmark`, `pincode`, `time`) VALUES ($_SESSION[u_id], '$rname','$rnumber', $tag, '$address', '$landmark', '$pincode', CONVERT_TZ(CURRENT_TIMESTAMP, '-07:00', '+05:30'))";
+        $sql = "INSERT INTO `addresses`(`_uid`, `name`, `number`, `tag`, `address`, `landmark`, `pincode`, `time`) VALUES ($_SESSION[u_id], '$rname','$rnumber', $tag, '$address', '$landmark', '$pincode', CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '+05:30'))";
         require 'db.inc.php';
 
         $conn = DB::getConnection();

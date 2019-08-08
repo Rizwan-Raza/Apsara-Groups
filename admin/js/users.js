@@ -58,11 +58,11 @@ function viewProfile(uid, name, email, number) {
             var str = "";
             obj.forEach(elm => {
                 str += `<div class="grey lighten-3 p-4 my-2">
-                <div>${elm.address}<span class="chip right bg-primary">${(elm.tag == 1 ? 'Home' : (elm.tag == 2 ? 'Work' : 'Friend&apos;s Home'))}</span></div>
-                <div>Landmark: ${elm.landmark}</div>
-                <div>Pincode: ${elm.pincode}</div>
-                <div>Receiver&apos;s Name: ${elm.name}</div>
-                <div>Receiver&apos;s Name: ${elm.number}</div>
+                <div><span class="fw-500">${elm.address}<span class="chip right bg-primary">${(elm.tag == 1 ? 'Home' : (elm.tag == 2 ? 'Work' : 'Friend&apos;s Home'))}</span></span></div>
+                <div>Landmark: <span class="fw-500">${elm.landmark}</span></div>
+                <div>Pincode: <span class="fw-500">${elm.pincode}</span></div>
+                <div>Receiver&apos;s Name: <span class="fw-500">${elm.name}</span></div>
+                <div>Receiver&apos;s Name: <span class="fw-500">${elm.number}</span></div>
                 </div>`;
             });
             $("#profileModal #p_adds").html(str);

@@ -194,10 +194,12 @@ session_start();
     <section id="cakes" class="p-4">
         <div class="px-m-4">
             <div class="card-panel white">
-                <h5>Gallery</h5>
-                <hr class="short-border left grey darken-3" />
+                <div class="px-m-4">
+                    <h5>Gallery</h5>
+                    <hr class="short-border left grey darken-3" />
+                </div>
                 <br />
-                <div class="row gallery">
+                <div class="row gallery enhanced px-m-4">
                     <?php
                     require_once "services/db.inc.php";
                     $sql = "SELECT * FROM `gallery` LIMIT 8";
@@ -226,10 +228,12 @@ session_start();
         <br />
         <div class="px-m-4">
             <div class="card-panel white">
-                <h5>Cakes</h5>
-                <hr class="short-border left grey darken-3" />
+                <div class="px-m-4">
+                    <h5>Cakes</h5>
+                    <hr class="short-border left grey darken-3" />
+                </div>
                 <br />
-                <div class="row products d-flex">
+                <div class="row products d-flex enhanced px-m-4">
                     <?php
                     require_once "services/db.inc.php";
                     $sql = "SELECT `products`.*, `types`.`title` AS `cat_title` FROM `products`, `types` WHERE `products`.`_tid`=`types`.`_tid` AND `has_image`=0 LIMIT 6";

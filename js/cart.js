@@ -143,20 +143,10 @@ $(() => {
                 if (object.status == "success") {
                     // e.target.reset();
                     $("#payMethod").modal("close");
+                    localStorage.removeItem("cart");
                     if (e.target.pay_method.value == 2) {
-                        $.ajax({
-                            url: "services/pay-api.php",
-                            method: "POST",
-                            data: {
-                                purpose: localStorage.getItem("c_purpose"),
-                                amount: localStorage.getItem("c_price")
-                            },
-                            success: (data, status) => {
-                                console.log("Something goes here");
-                            }
-                        });
+                        window.location.href = "services/pay-api.php?purpose=" + localStorage.getItem("c_purpose") + "&amount=" + localStorage.getItem("c_price");
                     } else {
-                        localStorage.removeItem("cart");
                         window.location.href = "/orders";
                     }
                 }

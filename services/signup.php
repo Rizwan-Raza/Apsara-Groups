@@ -7,12 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if (isset($_POST['name']) and isset($_POST['email']) and isset($_POST['password']) and isset($_POST['rpassword'])) {
         error_reporting(0);
         extract($_POST, EXTR_SKIP);
-            if ($password != $rpassword) {
-                echo json_encode(array("message" => "Password Mismatch", "status" => "password_error"));
-                return;
-            }
+        if ($password != $rpassword) {
+            echo json_encode(array("message" => "Password Mismatch", "status" => "password_error"));
+            return;
+        }
 
-        $sql = "INSERT INTO `users`(`name`, `email`, `password`, `number`, `time`) VALUES ('$name','$email','" . md5("*WAMP*" . $password . "*WAMP*") . "', '$number', CONVERT_TZ(CURRENT_TIMESTAMP, '-07:00', '+05:30'))";
+        $sql = "INSERT INTO `users`(`name`, `email`, `password`, `number`, `time`) VALUES ('$name','$email','" . md5("*WAMP*" . $password . "*WAMP*") . "', '$number', CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '+05:30'))";
         require 'db.inc.php';
 
         $conn = DB::getConnection();

@@ -100,6 +100,8 @@
                     data-tooltip="Show Password" style="margin-top: -45px;">
                     <i class="material-icons grey-text text-darken-3"
                         style="vertical-align: middle">visibility_off</i></button>
+                <span class="helper-text right"><a href="javascript:openModal('#signInForm', '#forgotPassword')">Forgot
+                        password?</a></span>
             </div>
         </form>
     </div>
@@ -161,5 +163,37 @@
         <button type="reset" class="modal-close waves-effect transparent waves-red btn-flat btn mr-1">Not
             now</button>
         <button type="submit" class="waves-effect waves-light btn ml-1" form="signUpForm">Create Account</button>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="forgotPassword" class="modal" style="max-width: 500px">
+    <div class="progress-holder hide" id="progress">
+        <div class="progress m-0">
+            <div class="indeterminate bg-primary"></div>
+        </div>
+    </div>
+    <div class="prevent-overlay hide full"></div>
+    <div class="modal-content">
+        <h4 class="fw-500 m-0">Account recovery<button
+                class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                    class="material-icons black-text">close</i></button>
+        </h4>
+        <br />
+        <br />
+        <form id="recoveryForm">
+            <div class="input-field">
+                <label for="ar_email">Registered Email</label>
+                <input type="email" name="email" required id="ar_email" />
+                <span class="helper-text">You'll receive password reset link on this email.</span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="waves-effect btn-flat btn left transparent" onclick="openModal(this, '#signUp')">Create an
+            account</button>
+        <button type="reset" class="modal-close waves-effect transparent waves-red btn-flat btn mr-1">Not
+            now</button>
+        <button type="submit" class="waves-effect waves-light btn ml-1" form="signUpForm">Recover Account</button>
     </div>
 </div>

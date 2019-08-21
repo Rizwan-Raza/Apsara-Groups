@@ -90,6 +90,39 @@ $(() => {
         });
     });
 
+    $("#forgotPassword form#recoveryForm").submit(e => {
+        e.preventDefault();
+        // console.log($(e.target).serialize());
+
+        $.ajax({
+            url: "services/recovery.php",
+            method: "POST",
+            data: $(e.target).serialize(),
+            beforeSend: () => {
+                $("#forgotPassword .progress-holder, #forgotPassword .prevent-overlay").removeClass("hide");
+            },
+            success: (data, status) => {
+                console.log(data, status);
+                var object = JSON.parse(data);
+                M.toast({
+                    html: object.message
+                });
+                if (object.status == "success") {
+                    e.target.reset();
+                }
+            },
+            error: (data, status) => {
+                M.toast({
+                    html: data
+                });
+                console.log(data, status);
+            },
+            complete: () => {
+                $("#forgotPassword .progress-holder, #forgotPassword .prevent-overlay").addClass("hide");
+            }
+        });
+    });
+
 });
 
 function popOut(elem, heightNum) {

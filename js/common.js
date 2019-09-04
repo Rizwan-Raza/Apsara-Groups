@@ -8,6 +8,8 @@ $(() => {
         }
     }
     M.AutoInit();
+    
+    $('.slider').slider({ height: 240, indicators: false });
 
     $("#explore .carousel").carousel({
         fullWidth: true,

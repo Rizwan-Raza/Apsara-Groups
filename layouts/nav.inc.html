@@ -7,35 +7,40 @@
         <option value="2" data-icons="images/location.png" class="left">Okhla</option>
       </select>
     </div>
-    <div class="left ml-2 hide-on-small-only"><a href="tel:+919876543210" class="black-text"><i class="material-icons left">phone</i>
+    <div class="left ml-2 hide-on-small-only"><a href="tel:+919876543210" class="black-text"><i
+          class="material-icons left">phone</i>
         011-9876543210</a></div>
 
     <ul class="right">
       <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
-        <li class="drop drop-right">
-          <a class="black-text fw-500">
-            <img src="images/photo.png" style="height: 24px;vertical-align:middle; margin-top: -4px"> <?= explode(" ", $_SESSION['u_name'])[0] ?></a>
-          <ul>
-            <li><a href="profile" class="fw-500">Profile</a></li>
-            <li><a href="orders" class="fw-500">My Order</a></li>
-            <li><a href="services/logout.php?log=true" class="fw-500">Logout</a></li>
-          </ul>
-        </li>
+      <li class="drop drop-right">
+        <a class="black-text fw-500">
+          <img src="images/photo.png" style="height: 24px;vertical-align:middle; margin-top: -4px">
+          <?= explode(" ", $_SESSION['u_name'])[0] ?></a>
+        <ul>
+          <li><a href="profile" class="fw-500">Profile</a></li>
+          <li><a href="orders" class="fw-500">My Order</a></li>
+          <li><a href="services/logout.php?log=true" class="fw-500">Logout</a></li>
+        </ul>
+      </li>
       <?php } else { ?>
-        <li><a class="modal-trigger btn" href="#signIn">Sign in</a></li>
+      <li><a class="modal-trigger btn" href="#signIn">Sign in</a></li>
       <?php } ?>
 
     </ul>
 
     <div class="right hide-on-med-and-down">
-      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent facebook btn-flat"><img src="images/socials/f.svg"></button>
-      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent twitter btn-flat"><img src="images/socials/t.svg"></button>
-      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent instagram btn-flat"><img src="images/socials/i.svg"></button>
+      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent facebook btn-flat"><img
+          src="images/socials/f.svg"></button>
+      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent twitter btn-flat"><img
+          src="images/socials/t.svg"></button>
+      <button class="btn-floating btn-small ml-2 waves-effect waves-circle transparent instagram btn-flat"><img
+          src="images/socials/i.svg"></button>
 
     </div>
-    <form class="right">
+    <form class="right" action="search">
       <div class="input-field">
-        <input id="search" type="search" required placeholder="Search here" name="q">
+        <input id="search" type="search" required placeholder="Search here" name="q" value="<?=@$_GET['q']?>">
         <label class="label-icon" for="search"><i class="material-icons black-text">search</i></label>
         <i class="material-icons">close</i>
       </div>
@@ -59,17 +64,17 @@
   $result = DB::getConnection()->query($sql);
   $numrows = $result->num_rows;
   if ($numrows > 0) {  ?>
-    <li class="waves-effect w-100" onclick="popOut(this, <?= $numrows ?>)">
-      <a href="javascript:;"><i class="material-icons">local_dining</i>
-        Menu</a>
-      <ul class="small-drop">
-        <?php
+  <li class="waves-effect w-100" onclick="popOut(this, <?= $numrows ?>)">
+    <a href="javascript:;"><i class="material-icons">local_dining</i>
+      Menu</a>
+    <ul class="small-drop">
+      <?php
         while ($nav = $result->fetch_assoc()) { ?>
-          <li><a href="menu/<?= $nav['url'] ?>" class="truncate"><?= $nav['title'] ?></a>
-          </li>
-        <?php } ?>
-      </ul>
-    </li>
+      <li><a href="menu/<?= $nav['url'] ?>" class="truncate"><?= $nav['title'] ?></a>
+      </li>
+      <?php } ?>
+    </ul>
+  </li>
   <?php } ?>
   <li class="waves-effect w-100">
     <a href="gallery"><i class="material-icons">cake</i> Gallery</a>
@@ -81,7 +86,8 @@
 <div class="divider"></div>
 <nav class="white px-m-4" id="mainNav">
   <div class="nav-wrapper">
-    <a href="javascript:;" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons black-text">menu</i></a>
+    <a href="javascript:;" data-target="mobile-sidenav" class="sidenav-trigger"><i
+        class="material-icons black-text">menu</i></a>
     <a href="./" class="brand-logo"><img src="images/apsara.jpg" class="ml-4 brand-img" alt="Apsara" />
 
       <ul class="right hide-on-med-and-down">
@@ -92,19 +98,20 @@
         $sql = "SELECT * FROM `types`";
         $result = DB::getConnection()->query($sql);
         if ($result->num_rows > 0) {  ?>
-          <li class="drop">
-            <a class="black-text hover-text-primary fw-500" href="javascript:;">Menu</a>
-            <ul>
-              <?php
+        <li class="drop">
+          <a class="black-text hover-text-primary fw-500" href="javascript:;">Menu</a>
+          <ul>
+            <?php
               while ($nav = $result->fetch_assoc()) { ?>
-                <li><a href="menu/<?= $nav['url'] ?>"><?= $nav['title'] ?></a></li>
-              <?php } ?>
-            </ul>
-          </li>
+            <li><a href="menu/<?= $nav['url'] ?>"><?= $nav['title'] ?></a></li>
+            <?php } ?>
+          </ul>
+        </li>
         <?php } ?>
         <li><a href="gallery" class="black-text hover-text-primary fw-500">Gallery</a></li>
         <li><a href="contact" class="black-text hover-text-primary fw-500">Contact Us</a></li>
-        <li><a href="cart" class="black-text hover-text-primary fw-500 pos-rel cart"><i class="material-icons left">shopping_cart</i> Cart <div class="num circle red white-text hide"></div></a>
+        <li><a href="cart" class="black-text hover-text-primary fw-500 pos-rel cart"><i
+              class="material-icons left">shopping_cart</i> Cart <div class="num circle red white-text hide"></div></a>
         </li>
       </ul>
   </div>

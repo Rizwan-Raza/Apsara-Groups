@@ -1,4 +1,5 @@
 /* theme */
+
 .bg-primary {
     background-color: #337ab7;
 }
@@ -8,6 +9,7 @@
 }
 
 /* margins */
+
 .m-0 {
     margin: 0px;
 }
@@ -81,6 +83,7 @@
 }
 
 /* paddings */
+
 .p-0 {
     padding: 0;
 }
@@ -119,6 +122,7 @@
 }
 
 /* sizing */
+
 .w-100 {
     width: 100%;
 }
@@ -129,6 +133,7 @@
 }
 
 /* typography */
+
 .lh-0 {
     line-height: 0px;
 }
@@ -142,6 +147,7 @@
 }
 
 /* display */
+
 .d-block {
     display: block;
 }
@@ -165,13 +171,16 @@
     position: absolute;
 }
 
-
 hr.short-border {
     border: none;
     height: 4px;
     background-color: #000;
     width: 100px;
     margin: 0 auto;
+}
+
+p {
+    text-align: justify;
 }
 
 @media (min-width: 992px) {
@@ -201,7 +210,6 @@ nav .select-wrapper {
     -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
     z-index: 996;
-
 }
 
 #mainNav button i {
@@ -239,8 +247,7 @@ nav .select-wrapper {
     transform: scale(0);
     -webkit-transform-origin: 0 0;
     transform-origin: 0 0;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
-        0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 }
 
 .drop.drop-right ul {
@@ -290,10 +297,9 @@ nav button.instagram:hover {
 }
 
 #cakes .gallery .card .card-image img {
-
     object-fit: cover;
-    height: 300px;
-    max-height: 300px
+    height: 240px;
+    max-height: 240px
 }
 
 .products.d-flex {
@@ -335,6 +341,7 @@ nav button.instagram:hover {
 header img {
     max-height: 600px;
     object-fit: cover;
+    background-attachment: fixed;
 }
 
 .home-banner {
@@ -358,6 +365,13 @@ header img {
 
 #belowBanner .row {
     margin-top: -100px;
+}
+
+#belowBanner .card .card-image .slider,
+#belowBanner .card .card-image .slides,
+#belowBanner .card .card-image img {
+    height: 240px;
+    object-fit: cover;
 }
 
 #home-about .col.m6 img {
@@ -396,6 +410,10 @@ header img {
 }
 
 @media (max-width: 600px) {
+    #belowBanner .row.d-flex {
+        display: block;
+    }
+
     #explore .carousel-item {
         width: 100%;
     }
@@ -462,6 +480,25 @@ header img {
     background-repeat: repeat;
 }
 
+#gallery-cakes .card .card-image {
+    max-height: 240px;
+}
+
+#gallery-cakes .card .card-image .pos-abs,
+#cakes .card .card-image .pos-abs {
+    transition: all 200ms ease;
+    top: 100%;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: zoom-in;
+}
+
+#gallery-cakes .card .card-image:hover .pos-abs,
+#cakes .card .card-image:hover .pos-abs {
+    top: 0;
+    opacity: 1;
+}
+
 #subscription form {
     max-width: 700px;
 }
@@ -490,7 +527,6 @@ header img {
 }
 
 @media (max-width:600px) {
-
     #instagram .left img {
         height: 80px;
     }

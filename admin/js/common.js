@@ -6,7 +6,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".sidenav a[href='" + window.location.href.replace("https://www.wampinstitute.in/", "") + "']").parent().addClass("active");
+    $(".sidenav a[href='" + window.location.href.replace("https://www.apsarafoods.in/", "") + "']").parent().addClass("active");
 });
 
 

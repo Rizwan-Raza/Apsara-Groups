@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <table
                         style="background-color: #eeeeee;padding: 8px 16px;width: 100%;box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);">
                         <tr>
-                            <td><img src="https://www.wampinstitute.in/images/wamp-round-logo.png" height="50px" alt="WAMP" /></td>
+                            <td><img src="https://www.apsarafoods.in/images/apsara.jpg" height="50px" alt="Apsara Foods" /></td>
                             <td style="line-height: 50px;vertical-align: top; margin:0px; font-size: 32px; font-weight: 500;">Password
                                 Reset for ' . $name . '</td>
                         </tr>
@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <table style="background-color: #880e4f;padding: 8px 16px;width: 100%;color: #ffffff;">
                         <tr>
                             <td style="line-height: 50px;vertical-align: top; margin:0px; font-size: 24px; font-weight: 500;"><a
-                                    href="https://wampinstitute.in/" style="color: #ffffff;text-decoration:none">Apsara Groups</a>
+                                    href="https://www.apsarafoods.in/" style="color: #ffffff;text-decoration:none">Apsara Groups</a>
                             </td>
-                            <td><a href="https://www.wampinstitute.in/about" style="color: #ffffff;text-decoration:none">About</a></td>
-                            <td><a href="https://www.wampinstitute.in/contact" style="color: #ffffff;text-decoration:none">Contact</a>
+                            <td><a href="https://www.apsarafoods.in/about" style="color: #ffffff;text-decoration:none">About</a></td>
+                            <td><a href="https://www.apsarafoods.in/contact" style="color: #ffffff;text-decoration:none">Contact</a>
                             </td>
                         </tr>
                     </table>
@@ -63,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 // Always set content-type when sending HTML email
                 $headers = "MIME-Version: 1.0" . "\r\n";
                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                // $headers .= "Cc: info@wampinstitute.in" . "\r\n";
-                $headers .= 'From: Support | WAMP Infotech <support@wampinfotech.com>' . "\r\n";
+                // $headers .= "Cc: info@apsarafoods.in" . "\r\n";
+                $headers .= 'From: Support | ApsaraFoods <support@apsarafoods.in>' . "\r\n";
 
-                if (mail($to, $subject, $body, $headersO)) {
+                if (mail($to, $subject, $body, $headers)) {
                     $data = array("message" => "Recovery mail sent successfully.", "status" => "success");
                 } else {
                     $data = array("message" => "Email seems to be wrong, Try again.", "status" => "success");

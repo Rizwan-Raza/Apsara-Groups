@@ -14,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $conn = DB::getConnection();
         if ($conn->query($sql) === true) {
             // For testing purpose only.
-            $to = "rizwan.raza987@gmail.com";
-            // $to = "wampinstitute@gmail.com";
+            // $to = "rizwan.raza987@gmail.com";
+            $to = "foods.apsara@gmail.com";
             $from = "$name <$email>";
             $subject = "Enquiry from Apsara Groups Web Platform.";
             $body = '<!DOCTYPE html>
@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <table
                     style="background-color: #eeeeee;padding: 8px 16px;width: 100%;box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);">
                     <tr>
-                        <td><img src="https://www.wampinstitute.in/images/wamp-round-logo.png" height="50px" alt="WAMP" /></td>
+                        <td><img src="https://www.apsarafoods.in/apsara.jpg" height="50px" alt="Apsara Foods" /></td>
                         <td style="line-height: 50px;vertical-align: top; margin:0px; font-size: 32px; font-weight: 500;">Enquiry
-                            from Apsara Groups</td>
+                            from Apsara Foods</td>
                     </tr>
                 </table>
                 <table style="padding: 8px 16px;width: 100%;font-weight: 500;" cellspacing="10">
@@ -55,10 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <table style="background-color: #880e4f;padding: 8px 16px;width: 100%;color: #ffffff;">
                     <tr>
                         <td style="line-height: 50px;vertical-align: top; margin:0px; font-size: 24px; font-weight: 500;"><a
-                                href="https://wampinstitute.in/" style="color: #ffffff;text-decoration:none">Apsara Groups</a>
+                                href="https://apsarafoods.in/" style="color: #ffffff;text-decoration:none">Apsara Groups</a>
                         </td>
-                        <td><a href="https://www.wampinstitute.in/about" style="color: #ffffff;text-decoration:none">About</a></td>
-                        <td><a href="https://www.wampinstitute.in/contact" style="color: #ffffff;text-decoration:none">Contact</a>
+                        <td><a href="https://www.apsarafoods.in/about" style="color: #ffffff;text-decoration:none">About</a></td>
+                        <td><a href="https://www.apsarafoods.in/contact" style="color: #ffffff;text-decoration:none">Contact</a>
                         </td>
                     </tr>
                 </table>
@@ -68,13 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             // Always set content-type when sending HTML email
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= "Cc: info@wampinstitute.in" . "\r\n";
+            $headers .= "Cc: info@apsarafoods.in" . "\r\n";
             // More headers
             $headersO = $headers . 'From: ' . $from . "\r\n";
             if (mail($to, $subject, $body, $headersO)) {
                 $data = array("message" => "Thank you! We will contact you soon.", "status" => "success");
             } else {
-                $headersO = $headers . 'From: Support | WAMP Infotech <support@wampinfotech.com>' . "\r\n";
+                $headersO = $headers . 'From: Support | ApsaraFoods <support@apsarafoods.in>' . "\r\n";
                 mail($to, $subject, $body, $headers);
                 $data = array("message" => "Email seems to be wrong, Try again.", "status" => "success");
             }

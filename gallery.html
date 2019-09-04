@@ -36,20 +36,18 @@ session_start();
                 if ($result->num_rows > 0) {
                     while ($value = $result->fetch_assoc()) {
                         extract($value, EXTR_OVERWRITE) ?>
-                <div class="col s12 m6 l4 xl3">
-                    <div class="card">
-                        <div class="card-image full">
-                            <img src="<?= $image ?>" class="materialboxed lh-0" />
-                            <div class="full pos-abs center mx-auto"
-                                onclick="$(this).closest('.card-image').find('img').trigger('click');"><i
-                                    class="material-icons white-text" style="line-height: 240px">launch</i>
+                        <div class="col s12 m6 l4 xl3">
+                            <div class="card">
+                                <div class="card-image full">
+                                    <img src="<?= $image ?>" class="materialboxed lh-0" />
+                                    <div class="full pos-abs center mx-auto" onclick="$(this).closest('.card-image').find('img').trigger('click');"><i class="material-icons white-text" style="line-height: 240px">launch</i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <?php }
-                } else { ?>
-                <div>No Gallery Images available</div>
+                    <?php }
+                    } else { ?>
+                    <div>No Gallery Images available</div>
                 <?php } ?>
             </div>
             <div class="row products d-flex enhanced" id="products">
@@ -60,35 +58,34 @@ session_start();
                 if ($result->num_rows > 0) {
                     while ($value = $result->fetch_assoc()) {
                         extract($value, EXTR_OVERWRITE) ?>
-                <div class="col s12 m6 l4 xl3 d-flex mx-auto">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="<?= $image ?>" class="grey lighten-3 full">
-                        </div>
-                        <div class="card-content">
-                            <h5 class="fw-500 truncate m-0"><?= $title ?></h5>
-                            <?php $count = strlen($description); ?>
-                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                        </div>
-                        <div class="fix"></div>
-                        <div class="card-action">
-                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
-                                    $result2 = DB::getConnection()->query($sqlV);
-                                    if ($result2->num_rows > 0) {
-                                        while ($valueV = $result2->fetch_assoc()) { ?>
-                            <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
-                                    <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                <button class="btn right btn-small red"
-                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
-                                    Cart</button>
+                        <div class="col s12 m6 l4 xl3 d-flex mx-auto">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="<?= $image ?>" class="grey lighten-3 full">
+                                </div>
+                                <div class="card-content">
+                                    <h5 class="fw-500 truncate m-0"><?= $title ?></h5>
+                                    <?php $count = strlen($description); ?>
+                                    <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                                </div>
+                                <div class="fix"></div>
+                                <div class="card-action">
+                                    <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                                            $result2 = DB::getConnection()->query($sqlV);
+                                            if ($result2->num_rows > 0) {
+                                                while ($valueV = $result2->fetch_assoc()) { ?>
+                                            <div class="my-1"><span class="left fw-700">&#8377;
+                                                    <?= number_format($valueV['price'], 2) ?>
+                                                    <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
+                                                <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                                    Cart</button>
+                                            </div>
+                                    <?php }
+                                            } ?>
+                                    <br clear="all" />
+                                </div>
                             </div>
-                            <?php }
-                                    } ?>
-                            <br clear="all" />
                         </div>
-                    </div>
-                </div>
                 <?php }
                 } else {
                     $numI = 0;
@@ -104,31 +101,30 @@ session_start();
                 if ($result->num_rows > 0) {
                     while ($value = $result->fetch_assoc()) {
                         extract($value, EXTR_OVERWRITE) ?>
-                <div class="col s12 m6 d-flex mx-auto">
-                    <div class="card w-100">
-                        <div class="card-content">
-                            <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
-                                    <?= $cat_title ?></div>
-                            </h5>
-                            <?php $count = strlen($description); ?>
-                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
-                                    $result2 = DB::getConnection()->query($sqlV);
-                                    if ($result2->num_rows > 0) {
-                                        while ($valueV = $result2->fetch_assoc()) { ?>
-                            <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
-                                    <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                <button class="btn right btn-small red"
-                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
-                                    Cart</button>
-                                <br clear="all" />
+                        <div class="col s12 m6 d-flex mx-auto">
+                            <div class="card w-100">
+                                <div class="card-content">
+                                    <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
+                                            <?= $cat_title ?></div>
+                                    </h5>
+                                    <?php $count = strlen($description); ?>
+                                    <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                                    <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                                            $result2 = DB::getConnection()->query($sqlV);
+                                            if ($result2->num_rows > 0) {
+                                                while ($valueV = $result2->fetch_assoc()) { ?>
+                                            <div class="my-1"><span class="left fw-700">&#8377;
+                                                    <?= number_format($valueV['price'], 2) ?>
+                                                    <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
+                                                <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                                    Cart</button>
+                                                <br clear="all" />
+                                            </div>
+                                    <?php }
+                                            } ?>
+                                </div>
                             </div>
-                            <?php }
-                                    } ?>
                         </div>
-                    </div>
-                </div>
                 <?php }
                 } else {
                     $numNI = 0;
@@ -136,7 +132,7 @@ session_start();
 
             </div>
             <?php if (isset($numI) and $numI == 0 and isset($numNI) and $numNI == 0) { ?>
-            <div>No Products to be shown</div>
+                <div>No Products to be shown</div>
             <?php } ?>
         </div>
     </section>

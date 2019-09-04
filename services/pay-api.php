@@ -21,7 +21,7 @@ try {
         "send_email" => true,
         "send_sms" => true,
         "email" => $email,
-        "redirect_url" => "https://www.wampinfotech.com/pay"
+        "redirect_url" => "https://www.apsarafoods.in/thanks"
     ));
     $id = $conn->real_escape_string($response['id']);
     # print_r($response);

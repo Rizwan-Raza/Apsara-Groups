@@ -16,6 +16,8 @@ $(() => {
         numVisible: 3
     });
 
+    $('.parallax').parallax();
+
 
     $("#signUp form#signUpForm").submit(e => {
         e.preventDefault();

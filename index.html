@@ -16,8 +16,10 @@ session_start();
 
 <body class="grey lighten-4">
     <?php include "layouts/nav.inc.html"; ?>
-    <header>
-        <img src="images/banner.jpg" class="full" />
+    <header class="parallax-container">
+        <div class="parallax">
+            <img src="images/banner.jpg" />
+        </div>
     </header>
     <section id="belowBanner">
         <div class="row mx-m-4 d-flex">
@@ -155,8 +157,7 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/apsara-restaurant.jpg" class="full">
                             <div class="full">
-                                <a href="about#apsara-restaurant"
-                                    class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#apsara-restaurant" class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -175,8 +176,7 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/sachus-cafe.jpg" class="full">
                             <div class="full">
-                                <a href="about#sachus-cafe"
-                                    class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#sachus-cafe" class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -194,8 +194,7 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/apsara-caterers.jpg" class="full">
                             <div class="full">
-                                <a href="about#apsara-catering"
-                                    class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#apsara-catering" class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -219,10 +218,8 @@ session_start();
                     </div>
                 </div>
             </div>
-            <button class="btn-floating white waves-effect waves-circle btn-small nav-left"
-                onclick="prev('#explore .carousel')"><i class="material-icons black-text">chevron_left</i></button>
-            <button class="btn-floating white waves-effect waves-circle btn-small nav-right"
-                onclick="next('#explore .carousel')"><i class="material-icons black-text">chevron_right</i></button>
+            <button class="btn-floating white waves-effect waves-circle btn-small nav-left" onclick="prev('#explore .carousel')"><i class="material-icons black-text">chevron_left</i></button>
+            <button class="btn-floating white waves-effect waves-circle btn-small nav-right" onclick="next('#explore .carousel')"><i class="material-icons black-text">chevron_right</i></button>
 
         </div>
         <br />
@@ -244,20 +241,18 @@ session_start();
                     if ($result->num_rows > 0) {
                         while ($value = $result->fetch_assoc()) {
                             extract($value, EXTR_OVERWRITE) ?>
-                    <div class="col s12 m6 l4 xl3">
-                        <div class="card">
-                            <div class="card-image full">
-                                <img src="<?= $image ?>" class="materialboxed lh-0" />
-                                <div class="full pos-abs center mx-auto"
-                                    onclick="$(this).closest('.card-image').find('img').trigger('click');"><i
-                                        class="material-icons white-text" style="line-height: 240px">launch</i>
+                            <div class="col s12 m6 l4 xl3">
+                                <div class="card">
+                                    <div class="card-image full">
+                                        <img src="<?= $image ?>" class="materialboxed lh-0" />
+                                        <div class="full pos-abs center mx-auto" onclick="$(this).closest('.card-image').find('img').trigger('click');"><i class="material-icons white-text" style="line-height: 240px">launch</i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <?php }
-                    } else { ?>
-                    <div>No Gallery Images available</div>
+                        <?php }
+                        } else { ?>
+                        <div>No Gallery Images available</div>
                     <?php } ?>
                 </div>
                 <br />
@@ -282,34 +277,33 @@ session_start();
                     if ($result->num_rows > 0) {
                         while ($value = $result->fetch_assoc()) {
                             extract($value, EXTR_OVERWRITE) ?>
-                    <div class="col s12 m6 d-flex mx-auto">
-                        <div class="card w-100">
-                            <div class="card-content">
-                                <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
-                                        <?= $cat_title ?></div>
-                                </h5>
-                                <?php $count = strlen($description); ?>
-                                <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                                <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
-                                        $result2 = DB::getConnection()->query($sqlV);
-                                        if ($result2->num_rows > 0) {
-                                            while ($valueV = $result2->fetch_assoc()) { ?>
-                                <div class="my-1"><span class="left fw-700">&#8377;
-                                        <?= number_format($valueV['price'], 2) ?>
-                                        <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                    <button class="btn right btn-small red"
-                                        onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
-                                        Cart</button>
-                                    <br clear="all" />
+                            <div class="col s12 m6 d-flex mx-auto">
+                                <div class="card w-100">
+                                    <div class="card-content">
+                                        <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
+                                                <?= $cat_title ?></div>
+                                        </h5>
+                                        <?php $count = strlen($description); ?>
+                                        <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                                        <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                                                $result2 = DB::getConnection()->query($sqlV);
+                                                if ($result2->num_rows > 0) {
+                                                    while ($valueV = $result2->fetch_assoc()) { ?>
+                                                <div class="my-1"><span class="left fw-700">&#8377;
+                                                        <?= number_format($valueV['price'], 2) ?>
+                                                        <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
+                                                    <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                                        Cart</button>
+                                                    <br clear="all" />
+                                                </div>
+                                        <?php }
+                                                } ?>
+                                    </div>
                                 </div>
-                                <?php }
-                                        } ?>
                             </div>
-                        </div>
-                    </div>
-                    <?php }
-                    } else { ?>
-                    <div>No Products available</div>
+                        <?php }
+                        } else { ?>
+                        <div>No Products available</div>
                     <?php } ?>
                 </div>
                 <br />
@@ -332,8 +326,7 @@ session_start();
                                 voluptatem reiciendis sit corrupti, quisquam animi? Molestias, libero!
                             </p>
 
-                            <div class="center hide-on-med-and-up"><br /><button
-                                    class="btn white btn-large mx-auto waves-effect waves-dark black-text">Explore</button>
+                            <div class="center hide-on-med-and-up"><br /><button class="btn white btn-large mx-auto waves-effect waves-dark black-text">Explore</button>
                             </div>
                         </div>
                     </div>
@@ -355,8 +348,7 @@ session_start();
                                 temporibus blanditiis earum laborum eum dolor dolore culpa rerum exercitationem
                                 voluptatem reiciendis sit corrupti, quisquam animi? Molestias, libero!
                             </p>
-                            <div class="center hide-on-med-and-up"><br /><button
-                                    class="btn grey darken-3 btn-large mx-auto waves-effect waves-dark white-text">Explore</button>
+                            <div class="center hide-on-med-and-up"><br /><button class="btn grey darken-3 btn-large mx-auto waves-effect waves-dark white-text">Explore</button>
                             </div>
                         </div>
                     </div>

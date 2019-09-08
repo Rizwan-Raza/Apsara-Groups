@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
     error_reporting(0);
     extract($_POST, EXTR_SKIP);
 
-    $sql = "INSERT INTO `types` (`title`, `url`, `description`) VALUES('$title', '$url', '$desc')";
+    $sql = "INSERT INTO `types` (`title`, `page_title`, `url`, `keyowrds`, `description`) VALUES('$title','$ptitle', '$url', '$keywords', '$desc')";
     require '../../services/db.inc.php';
 
     $conn = DB::getConnection();

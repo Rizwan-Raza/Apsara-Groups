@@ -112,11 +112,25 @@ function deleteCategory(id, elem) {
     }
 }
 
-function editCategory(id, title, url, desc) {
+function editCategory(id, title, p_title, url, keys, desc) {
     $("#categoryEdit #e_tid").val(id);
     $("#categoryEdit #etitle").val(title);
+    $("#categoryEdit #eptitle").val(p_title);
     $("#categoryEdit #eurl").val(url);
+    $("#categoryEdit #ekeywords").val(keys);
     $("#categoryEdit #edescription").val(desc);
     M.updateTextFields();
+    M.textareaAutoResize($("#edescription"));
     $("#categoryEdit").modal("open");
+}
+function viewCategory(title, p_title, url, keys, desc) {
+    $("#categoryView #vtitle").text(title);
+    $("#categoryView #vptitle").text(p_title);
+    let urlNode = $("#categoryView #vurl");
+    urlNode.attr("href", "menu/"+url);
+    urlNode.find("span").text(url);
+    $("#categoryView #vkeys").empty();
+    if(keys != null && keys.trim() != "") {$("#categoryView #vkeys").append(keys.split(",").map(key => {return `<div class="chip bg-primary">${key}</div>`}));}
+    $("#categoryView #vdescription").text(desc);
+    $("#categoryView").modal("open");
 }

@@ -10,7 +10,7 @@ if (
 <html lang="en">
 
 <head>
-    <title>Digital Marketing Company | Web Design Company</title>
+    <title>Gallery | Apsara Foods Admin </title>
     <base href="../" />
     <?php include "includes/head.inc.php"; ?>
     <!-- <link rel="stylesheet" href="admin/css/queries.css" /> -->
@@ -21,6 +21,23 @@ if (
 
         .grey .row .col .card .card-image img {
             object-fit: cover;
+        }
+
+        .material-placeholder {
+            height: 100%;
+            width: 100%;
+        }
+
+        h4 button img {
+            margin: 10px;
+        }
+
+        .card {
+            overflow: hidden;
+        }
+
+        .modal {
+            max-width: 500px;
         }
     </style>
 </head>
@@ -33,11 +50,14 @@ if (
         <div class="col s12 m9 white m-0 p-0" style="height:100vh;overflow:auto">
             <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons text-primary">menu</i></a>
             <div class="px-4">
-                <h4 class="my-1">Gallery</h4>
+                <h4 class="my-1">Gallery<button
+                        class="btn-flat btn-floating white waves-effect waves-dark right align-right modal-trigger"
+                        data-target="igUpdate"><img src="../images/socials/i.svg" alt="Instagram Gallery" /></button>
+                </h4>
             </div>
             <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
             <div class="grey lighten-3">
-                <?php $sql = "SELECT * FROM `gallery` ORDER BY `time` ASC";
+                <?php $sql = "SELECT * FROM `gallery` ORDER BY `time` DESC";
                     require "../services/db.inc.php";
                     include "includes/functions.inc.php";
                     date_default_timezone_set("Asia/Kolkata");
@@ -50,11 +70,11 @@ if (
                         for ($i = 0; $i < $num; $i++) {
                             $image = $result->fetch_assoc(); ?>
                     <div class="col s12 m6 l4 xl3">
-                        <div class="card p-0 m-0" style="overflow:hidden">
+                        <div class="card p-0" style="overflow:hidden">
                             <div class="card-image">
-                                <img src="<?= $image['image'] ?>" class="grey lighten-3 full">
+                                <img src="<?= $image['image'] ?>" class="grey lighten-3 full materialboxed">
                             </div>
-                            <div class="card-content">
+                            <div class="card-content p-2">
                                 <div class="pos-abs circle"
                                     style="background-color:rgba(0,0,0,0.5);top:-60px;left:-60px;width:120px;height:120px;padding:55px 0px 0px 45px">
                                     <h5 class="center fw-700 white-text text-z-depth-2">#<?= $i + 1 ?></h5>
@@ -87,7 +107,7 @@ if (
     </section>
 
     <!-- Modal Structure -->
-    <div id="imageAdd" class="modal  modal-fixed-footer" style="max-width: 500px">
+    <div id="imageAdd" class="modal  modal-fixed-footer">
         <div class="progress-holder hide border-radius-0">
             <div class="progress border-radius-0">
                 <div class="indeterminate bg-primary"></div>
@@ -96,7 +116,7 @@ if (
         <div class="prevent-overlay hide full"></div>
         <div class="modal-content card p-0 m-0">
             <div class="card-image">
-                <img src="images/card.jpg" class="grey lighten-3 full" id="holder">
+                <img src="images/card3.jpg" class="grey lighten-3 full" id="holder">
             </div>
             <div class="card-content">
                 <form id="gallery" enctype="multipart/form-data">
@@ -120,6 +140,39 @@ if (
     </div>
 
 
+    <!-- Modal Structure -->
+    <div id="igUpdate" class="modal">
+        <div class="progress-holder hide border-radius-0">
+            <div class="progress border-radius-0">
+                <div class="indeterminate bg-primary"></div>
+            </div>
+        </div>
+        <div class="prevent-overlay hide full"></div>
+        <div class="modal-content">
+            <h4>Instagram Gallery Keys</h4>
+            <br />
+            <form action="admin/services/update-ig-keys.php" method="post" id="igform">
+                <div class="input-field">
+                    <span class="prefix"><i class="material-icons">person</i></span>
+                    <input type="text" maxlength="18" minlength="9" id="igId" name="ig_id" required
+                        value="<?=file_get_contents('../services/ig_id.txt')?>" />
+                    <label for="igId">Instagram Profile ID</label>
+                </div>
+                <div class="input-field">
+                    <span class="prefix"><i class="material-icons">sync_problem</i></span>
+                    <input type="text" maxlength="32" minlength="32" id="igHash" name="hash" required
+                        value="<?=file_get_contents('../services/hash.txt')?>" />
+                    <label for="igHash">Instagram Access Hash</label>
+                </div>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button type="reset" class="modal-close waves-effect waves-red btn-flat btn">Not now</button>
+            <button type="submit" class="waves-effect waves-light bg-primary btn ml-1" form="igform">Update</button>
+        </div>
+    </div>
+
     <div class="fixed-action-btn">
         <a class="btn-floating btn-large bg-primary waves-effect waves-light modal-trigger" data-target="imageAdd">
             <i class="large material-icons">add</i>
@@ -130,6 +183,10 @@ if (
     <?php include "includes/scripts.inc.php"; ?>
     <!-- <script src="admin/js/queries.js"></script> -->
     <script>
+        $(() => {
+            M.AutoInit();
+            $(".modal").modal();
+        });
         function readURL(input, query) {
             var files = !!input.files ? input.files : [];
             if (!files.length || !window.FileReader) return;
@@ -175,6 +232,37 @@ if (
                     }
                 });
             });
+
+
+            $("#igUpdate form").submit(e => {
+                e.preventDefault();
+                let form = e.target;
+                $.ajax({
+                    url: form.getAttribute("action"),
+                    method: form.getAttribute("method"),
+                    data: $(form).serialize(),
+                    beforeSend: () => {
+                        $("#igUpdate .progress-holder, #igUpdate .prevent-overlay").removeClass("hide");
+                    },
+                    success: (data, status) => {
+                        var object = JSON.parse(data);
+                        M.toast({
+                            html: object.message
+                        });
+
+                        if (object.status == "success") {
+                            e.target.reset();
+                            $("#igUpdate").modal("close");
+                        }
+                    },
+                    error: (data, status) => {
+                        console.log(data, status);
+                    },
+                    complete: () => {
+                        $("#igUpdate .progress-holder, #igUpdate .prevent-overlay").addClass("hide");
+                    }
+                });
+            });
         });
 
         function deleteImage(id, elem) {
@@ -211,6 +299,9 @@ if (
                 });
             }
         }
+
+
+
     </script>
 
 </body>

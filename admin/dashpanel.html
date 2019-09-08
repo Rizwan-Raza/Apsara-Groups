@@ -6,7 +6,7 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
 <html lang="en">
 
 <head>
-    <title>Digital Marketing Company | Web Design Company</title>
+    <title>Dashboard | Apsara Foods Admin </title>
     <base href="../">
     <?php include "includes/head.inc.php"; ?>
     <!-- <link rel="stylesheet" href="css/signin.css" /> -->
@@ -50,6 +50,11 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
         $result = $conn->query($sql);
         $num_u = $result->fetch_assoc()['COUNT(`_uid`)'];
 
+        $sql = "SELECT COUNT(`_sbid`) FROM `subscribers`"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_sb = $result->fetch_assoc()['COUNT(`_sbid`)'];
+
         $sql = "SELECT COUNT(`_oid`) FROM `orders` WHERE `status`!=2"; 
         $conn = DB::getConnection(); 
         $result = $conn->query($sql);
@@ -83,7 +88,8 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                 <p>Here, we got some numbers: </p>
                 <div class="row">
                     <?php if($num_op > 0 ) { ?><div class="col s12 m6 l4 xl3 my-1">
-                        <a href="admin/orders?filter=unpaid" class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
+                        <a href="admin/orders?filter=unpaid"
+                            class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
                             <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
@@ -98,7 +104,8 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                     </div>
                     <?php } ?>
                     <?php if($num_od > 0 ) { ?><div class="col s12 m6 l4 xl3 my-1">
-                        <a href="admin/orders?filter=non-delivered" class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
+                        <a href="admin/orders?filter=non-delivered"
+                            class="waves-effect waves-light w-full bg-primary border-radius-8 pulse">
                             <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
@@ -122,6 +129,20 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                                 </div>
                                 <div class="card-action center-align">
                                     Queries
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/subscribers" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
+                                        <?=$num_sb?>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Subscribers
                                 </div>
                             </div>
                         </a>
@@ -186,7 +207,8 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                     while($cat = $resultTypes->fetch_assoc()) {
                         ?>
                     <div class="col s12 m6 l4 xl3 my-1">
-                        <a href="admin/products/<?=$cat['url']?>" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                        <a href="admin/products/<?=$cat['url']?>"
+                            class="waves-effect waves-light w-full bg-primary border-radius-8">
                             <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">

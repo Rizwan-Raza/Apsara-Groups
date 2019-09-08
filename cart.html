@@ -6,10 +6,11 @@ session_start();
 
 <head>
     <title>
-        Cart | Apsara Groups
+        Apsara Foods | Add to cart and buy it
     </title>
-    <meta name="description" content=" " />
-    <meta name="keywords" content=" " />
+    <meta name="description"
+        content="Grab the delicacies at your doorstep as we bring to you Apsara Foods services live and you can directly get in touch with us for customisations." />
+    <meta name="keywords" content="Check Out, checkout Apsara, checkout food" />
 
     <?php include "includes/head.inc.php"; ?>
     <style>
@@ -99,13 +100,14 @@ session_start();
                         <div class="divider my-2"></div>
                         <div>
                             <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
-                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="checkout">
-                                    Checkout</button>
+                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="checkout">
+                                Checkout</button>
                             <?php } else { ?>
-                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
-                                    in</button>
-                                <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="guestCheckout">Guest
-                                    Checkout</button>
+                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger" data-target="signIn">Sign
+                                in</button>
+                            <button class="btn btn-large btn-block my-2 w-100 modal-trigger"
+                                data-target="guestCheckout">Guest
+                                Checkout</button>
                             <?php } ?>
                         </div>
                     </div>
@@ -123,7 +125,9 @@ session_start();
         </div>
         <div class="prevent-overlay hide full"></div>
         <div class="modal-content">
-            <h4 class="fw-500 truncate m-0">Guest Checkout<button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button>
+            <h4 class="fw-500 truncate m-0">Guest Checkout<button
+                    class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                        class="material-icons black-text">close</i></button>
             </h4>
             <br />
             <form id="guestForm">
@@ -173,43 +177,54 @@ session_start();
         </div>
     </div>
     <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
-        <!-- Modal Structure -->
-        <div id="checkout" class="modal modal-fixed-footer" style="max-width: 500px">
-            <div class="modal-content">
-                <h4 class="fw-500 truncate m-0">Checkout <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i class="material-icons black-text">close</i></button>
-                </h4>
-                <br />
-                <form id="checkoutForm">
-                    <div class="input-field">
-                        <?php $sql = "SELECT * FROM `addresses` WHERE `_uid`=$_SESSION[u_id]";
+    <!-- Modal Structure -->
+    <div id="checkout" class="modal modal-fixed-footer" style="max-width: 500px">
+        <div class="modal-content">
+            <h4 class="fw-500 truncate m-0">Checkout <button
+                    class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent modal-close"><i
+                        class="material-icons black-text">close</i></button>
+            </h4>
+            <br />
+            <form id="checkoutForm">
+                <div class="input-field">
+                    <?php $sql = "SELECT * FROM `addresses` WHERE `_uid`=$_SESSION[u_id]";
                         require_once "services/db.inc.php";
                         $conn = DB::getConnection();
                         $result = $conn->query($sql);
                         $addAvail = false;
                         if ($result->num_rows > 0) { ?>
 
-                            <select name="add_id" id="add_id">
-                                <option value="" disabled selected>Choose Address</option>
+                    <select name="add_id" id="add_id">
+                        <option value="" disabled selected>Choose Address</option>
 
-                                <?php $addAvail = true;
+                        <?php $addAvail = true;
                                 while ($user = $result->fetch_assoc()) { ?>
-                                    <option value="<?= $user['_aid'] ?>" data-fields="<?= htmlspecialchars(json_encode($user), ENT_QUOTES, 'UTF-8') ?>"><?= ($user['tag'] == 1 ? 'Home' : ($user['tag'] == 2 ? 'Work' : 'Friend&apos;s Home')) ?> - <?= $user['address'] ?> - <?= $user['pincode'] ?></option>
-                                <?php } ?>
-                            </select>
+                        <option value="<?= $user['_aid'] ?>"
+                            data-fields="<?= htmlspecialchars(json_encode($user), ENT_QUOTES, 'UTF-8') ?>">
+                            <?= ($user['tag'] == 1 ? 'Home' : ($user['tag'] == 2 ? 'Work' : 'Friend&apos;s Home')) ?> -
+                            <?= $user['address'] ?> - <?= $user['pincode'] ?></option>
                         <?php } ?>
-                    </div>
-                    <input type="text" required id="co_address" placeholder="Delivery Address" <?= ($addAvail ? 'disabled' : 'name="address"') ?> />
-                    <input type="text" required id="co_landmark" placeholder="Landmark" <?= ($addAvail ? 'disabled' : 'name="landmark"') ?> />
-                    <input type="number" required id="co_pincode" placeholder="Pincode" <?= ($addAvail ? 'disabled' : 'name="pincode"') ?> />
-                    <input type="text" required id="co_r_name" placeholder="Receiver&apos;s Name" <?= ($addAvail ? 'disabled' : 'name="rname"') ?> />
-                    <input type="text" required id="co_r_number" placeholder="Receiver&apos;s Number" <?= ($addAvail ? 'disabled' : 'name="rnumber"') ?> />
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="reset" class="modal-close waves-effect waves-red btn-flat btn transparent">Not now</button>
-                <button type="submit" class="waves-effect waves-light btn ml-1" form="checkoutForm">Proceed to Payment</button>
-            </div>
+                    </select>
+                    <?php } ?>
+                </div>
+                <input type="text" required id="co_address" placeholder="Delivery Address"
+                    <?= ($addAvail ? 'disabled' : 'name="address"') ?> />
+                <input type="text" required id="co_landmark" placeholder="Landmark"
+                    <?= ($addAvail ? 'disabled' : 'name="landmark"') ?> />
+                <input type="number" required id="co_pincode" placeholder="Pincode"
+                    <?= ($addAvail ? 'disabled' : 'name="pincode"') ?> />
+                <input type="text" required id="co_r_name" placeholder="Receiver&apos;s Name"
+                    <?= ($addAvail ? 'disabled' : 'name="rname"') ?> />
+                <input type="text" required id="co_r_number" placeholder="Receiver&apos;s Number"
+                    <?= ($addAvail ? 'disabled' : 'name="rnumber"') ?> />
+            </form>
         </div>
+        <div class="modal-footer">
+            <button type="reset" class="modal-close waves-effect waves-red btn-flat btn transparent">Not now</button>
+            <button type="submit" class="waves-effect waves-light btn ml-1" form="checkoutForm">Proceed to
+                Payment</button>
+        </div>
+    </div>
     <?php } ?>
 
     <!-- Modal Structure -->
@@ -221,7 +236,10 @@ session_start();
         </div>
         <div class="prevent-overlay hide full"></div>
         <div class="modal-content">
-            <h4>Payment Method <button class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent tooltipped rollback" data-tooltip="Rollback Order" onclick="rollbackOrder(-1)"><i class="material-icons black-text">close</i></button></h4>
+            <h4>Payment Method <button
+                    class="right btn-flat btn-floating waves-effect waves-dark waves-circle transparent tooltipped rollback"
+                    data-tooltip="Rollback Order" onclick="rollbackOrder(-1)"><i
+                        class="material-icons black-text">close</i></button></h4>
             <br />
             <form>
                 <input type="number" name="order_id" class="hide" id="order_id" />
@@ -239,7 +257,8 @@ session_start();
                     </label>
                 </p>
                 <button type="submit" class="right waves-effect waves-light btn ml-2">Make Order</button>
-                <button type="reset" class="right waves-effect waves-red transparent btn-flat btn rollback" onclick="rollbackOrder(-1)">Roll back Order</button>
+                <button type="reset" class="right waves-effect waves-red transparent btn-flat btn rollback"
+                    onclick="rollbackOrder(-1)">Roll back Order</button>
                 <div class="clearfix"></div>
             </form>
         </div>

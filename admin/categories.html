@@ -10,7 +10,7 @@ if (
 <html lang="en">
 
 <head>
-    <title>Digital Marketing Company | Web Design Company</title>
+    <title>Categories | Apsara Foods Admin </title>
     <base href="../" />
     <?php include "includes/head.inc.php"; ?>
     <!-- <link rel="stylesheet" href="admin/css/categories.css" /> -->
@@ -24,13 +24,14 @@ if (
         }
 
         .input-field .pos-abs {
-            line-height: 42px;
+            line-height: 45px;
             font-size: 16px;
+            color: #888888
         }
 
         .input-field #url,
         .input-field #eurl {
-            padding-left: 169px;
+            padding-left: 155px;
             box-sizing: border-box;
         }
     </style>
@@ -64,7 +65,7 @@ if (
                             <th class="pl-4">#</th>
                             <th>Title</th>
                             <th>URL</th>
-                            <th>Description</th>
+                            <th>Page</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -80,18 +81,24 @@ if (
                                 <?= $cat['title'] ?>
                             </td>
                             <td>
-                                localhost/apsara/menu/<?=$cat['url'] ?>
+                                <a href="menu/<?=$cat['url'] ?>"
+                                    target="_blank">apsarafoods.in/menu/<?=$cat['url'] ?></a>
                             </td>
                             <td>
-                                <?= $cat['description'] ?>
+                                <?= $cat['page_title'] ?>
                             </td>
                             <td>
                                 <a class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
-                                    href="admin/products/<?=$cat['url']?>" data-tooltip="View"><i
+                                    href="admin/products/<?=$cat['url']?>" data-tooltip="View Products"><i
                                         class="material-icons black-text lh-5">launch</i></a>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
-                                    onclick="editCategory(<?= $cat['_tid'] ?>, '<?= $cat['title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['description'] ?>')"
+                                    onclick="viewCategory('<?= $cat['title'] ?>', '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
+                                    data-tooltip="View Category Info"><i
+                                        class="material-icons black-text lh-5">visibility</i></button>
+                                <button
+                                    class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
+                                    onclick="editCategory(<?= $cat['_tid'] ?>, '<?= $cat['title'] ?>', '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
                                     data-tooltip="Edit"><i class="material-icons black-text lh-5">edit</i></button>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
@@ -131,11 +138,19 @@ if (
                     <label for="title">Title</label>
                 </div>
                 <div class="input-field">
-                    <span class="pos-abs">localhost/apsara/menu/</span>
+                    <input id="ptitle" type="text" class="validate" name="ptitle" required minlength="3">
+                    <label for="ptitle">Title</label>
+                </div>
+                <div class="input-field">
+                    <span class="pos-abs">apsarafoods.in/menu/</span>
                     <input id="url" type="text" class="validate" name="url" minlength="3">
                 </div>
                 <div class="input-field">
-                    <textarea id="description" class="materialize-textarea" name="desc"></textarea>
+                    <input id="keywords" type="text" class="validate" name="keywords" required minlength="3">
+                    <label for="keywords">Keywords</label>
+                </div>
+                <div class="input-field">
+                    <textarea id="description" class="materialize-textarea" name="desc" required></textarea>
                     <label for="description">Description</label>
                     <span class="helper-text">Optional</span>
                 </div>
@@ -164,11 +179,19 @@ if (
                     <label for="etitle">Title</label>
                 </div>
                 <div class="input-field">
-                    <span class="pos-abs">localhost/apsara/menu/</span>
+                    <input id="eptitle" type="text" class="validate" name="ptitle" required minlength="3">
+                    <label for="eptitle">Page Title</label>
+                </div>
+                <div class="input-field">
+                    <span class="pos-abs">apsarafoods.in/menu/</span>
                     <input id="eurl" type="text" class="validate" name="url" required minlength="3">
                 </div>
                 <div class="input-field">
-                    <textarea id="edescription" class="materialize-textarea" name="desc"></textarea>
+                    <input id="ekeywords" type="text" class="validate" name="keywords" required minlength="3">
+                    <label for="ekeywords">Keywords</label>
+                </div>
+                <div class="input-field">
+                    <textarea id="edescription" class="materialize-textarea" name="desc" required></textarea>
                     <label for="edescription">Description</label>
                     <span class="helper-text">Optional</span>
                 </div>
@@ -176,6 +199,40 @@ if (
                 <button type="reset" class="right modal-close waves-effect waves-red btn-flat btn">Not now</button>
                 <div class="clearfix"></div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="categoryView" class="modal">
+        <div class="modal-content">
+            <h4>View Category</h4>
+            <br />
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Title</td>
+                        <td id="vtitle">NA</td>
+                    </tr>
+                    <tr>
+                        <td>Page Title</td>
+                        <td id="vptitle">NA</td>
+                    </tr>
+                    <tr>
+                        <td>Keywords</td>
+                        <td>
+                            <div id="vkeys"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td id="vdescription">NA</td>
+                    </tr>
+                    <tr>
+                        <td>URL</td>
+                        <td><a id="vurl" href="#" target="_blank">apsarafoods.in/menu/<span>#</span></a></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

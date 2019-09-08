@@ -1,0 +1,141 @@
+<?php if (!isset($_SESSION)) {
+    session_start();
+}
+if (
+    isset($_SESSION['admin']) and
+    $_SESSION['admin'] == true
+) {
+    ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Subscribers | Apsara Foods Admin </title>
+    <base href="../" />
+    <?php include "includes/head.inc.php"; ?>
+    <link rel="stylesheet" href="admin/css/queries.css" />
+</head>
+
+<body>
+    <!-- Page Layout here -->
+    <section class="row m-0 p-0">
+        <?php include "includes/sidenav.inc.html" ?>
+
+        <div class="col s12 m9 white m-0 p-0" style="height:100vh;overflow:auto">
+            <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons text-primary">menu</i></a>
+            <div class="px-4">
+                <h4 class="my-1">Subscribers</h4>
+            </div>
+            <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
+            <div class="grey lighten-3">
+                <?php
+                    include "includes/functions.inc.php";
+                    date_default_timezone_set("Asia/Kolkata");
+                    $sql = "SELECT * FROM `subscribers` ORDER BY `time` DESC";
+                    require "../services/db.inc.php";
+                    $conn =
+                        DB::getConnection();
+                    $result = $conn->query($sql); ?>
+
+                <table>
+                    <?php if ($result and ($num = $result->num_rows) > 0) {
+                            ?>
+                    <thead>
+                        <tr>
+                            <th class="pl-4">#</th>
+                            <th>Email</th>
+                            <th>Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php for ($i = 0; $i <
+                                    $num; $i++) {
+                                    $user = $result->fetch_assoc(); ?>
+                        <tr>
+                            <td class="pl-4">
+                                <?= $i + 1 ?>
+                            </td>
+                            <td>
+                                <?= $user['email'] ?>
+                            </td>
+                            <td class="tooltipped"
+                                data-tooltip="<?= date_format(date_create($user['time']), "M jS, Y \a\\t g:i:s A") ?>">
+                                <?= daysUntilToday($user['time']) ?>
+                            </td>
+                            <td>
+                                <button
+                                    class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
+                                    onclick="deleteSubs(<?= $user['_sbid'] ?>, this)" data-tooltip="Delete"><i
+                                        class="material-icons black-text lh-5">delete</i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <?php
+                            } ?>
+                    <?php
+                        } else {
+                            ?>
+                    <tr>
+                        <td colspan="5" class="center-align">No subscribers found</td>
+                    </tr>
+                    <?php
+                        } ?>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <?php include "includes/scripts.inc.php"; ?>
+    <!-- <script src="admin/js/users.js"></script> -->
+    <script>
+        $(() => {
+            M.AutoInit();
+        });
+
+        function deleteSubs(_sbid, elem) {
+            let answer = confirm("Are you sure, you want to delete this subscriber?");
+            if (answer) {
+                elem = $(elem).closest("tr");
+                $.ajax({
+                    url: "admin/services/delete-sub.php",
+                    method: "POST",
+                    data: {
+                        _sbid: _sbid,
+                    },
+                    beforeSend: () => {
+                        elem.css("opacity", 0.5);
+                        // $("#progress, .prevent-overlay").removeClass("hide");
+                    },
+                    success: (data, status) => {
+                        // console.log(data, status);
+                        var object = JSON.parse(data);
+                        M.toast({
+                            html: object.message
+                        });
+                        if (object.status == "server_error") {
+                            elem.css("opacity", 1);
+                            return;
+                        } else if (object.status == "success") {
+                            elem.slideUp();
+                        }
+                    },
+                    error: (data, status) => {
+                        console.log(data, status);
+                    },
+                    complete: () => {
+                        // $("#progress, .prevent-overlay").addClass("hide");
+                    }
+                });
+            }
+        }
+
+    </script>
+</body>
+
+</html>
+
+<?php
+} else {
+    header("Location: /admin/?redirect_to=" . $_SERVER['REDIRECT_URL']);
+} ?>

@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
     error_reporting(0);
     extract($_POST, EXTR_SKIP);
 
-    $sql = "UPDATE `types` SET `title` = '$title', " . ($tid != 1 and (isset($url) and (strlen($url) > 0)) ? "`url`= '$url', " : "") . " `description` = '$desc' WHERE `_tid`=$tid";
+    $sql = "UPDATE `types` SET `title` = '$title', `page_title` = '$ptitle', `keywords` = '$keywords', " . ((isset($url) and (strlen($url) > 0)) ? "`url`= '$url', " : "") . " `description` = '$desc' WHERE `_tid`=$tid";
     require '../../services/db.inc.php';
 
     $conn = DB::getConnection();
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
     } elseif (strpos($conn->error, "Duplicate entry") === 0) {
         $data = array("message" => "Already Added, try something else", "status" => "duplicate_error");
     } else {
-        $data = array("message" => "Something went wrong!", "status" => "server_error");
+        $data = array("message" => "Something went wrong!", "status" => "server_error", "debug" => $sql);
     }
 }
 echo json_encode($data);

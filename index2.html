@@ -8,16 +8,26 @@ session_start();
     <title>
         Apsara Foods | The house of delicacies
     </title>
-    <meta name="description" content="Apsara Foods started 20 years ago since then it has been a popular name in the food industry. The business has been expanded the business to be successful." />
-    <meta name="keywords" content="online food, online caterers, apsara foods, online bakers, online cake delivery, order online food, online food delivery " />
+    <meta name="description"
+        content="Apsara Foods started 20 years ago since then it has been a popular name in the food industry. The business has been expanded the business to be successful." />
+    <meta name="keywords"
+        content="online food, online caterers, apsara foods, online bakers, online cake delivery, order online food, online food delivery " />
     <base href="./" />
     <?php include "includes/head.inc.php"; ?>
 </head>
 
 <body class="grey lighten-4">
     <?php include "layouts/nav.inc.html"; ?>
-    <header style="height: 360px;">
-        <img src="images/home-banner.jpg" />
+    <header id="banner">
+        <div class="slider">
+            <ul class="slides">
+                <li><img srcset="images/home-banner-min.jpg 600w, images/home-banner.jpg 1400w"
+                        src="images/home-banner.jpg" /></li>
+                <li><img src="images/banner.jpg"></li>
+                <li><img src="images/back.jpg"></li>
+            </ul>
+        </div>
+
     </header>
     <section id="belowBanner" style="background: linear-gradient(transparent, white)">
         <div class="row mx-m-4 d-flex m-0 py-4">
@@ -156,7 +166,8 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/apsara-restaurant.jpg" class="full">
                             <div class="full">
-                                <a href="about#apsara-restaurant" class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#apsara-restaurant"
+                                    class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -175,7 +186,8 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/sachus-cafe.jpg" class="full">
                             <div class="full">
-                                <a href="about#sachus-cafe" class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#sachus-cafe"
+                                    class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -193,7 +205,8 @@ session_start();
                         <div class="card-image white">
                             <img src="images/subs/apsara-caterers.jpg" class="full">
                             <div class="full">
-                                <a href="about#apsara-catering" class="btn white waves-effect waves-dark black-text">Explore</a>
+                                <a href="about#apsara-catering"
+                                    class="btn white waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -217,8 +230,10 @@ session_start();
                     </div>
                 </div>
             </div>
-            <button class="btn-floating white waves-effect waves-circle btn-small nav-left" onclick="prev('#explore .carousel')"><i class="material-icons black-text">chevron_left</i></button>
-            <button class="btn-floating white waves-effect waves-circle btn-small nav-right" onclick="next('#explore .carousel')"><i class="material-icons black-text">chevron_right</i></button>
+            <button class="btn-floating white waves-effect waves-circle btn-small nav-left"
+                onclick="prev('#explore .carousel')"><i class="material-icons black-text">chevron_left</i></button>
+            <button class="btn-floating white waves-effect waves-circle btn-small nav-right"
+                onclick="next('#explore .carousel')"><i class="material-icons black-text">chevron_right</i></button>
 
         </div>
         <br />
@@ -240,18 +255,21 @@ session_start();
                     if ($result->num_rows > 0) {
                         while ($value = $result->fetch_assoc()) {
                             extract($value, EXTR_OVERWRITE) ?>
-                            <div class="col s12 m6 l4 xl3">
-                                <div class="card">
-                                    <div class="card-image full">
-                                        <img src="<?= $image ?>" class="materialboxed lh-0" />
-                                        <div class="full pos-abs center mx-auto" onclick="$(this).closest('.card-image').find('img').trigger('click');"><i class="material-icons medium white-text" style="line-height: 240px">fullscreen</i>
-                                        </div>
-                                    </div>
+                    <div class="col s12 m6 l4 xl3">
+                        <div class="card">
+                            <div class="card-image full">
+                                <img src="<?= $image ?>" class="materialboxed lh-0" />
+                                <div class="full pos-abs center mx-auto"
+                                    onclick="$(this).closest('.card-image').find('img').trigger('click');"><i
+                                        class="material-icons medium white-text"
+                                        style="line-height: 240px">fullscreen</i>
                                 </div>
                             </div>
-                        <?php }
+                        </div>
+                    </div>
+                    <?php }
                         } else { ?>
-                        <div>No Gallery Images available</div>
+                    <div>No Gallery Images available</div>
                     <?php } ?>
                 </div>
                 <br />
@@ -276,33 +294,34 @@ session_start();
                     if ($result->num_rows > 0) {
                         while ($value = $result->fetch_assoc()) {
                             extract($value, EXTR_OVERWRITE) ?>
-                            <div class="col s12 m6 d-flex mx-auto">
-                                <div class="card w-100">
-                                    <div class="card-content">
-                                        <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
-                                                <?= $cat_title ?></div>
-                                        </h5>
-                                        <?php $count = strlen($description); ?>
-                                        <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                                        <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                    <div class="col s12 m6 d-flex mx-auto">
+                        <div class="card w-100">
+                            <div class="card-content">
+                                <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
+                                        <?= $cat_title ?></div>
+                                </h5>
+                                <?php $count = strlen($description); ?>
+                                <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                                <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
                                                 $result2 = DB::getConnection()->query($sqlV);
                                                 if ($result2->num_rows > 0) {
                                                     while ($valueV = $result2->fetch_assoc()) { ?>
-                                                <div class="my-1"><span class="left fw-700">&#8377;
-                                                        <?= number_format($valueV['price'], 2) ?>
-                                                        <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                                    <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
-                                                        Cart</button>
-                                                    <br clear="all" />
-                                                </div>
-                                        <?php }
-                                                } ?>
-                                    </div>
+                                <div class="my-1"><span class="left fw-700">&#8377;
+                                        <?= number_format($valueV['price'], 2) ?>
+                                        <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
+                                    <button class="btn right btn-small red"
+                                        onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                        Cart</button>
+                                    <br clear="all" />
                                 </div>
+                                <?php }
+                                                } ?>
                             </div>
-                        <?php }
+                        </div>
+                    </div>
+                    <?php }
                         } else { ?>
-                        <div>No Products available</div>
+                    <div>No Products available</div>
                     <?php } ?>
                 </div>
                 <br />
@@ -321,19 +340,22 @@ session_start();
                             <div class="card-content">
                                 <h4 class="m-0 mb-2">Get your cakes customised!</h4>
                                 <p>
-                                    Cakes are the major discussion for any party, be it a wedding, a birthday, a festival or
+                                    Cakes are the major discussion for any party, be it a wedding, a birthday, a
+                                    festival or
                                     a baby shower! The cake has to be on point and we make sure that your guests are not
                                     just impressed by the appearance but also by the taste.
                                 </p>
 
-                                <div class="center hide-on-med-and-up"><br /><a href="menu/cakes" class="btn white btn-large mx-auto waves-effect waves-dark black-text">Explore</a>
+                                <div class="center hide-on-med-and-up"><br /><a href="menu/cakes"
+                                        class="btn white btn-large mx-auto waves-effect waves-dark black-text">Explore</a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-image white hide-on-small-only">
                             <img src="images/explore0.jpg" class="full">
                             <div class="full">
-                                <a href="menu/cakes" class="btn white btn-large waves-effect waves-dark black-text">Explore</a>
+                                <a href="menu/cakes"
+                                    class="btn white btn-large waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -346,18 +368,23 @@ session_start();
                             <div class="card-content">
                                 <h4 class="m-0 mb-2">Your go-to for delicious food!</h4>
                                 <p>
-                                    We have been trusted in the food business and have worked to make occasions special for
-                                    all our customers. Our range of services has been increasing due to your love, we thank
+                                    We have been trusted in the food business and have worked to make occasions special
+                                    for
+                                    all our customers. Our range of services has been increasing due to your love, we
+                                    thank
                                     each one of you for being a part of our success.
                                 </p>
-                                <div class="center hide-on-med-and-up"><br /><a href="https://www.instagram.com/sachus.cafe/" target="_blank" class="btn grey darken-3 btn-large mx-auto waves-effect waves-dark white-text">Explore</a>
+                                <div class="center hide-on-med-and-up"><br /><a
+                                        href="https://www.instagram.com/sachus.cafe/" target="_blank"
+                                        class="btn grey darken-3 btn-large mx-auto waves-effect waves-dark white-text">Explore</a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-image white hide-on-small-only">
                             <img src="images/explore1.jpeg" class="full">
                             <div class="full">
-                                <a href="https://www.instagram.com/sachus.cafe/" target="_blank" class="btn white btn-large waves-effect waves-dark black-text">Explore</a>
+                                <a href="https://www.instagram.com/sachus.cafe/" target="_blank"
+                                    class="btn white btn-large waves-effect waves-dark black-text">Explore</a>
                             </div>
                         </div>
                     </div>
@@ -406,54 +433,54 @@ session_start();
                                 $src = $node["display_resources"][0]['src'];
                                 $url = "https://www.instagram.com/p/" . $node['shortcode'];
                                 ?>
-                                <div class="col s4 lh-0">
-                                    <a href="<?= $url ?>" target="_blank">
-                                        <img src="<?= $src ?>" alt="Instagram Post" class="lh-0" />
-                                    </a>
-                                </div>
-                            <?php }
+                        <div class="col s4 lh-0">
+                            <a href="<?= $url ?>" target="_blank">
+                                <img src="<?= $src ?>" alt="Instagram Post" class="lh-0" />
+                            </a>
+                        </div>
+                        <?php }
                             } else { ?>
 
-                            <div class="col s4 lh-0">
-                                <img src="images/card1.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card2.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card3.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card4.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card5.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card6.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card7.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card8.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
-                            <div class="col s4 lh-0">
-                                <img src="images/card9.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
-                            </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card1.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card2.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card3.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card4.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card5.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card6.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card7.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card8.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
+                        <div class="col s4 lh-0">
+                            <img src="images/card9.jpg" class="w-100 materialboxed lh-0" alt="Gallery Image" />
+                        </div>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="col s12 m7 right d-flex">
                     <div class="pos-rel">
                         <img src="images/l-card.jpg" class="hide-on-small-only" />
-                        <div class="pos-abs grey darken-3 p-2 white-text center">
+                        <div class="pos-abs grey darken-3 p-2 white-text center" style="min-width:200px">
                             <h5>Order now!</h5>
                             <p>Grab the best taste from our trusted bakers and cooks at the house of Apsara. We promise
                                 to make your occasion a big success with our customised cakes as ‘we speak the language
                                 of food’. </p>
                             <br />
-                            <a href="about" class="btn btn-large mb-2">Read more</a>
+                            <a href="cart" class="btn btn-large mb-2">Order now</a>
                         </div>
                     </div>
                 </div>

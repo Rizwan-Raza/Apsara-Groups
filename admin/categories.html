@@ -24,7 +24,7 @@ if (
         }
 
         .input-field .pos-abs {
-            line-height: 45px;
+            line-height: 42px;
             font-size: 16px;
             color: #888888
         }
@@ -33,6 +33,11 @@ if (
         .input-field #eurl {
             padding-left: 155px;
             box-sizing: border-box;
+        }
+
+        h4.my-1 .select-wrapper input.select-dropdown {
+            margin-top: -1px;
+            margin-bottom: -1px;
         }
     </style>
 </head>
@@ -45,11 +50,40 @@ if (
         <div class="col s12 m9 white m-0 p-0" style="height:100vh;overflow:auto">
             <a class="p-2 pb-0 left" href="javascript:toggleNav()"><i class="material-icons text-primary">menu</i></a>
             <div class="px-4">
-                <h4 class="my-1">Categories</h4>
+                <h4 class="my-1">Categories <div class="right m-0"><select
+                            onchange="window.location.href='admin/categories?filter='+this.value">
+                            <option value="pages"
+                                <?= ((isset($_GET['filter']) and $_GET['filter'] == "pages") ? "selected" : "") ?>>Pages
+                            </option>
+                            <option value="parents"
+                                <?= ((isset($_GET['filter']) and $_GET['filter'] == "parents") ? "selected" : "") ?>>Parents</option>
+                            <option value="all"
+                                <?= ((isset($_GET['filter']) and $_GET['filter'] == "all") ? "selected" : "") ?>>All
+                            </option>
+                        </select></div>
+                </h4>
             </div>
             <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
             <div class="grey lighten-3">
                 <?php $sql = "SELECT * FROM `types`";
+                if (isset($_GET['filter'])) {
+                    $filter = "";
+                    switch ($_GET['filter']) {
+                        case "all":
+                            $filter = "";
+                            break;
+                        case "parents":
+                            $filter = "WHERE `have_child`=1";
+                            break;
+                        case "pages":
+                            $filter = "WHERE `have_child`=0";
+                            break;
+                        default:
+                    }
+                    $sql .= $filter;
+                } else {
+                    $sql .= " WHERE `have_child`=0";
+                }
                     require "../services/db.inc.php";
                     include "includes/functions.inc.php";
                     date_default_timezone_set("Asia/Kolkata");
@@ -72,7 +106,16 @@ if (
                     <tbody>
                         <?php for ($i = 0; $i <
                                     $num; $i++) {
-                                    $cat = $result->fetch_assoc(); ?>
+                                    $cat = $result->fetch_assoc();
+                                    $subChild = FALSE;
+                                    if($cat['have_child']!=0) {
+                                        $sql = "SELECT * FROM `types` WHERE `parent`=$cat[_tid]";
+                                        $conn = DB::getConnection();
+                                        $sub = $conn->query($sql);
+                                        $subChild = TRUE;
+                                     }
+                                     
+                                     ?>
                         <tr>
                             <td class="pl-4">
                                 <?= $i + 1 ?>
@@ -81,16 +124,20 @@ if (
                                 <?= $cat['title'] ?>
                             </td>
                             <td>
+                                <?php if(!$subChild) { ?>
                                 <a href="menu/<?=$cat['url'] ?>"
                                     target="_blank">apsarafoods.in/menu/<?=$cat['url'] ?></a>
+                                <?php } ?>
                             </td>
                             <td>
-                                <?= $cat['page_title'] ?>
+                                <?php if(!$subChild) { echo $cat['page_title']; }?>
                             </td>
                             <td>
-                                <a class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
+                                <?php if(!$subChild) { ?><a
+                                    class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
                                     href="admin/products/<?=$cat['url']?>" data-tooltip="View Products"><i
                                         class="material-icons black-text lh-5">launch</i></a>
+                                <?php } ?>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
                                     onclick="viewCategory('<?= $cat['title'] ?>', '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
@@ -137,22 +184,52 @@ if (
                     <input id="title" type="text" class="validate" name="title" required minlength="3">
                     <label for="title">Title</label>
                 </div>
-                <div class="input-field">
-                    <input id="ptitle" type="text" class="validate" name="ptitle" required minlength="3">
-                    <label for="ptitle">Title</label>
+                <div class="row enhanced">
+                    <div class="col s6">
+                        <div class="input-field">
+                            <select name="parent" id="parentId">
+                                <option value="0" selected>No Parent</option>
+                                <?php $sql = "SELECT * FROM `types` WHERE `have_child`=1";
+                            require_once "../services/db.inc.php";
+                            $conn = DB::getConnection();
+                            $result = $conn->query($sql);
+                            while ($parent = $result->fetch_assoc()) { ?>
+                                <option value="<?= $parent['_tid'] ?>"><?= $parent['title'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <label>Choose Parent</label>
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="switch">
+                            <p>Will contain sub-categories?</p>
+                            <label>
+                                No
+                                <input type="checkbox" name="have_child" onchange="toggleEverything(this)">
+                                <span class="lever"></span>
+                                Yes
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-field">
-                    <span class="pos-abs">apsarafoods.in/menu/</span>
-                    <input id="url" type="text" class="validate" name="url" minlength="3">
-                </div>
-                <div class="input-field">
-                    <input id="keywords" type="text" class="validate" name="keywords" required minlength="3">
-                    <label for="keywords">Keywords</label>
-                </div>
-                <div class="input-field">
-                    <textarea id="description" class="materialize-textarea" name="desc" required></textarea>
-                    <label for="description">Description</label>
-                    <span class="helper-text">Optional</span>
+                <div id="panelToToggle">
+                    <div class="input-field">
+                        <input id="ptitle" type="text" class="validate" name="ptitle" minlength="3">
+                        <label for="ptitle">Page Title</label>
+                    </div>
+                    <div class="input-field">
+                        <span class="pos-abs">apsarafoods.in/menu/</span>
+                        <input id="url" type="text" class="validate" name="url" minlength="3">
+                    </div>
+                    <div class="input-field">
+                        <input id="keywords" type="text" class="validate" name="keywords" minlength="3">
+                        <label for="keywords">Keywords</label>
+                    </div>
+                    <div class="input-field">
+                        <textarea id="description" class="materialize-textarea" name="desc"></textarea>
+                        <label for="description">Description</label>
+                        <span class="helper-text">Optional</span>
+                    </div>
                 </div>
                 <button type="submit" class="right waves-effect waves-light bg-primary btn ml-1">Add</button>
                 <button type="reset" class="right modal-close waves-effect waves-red btn-flat btn">Not now</button>
@@ -177,6 +254,34 @@ if (
                 <div class="input-field">
                     <input id="etitle" type="text" class="validate" name="title" required minlength="3">
                     <label for="etitle">Title</label>
+                </div>
+                <div class="row enhanced">
+                    <div class="col s6">
+                        <div class="input-field">
+                            <select name="parent" id="parentId">
+                                <option value="0" selected>No Parent</option>
+                                <?php $sql = "SELECT * FROM `types` WHERE `have_child`=1";
+                                require_once "../services/db.inc.php";
+                                $conn = DB::getConnection();
+                                $result = $conn->query($sql);
+                                while ($parent = $result->fetch_assoc()) { ?>
+                                <option value="<?= $parent['_tid'] ?>"><?= $parent['title'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <label>Choose Parent</label>
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="switch">
+                            <p>Will contain sub-categories?</p>
+                            <label>
+                                No
+                                <input type="checkbox" name="have_child" onchange="toggleEverything(this)">
+                                <span class="lever"></span>
+                                Yes
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="input-field">
                     <input id="eptitle" type="text" class="validate" name="ptitle" required minlength="3">

@@ -54,6 +54,7 @@ $(() => {
             },
             success: (data, status) => {
                 // console.log(data, status);
+                // return;
                 var object = JSON.parse(data);
                 M.toast({
                     html: object.message
@@ -133,4 +134,15 @@ function viewCategory(title, p_title, url, keys, desc) {
     if(keys != null && keys.trim() != "") {$("#categoryView #vkeys").append(keys.split(",").map(key => {return `<div class="chip bg-primary">${key}</div>`}));}
     $("#categoryView #vdescription").text(desc);
     $("#categoryView").modal("open");
+}
+function toggleEverything(elem) {
+    if(elem.checked) {
+        $("#panelToToggle").slideUp();
+        $("#panelToToggle").find("input").removeAttr("required");
+        $("#panelToToggle").find("textarea").removeAttr("required");
+    } else {
+        $("#panelToToggle").slideDown();
+        $("#panelToToggle").find("input").attr("required", "required");
+        $("#panelToToggle").find("textarea").attr("required", "required");
+    }
 }

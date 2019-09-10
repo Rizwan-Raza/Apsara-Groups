@@ -1,10 +1,12 @@
 <?php
 $data = array("message" => "Unknown method", "status" => "server_error");
-if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($_POST['price'])) {
+// print_r($_REQUEST);
+// return;
+if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($_POST['parent'])) {
     error_reporting(0);
     extract($_POST, EXTR_SKIP);
 
-    $sql = "INSERT INTO `types` (`title`, `page_title`, `url`, `keyowrds`, `description`) VALUES('$title','$ptitle', '$url', '$keywords', '$desc')";
+    $sql = "INSERT INTO `types` (`title`, `parent`, `have_child`, `page_title`, `url`, `keywords`, `description`) VALUES('$title',$parent, " . ((isset($have_child) and $have_child == "on") ? "1" : "0") . ", '$ptitle', '$url', '$keywords', '$desc')";
     require '../../services/db.inc.php';
 
     $conn = DB::getConnection();
@@ -15,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
     } elseif (strpos($conn->error, "Duplicate entry") === 0) {
         $data = array("message" => "Already Added, try something else", "status" => "duplicate_error");
     } else {
-        $data = array("message" => "Something went wrong!", "status" => "server_error");
+        $data = array("message" => "Something went wrong!" . $sql, "status" => "server_error");
     }
 }
 echo json_encode($data);

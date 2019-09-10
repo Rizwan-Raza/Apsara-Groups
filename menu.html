@@ -16,7 +16,7 @@ if (isset($_GET) and isset($_GET['url'])) {
     </title>
     <meta name="description" content="<?= $cat['description'] ?>" />
     <meta name="keywords" content="<?= $cat['keywords'] ?>" />
-    <base href="./../" />
+    <base href="/" />
     <?php include "includes/head.inc.php"; ?>
 </head>
 
@@ -132,10 +132,10 @@ if (isset($_GET) and isset($_GET['url'])) {
 
 </html>
 <?php } else {
-        header("Location: gallery?ref=menu&url=500");
+        header("Location: /gallery?ref=menu&url=500");
     }
 } else {
-    header("Location: gallery?ref=menu&url=404");
+    header("Location: /gallery?ref=menu&url=404");
 }
 
 ?>

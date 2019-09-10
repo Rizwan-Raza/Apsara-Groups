@@ -41,7 +41,7 @@
     </div>
     <form class="right hide-on-small-only" action="search">
       <div class="input-field">
-        <input id="search" type="search" required placeholder="Search here" name="q" value="<?=@$_GET['q']?>">
+        <input id="search" type="search" required placeholder="Search here" name="q" value="<?= @$_GET['q'] ?>">
         <label class="label-icon" for="search"><i class="material-icons black-text">search</i></label>
         <i class="material-icons">close</i>
       </div>
@@ -61,7 +61,7 @@
   </li>
   <?php
   require_once "services/db.inc.php";
-  $sql = "SELECT * FROM `types`";
+  $sql = "SELECT * FROM `types` WHERE `parent`=0 AND `have_child`=0";
   $result = DB::getConnection()->query($sql);
   $numrows = $result->num_rows;
   if ($numrows > 0) {  ?>
@@ -70,7 +70,7 @@
       Menu</a>
     <ul class="small-drop">
       <?php
-        while ($nav = $result->fetch_assoc()) { ?>
+          while ($nav = $result->fetch_assoc()) { ?>
       <li><a href="menu/<?= $nav['url'] ?>" class="truncate"><?= $nav['title'] ?></a>
       </li>
       <?php } ?>
@@ -112,20 +112,42 @@
         <li><a href="about" class="black-text hover-text-primary fw-500">About Us</a></li>
         <?php
         require_once "services/db.inc.php";
-        $sql = "SELECT * FROM `types`";
+        $sql = "SELECT * FROM `types` WHERE `parent`=0 AND `have_child`=0";
         $result = DB::getConnection()->query($sql);
         if ($result->num_rows > 0) {  ?>
         <li class="drop">
           <a class="black-text hover-text-primary fw-500" href="javascript:;">Menu</a>
           <ul>
             <?php
-              while ($nav = $result->fetch_assoc()) { ?>
-            <li><a href="menu/<?= $nav['url'] ?>"><?= $nav['title'] ?></a></li>
+                while ($nav = $result->fetch_assoc()) { ?>
+            <li style="line-height: 32px;"><a href="menu/<?= $nav['url'] ?>"
+                style="line-height: 32px;"><?= $nav['title'] ?></a></li>
             <?php } ?>
           </ul>
         </li>
         <?php } ?>
-        <li><a href="gallery" class="black-text hover-text-primary fw-500">Gallery</a></li>
+        <li class="drop" id="cakeList"><a href="javascript:;" class="black-text hover-text-primary fw-500">Cakes</a>
+          <ul class="row">
+            <?php $in_sql = "SELECT * FROM `types` WHERE `parent`=1 AND `have_child`=1";
+            $in_result = DB::getConnection()->query($in_sql);
+            if ($in_result->num_rows > 0) {
+              while ($in_nav = $in_result->fetch_assoc()) { ?>
+            <div class="col s4 mb-2"><a href="javascript:;" class="black-text fw-500"
+                style="line-height: 32px;"><?= $in_nav['title'] ?></a>
+              <?php $iin_sql = "SELECT * FROM `types` WHERE `parent`=$in_nav[_tid] AND `have_child`=0";
+                      $iin_result = DB::getConnection()->query($iin_sql);
+                      if ($iin_result->num_rows > 0) {
+                        echo "<li class='divider'></li>";
+                        while ($iin_nav = $iin_result->fetch_assoc()) { ?>
+              <li style="line-height: 32px;"><a href="menu/<?= $iin_nav['url'] ?>"
+                  style="line-height: 32px;"><?= $iin_nav['title'] ?></a></li>
+              <?php }
+                      } ?>
+            </div>
+            <?php }
+            } ?>
+          </ul>
+        </li>
         <li><a href="contact" class="black-text hover-text-primary fw-500">Contact Us</a></li>
         <li><a href="cart" class="black-text hover-text-primary fw-500 pos-rel cart"><i
               class="material-icons left">shopping_cart</i> Cart <div class="num circle red white-text hide"></div></a>

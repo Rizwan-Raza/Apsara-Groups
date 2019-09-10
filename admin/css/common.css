@@ -107,6 +107,11 @@ body {
     margin-top: -45px;
 }
 
+.row.enhanced {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
 @media (max-width: 600px) {
     .sidenav.bg-primary {
         /* background-color: red; */

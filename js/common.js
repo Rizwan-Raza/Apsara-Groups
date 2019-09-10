@@ -8,8 +8,10 @@ $(() => {
         }
     }
     M.AutoInit();
-    
-    $('.slider').slider({ height: 240, indicators: false });
+
+    $('#banner .slider').slider({ height: 600, indicators: false });
+
+    $('#belowBanner .slider').slider({ height: 240, indicators: false });
 
     $("#explore .carousel").carousel({
         fullWidth: true,
@@ -125,6 +127,22 @@ $(() => {
                 $("#forgotPassword .progress-holder, #forgotPassword .prevent-overlay").addClass("hide");
             }
         });
+    });
+
+    var shrinked = false;
+
+    $(document).scroll((e) => {
+        if ($(e.target).scrollTop() > 50) {
+            if (!shrinked) {
+                $("#cakeList .row").css("top", "64px");
+                shrinked = true;
+            }
+        } else if (0 < $(e.target).scrollTop() <= 50) {
+            if (shrinked) {
+                $("#cakeList .row").css("top", "initial");
+                shrinked = false;
+            }
+        }
     });
 
 });

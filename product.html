@@ -1,0 +1,105 @@
+<?php
+session_start();
+if (isset($_GET) and isset($_GET['url'])) {
+    require_once "services/db.inc.php";
+    $sql = "SELECT * FROM `products` WHERE `url`='$_GET[url]'";
+    $result = DB::getConnection()->query($sql);
+    if ($result->num_rows > 0) {
+        $cat = $result->fetch_assoc();
+        ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <?= $cat['title'] ?>
+    </title>
+    <meta name="description" content="<?= $cat['description'] ?>" />
+    <meta name="keywords" content="<?= $cat['title'] ?>" />
+    <base href="/" />
+    <?php include "includes/head.inc.php"; ?>
+    <style>
+        .card-action.py-1 span {
+            line-height: 45px;
+        }
+
+        .card .card-action.py-1 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <?php include "layouts/nav.inc.html"; ?>
+    <section class="py-4">
+        <div class="container full px-4">
+            <div class="row">
+                <div class="col s12 m5">
+                    <img src="<?= $cat['image'] ?>" alt="<?= $cat['title'] ?>" class="w-100">
+                </div>
+                <div class="col s12 m5">
+                    <h2 class="fw-500 m-0"><?= $cat['title'] ?></h2>
+                    <?php if (strlen($cat['description']) > 0) { ?>
+                    <p>$cat[description]</p><br />
+                    <?php } ?>
+                    <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$cat[_pid]";
+                    $result2 = DB::getConnection()->query($sqlV);
+                    if ($result2->num_rows > 0) { ?>
+
+                    <h3 class="m-0" id="p_price">&#8377; <span>999</span></h3>
+                    <small>Inclusive of all taxes</small>
+                    <br />
+                    <br />
+                    <form action="#" id="varient">
+                        <?php while($valueV = $result2->fetch_assoc()) { ?>
+                        <p>
+                            <label>
+                                <input name="varient" type="radio" value="<?=$valueV['_vid']?>" />
+                                <span>&#8377; <b><?= $valueV['price'] ?></b> (<?= $valueV['size']?>)</span>
+                            </label>
+                        </p>
+                        <?php } ?>
+                    </form>
+                    <?php } ?>
+                    <br />
+                    <button id="cart_btn" class="btn btn-large red my-1 left" disabled
+                        onclick="addToCart(<?=$cat['_pid']?>, 0)"><i class="material-icons left">add_shopping_cart</i>
+                        Add to Cart</button>
+                    <br clear="both" />
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <?php require_once "layouts/footer.inc.html"; ?>
+
+    <?php require_once "includes/scripts.inc.php" ?>
+    <script>
+        $(() => {
+            let varient = $("#varient p").first();
+            varient.find("input").prop("checked", true);
+            $("#p_price span").text(varient.find("span b").text());
+            $("#cart_btn").attr("onclick", $("#cart_btn").attr("onclick").slice(0, -2) + varient.find("input").val() + ")");
+
+            $("#varient input[name='varient']").change(function (e) {
+                $("#p_price span").text($(e.target).parent().find("span b").text());
+                let c_btn = $("#cart_btn");
+                c_btn.removeAttr("disabled");
+                c_btn.attr("onclick", c_btn.attr("onclick").slice(0, -2) + e.target.value + ")");
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
+<?php } else {
+        header("Location: /?ref=$_SERVER[HTTP_REFERER]&url=500");
+    }
+} else {
+    header("Location: /?ref=$_SERVER[HTTP_REFERER]&url=404");
+}
+
+?>

@@ -113,36 +113,58 @@ function deleteCategory(id, elem) {
     }
 }
 
-function editCategory(id, title, p_title, url, keys, desc) {
+function editCategory(id, title, parent, have_child, p_title, url, keys, desc) {
     $("#categoryEdit #e_tid").val(id);
     $("#categoryEdit #etitle").val(title);
-    $("#categoryEdit #eptitle").val(p_title);
-    $("#categoryEdit #eurl").val(url);
-    $("#categoryEdit #ekeywords").val(keys);
-    $("#categoryEdit #edescription").val(desc);
+    $("#categoryEdit #eparentId").val(parent);
+
+    $("#categoryEdit #eparentId option").removeAttr("selected");
+    $("#categoryEdit #eparentId option[value='" + parent + "']").attr("selected", "selected");
+    $("#categoryEdit #eparentId").closest(".input-field").find("input").val($("#categoryEdit #eparentId option[value='" + parent + "']").text());
+
+    if (have_child == 0) {
+        $("#categoryEdit #ehavechild").prop("checked", false);
+        $("#categoryEdit .panelToToggle").show();
+        $("#categoryEdit #eptitle").val(p_title);
+        $("#categoryEdit #eurl").val(url);
+        $("#categoryEdit #ekeywords").val(keys);
+        $("#categoryEdit #edescription").val(desc);
+    } else {
+        $("#categoryEdit #ehavechild").prop("checked", true);
+        $("#categoryEdit .panelToToggle").hide();
+
+    }
     M.updateTextFields();
     M.textareaAutoResize($("#edescription"));
     $("#categoryEdit").modal("open");
 }
-function viewCategory(title, p_title, url, keys, desc) {
+function viewCategory(title, parent, have_child, p_title, url, keys, desc) {
     $("#categoryView #vtitle").text(title);
-    $("#categoryView #vptitle").text(p_title);
-    let urlNode = $("#categoryView #vurl");
-    urlNode.attr("href", "menu/"+url);
-    urlNode.find("span").text(url);
-    $("#categoryView #vkeys").empty();
-    if(keys != null && keys.trim() != "") {$("#categoryView #vkeys").append(keys.split(",").map(key => {return `<div class="chip bg-primary">${key}</div>`}));}
-    $("#categoryView #vdescription").text(desc);
+    $("#categoryView #vparent").text(((parent == "NULL" || parent == "" || parent.length == 0) ? "No Parent" : ((parent != "Cakes") ? "Cakes > " : "") + parent));
+    if (have_child == 0) {
+        $("#categoryView #vhave_child").text("No");
+        $("#categoryView .to-be-hide").show();
+        $("#categoryView #vptitle").text(p_title);
+        let urlNode = $("#categoryView #vurl");
+        urlNode.attr("href", "menu/" + url);
+        urlNode.find("span").text(url);
+        $("#categoryView #vkeys").empty();
+        if (keys != null && keys.trim() != "") { $("#categoryView #vkeys").append(keys.split(",").map(key => { return `<div class="chip bg-primary">${key}</div>` })); }
+        $("#categoryView #vdescription").text(desc);
+    } else {
+        $("#categoryView #vhave_child").text("Yes");
+        $("#categoryView .to-be-hide").hide();
+    }
     $("#categoryView").modal("open");
 }
 function toggleEverything(elem) {
-    if(elem.checked) {
-        $("#panelToToggle").slideUp();
-        $("#panelToToggle").find("input").removeAttr("required");
-        $("#panelToToggle").find("textarea").removeAttr("required");
+    if (elem.checked) {
+        $(".panelToToggle").slideUp();
+        $(".panelToToggle").find("input").removeAttr("required");
+        $(".panelToToggle").find("textarea").removeAttr("required");
     } else {
-        $("#panelToToggle").slideDown();
-        $("#panelToToggle").find("input").attr("required", "required");
-        $("#panelToToggle").find("textarea").attr("required", "required");
+        $(".panelToToggle").slideDown();
+        $(".panelToToggle").find("input").attr("required", "required");
+        $(".panelToToggle").find("textarea").attr("required", "required");
     }
 }

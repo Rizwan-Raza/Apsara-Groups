@@ -65,24 +65,24 @@ if (
             </div>
             <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
             <div class="grey lighten-3">
-                <?php $sql = "SELECT * FROM `types`";
+                <?php
+                $sql = "";
                 if (isset($_GET['filter'])) {
                     $filter = "";
                     switch ($_GET['filter']) {
                         case "all":
-                            $filter = "";
+                            $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=1 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=1 AND `t1`.`parent`=`t2`.`_tid` UNION ALL SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid` AND `t1`.`url` != 'all-cakes'";
                             break;
                         case "parents":
-                            $filter = "WHERE `have_child`=1";
+                            $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=1 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=1 AND `t1`.`parent`=`t2`.`_tid`";
                             break;
                         case "pages":
-                            $filter = "WHERE `have_child`=0";
+                            $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid` AND `t1`.`url` != 'all-cakes'";
                             break;
                         default:
                     }
-                    $sql .= $filter;
                 } else {
-                    $sql .= " WHERE `have_child`=0";
+                    $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid` AND `t1`.`url` != 'all-cakes'";
                 }
                     require "../services/db.inc.php";
                     include "includes/functions.inc.php";
@@ -121,7 +121,7 @@ if (
                                 <?= $i + 1 ?>
                             </td>
                             <td>
-                                <?= $cat['title'] ?>
+                                <?= !empty($cat['parent_t']) ? "<small>".(($cat['parent_t'] != "Cakes") ? "Cakes > " : "") . $cat['parent_t'] . "</small><br />" .$cat['title'] : $cat['title'] ?>
                             </td>
                             <td>
                                 <?php if(!$subChild) { ?>
@@ -140,12 +140,12 @@ if (
                                 <?php } ?>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
-                                    onclick="viewCategory('<?= $cat['title'] ?>', '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
+                                    onclick="viewCategory('<?= $cat['title'] ?>','<?= $cat['parent_t'] ?>',<?= $cat['have_child'] ?>, '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
                                     data-tooltip="View Category Info"><i
                                         class="material-icons black-text lh-5">visibility</i></button>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
-                                    onclick="editCategory(<?= $cat['_tid'] ?>, '<?= $cat['title'] ?>', '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
+                                    onclick="editCategory(<?= $cat['_tid'] ?>, '<?= $cat['title'] ?>',<?= $cat['parent'] ?>,<?= $cat['have_child'] ?>, '<?= $cat['page_title'] ?>', '<?= $cat['url'] ?>', '<?= $cat['keywords'] ?>', '<?= $cat['description'] ?>')"
                                     data-tooltip="Edit"><i class="material-icons black-text lh-5">edit</i></button>
                                 <button
                                     class="transparent btn-flat circle btn-floating btn-medium tooltipped waves-effect waves-circle waves-dark"
@@ -212,7 +212,7 @@ if (
                         </div>
                     </div>
                 </div>
-                <div id="panelToToggle">
+                <div class="panelToToggle">
                     <div class="input-field">
                         <input id="ptitle" type="text" class="validate" name="ptitle" minlength="3">
                         <label for="ptitle">Page Title</label>
@@ -258,7 +258,7 @@ if (
                 <div class="row enhanced">
                     <div class="col s6">
                         <div class="input-field">
-                            <select name="parent" id="parentId">
+                            <select name="parent" id="eparentId">
                                 <option value="0" selected>No Parent</option>
                                 <?php $sql = "SELECT * FROM `types` WHERE `have_child`=1";
                                 require_once "../services/db.inc.php";
@@ -276,29 +276,32 @@ if (
                             <p>Will contain sub-categories?</p>
                             <label>
                                 No
-                                <input type="checkbox" name="have_child" onchange="toggleEverything(this)">
+                                <input type="checkbox" name="have_child" onchange="toggleEverything(this)"
+                                    id="ehavechild">
                                 <span class="lever"></span>
                                 Yes
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="input-field">
-                    <input id="eptitle" type="text" class="validate" name="ptitle" required minlength="3">
-                    <label for="eptitle">Page Title</label>
-                </div>
-                <div class="input-field">
-                    <span class="pos-abs">apsarafoods.in/menu/</span>
-                    <input id="eurl" type="text" class="validate" name="url" required minlength="3">
-                </div>
-                <div class="input-field">
-                    <input id="ekeywords" type="text" class="validate" name="keywords" required minlength="3">
-                    <label for="ekeywords">Keywords</label>
-                </div>
-                <div class="input-field">
-                    <textarea id="edescription" class="materialize-textarea" name="desc" required></textarea>
-                    <label for="edescription">Description</label>
-                    <span class="helper-text">Optional</span>
+                <div class="panelToToggle">
+                    <div class="input-field">
+                        <input id="eptitle" type="text" class="validate" name="ptitle" required minlength="3">
+                        <label for="eptitle">Page Title</label>
+                    </div>
+                    <div class="input-field">
+                        <span class="pos-abs">apsarafoods.in/menu/</span>
+                        <input id="eurl" type="text" class="validate" name="url" required minlength="3">
+                    </div>
+                    <div class="input-field">
+                        <input id="ekeywords" type="text" class="validate" name="keywords" required minlength="3">
+                        <label for="ekeywords">Keywords</label>
+                    </div>
+                    <div class="input-field">
+                        <textarea id="edescription" class="materialize-textarea" name="desc" required></textarea>
+                        <label for="edescription">Description</label>
+                        <span class="helper-text">Optional</span>
+                    </div>
                 </div>
                 <button type="submit" class="right waves-effect waves-light bg-primary btn ml-1">Update</button>
                 <button type="reset" class="right modal-close waves-effect waves-red btn-flat btn">Not now</button>
@@ -319,20 +322,28 @@ if (
                         <td id="vtitle">NA</td>
                     </tr>
                     <tr>
+                        <td>Parent</td>
+                        <td id="vparent">NA</td>
+                    </tr>
+                    <tr>
+                        <td>Have Children?</td>
+                        <td id="vhave_child">NA</td>
+                    </tr>
+                    <tr class="to-be-hide">
                         <td>Page Title</td>
                         <td id="vptitle">NA</td>
                     </tr>
-                    <tr>
+                    <tr class="to-be-hide">
                         <td>Keywords</td>
                         <td>
                             <div id="vkeys"></div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="to-be-hide">
                         <td>Description</td>
                         <td id="vdescription">NA</td>
                     </tr>
-                    <tr>
+                    <tr class="to-be-hide">
                         <td>URL</td>
                         <td><a id="vurl" href="#" target="_blank">apsarafoods.in/menu/<span>#</span></a></td>
                     </tr>

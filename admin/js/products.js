@@ -35,8 +35,8 @@ $(() => {
                         <label for="quantity_1">Quantity</label>
                     </div>
                 </div>`);
-                    $("#productAdd #imageSwicth").prop("checked", true);
-                    $("#productAdd .file-field").slideDown();
+                    $("#productAdd #imageSwicth").prop("checked", false);
+                    $("#productAdd .file-field").slideUp();
                     $("#productAdd #variety .btn").attr("onclick", "addMore(this,1)");
                     M.updateTextFields();
                     $("#productAdd").modal("close");

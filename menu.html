@@ -18,6 +18,21 @@ if (isset($_GET) and isset($_GET['url'])) {
     <meta name="keywords" content="<?= $cat['keywords'] ?>" />
     <base href="/" />
     <?php include "includes/head.inc.php"; ?>
+    <style>
+        .card-action.py-1 span {
+            line-height: 45px;
+        }
+
+        .card .card-action.py-1 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .card:hover {
+            -webkit-box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -41,37 +56,44 @@ if (isset($_GET) and isset($_GET['url'])) {
             <div class="row enhanced products d-flex">
                 <?php
                         require_once "services/db.inc.php";
-                        $sql = "SELECT * FROM `products` WHERE `has_image`=1 AND `products`.`_tid`=$cat[_tid]";
+                        $sql = "SELECT * FROM `products` WHERE `has_image`=1";
+                        if($_GET['url'] != "all-cakes") {
+                            $sql .=" AND `products`.`_tid`=$cat[_tid]";
+                        } else {
+                            $sql ="SELECT `products`.*, `types`.`title` AS `parent_t` FROM `products`, `types` WHERE `has_image`=1 AND `products`.`_tid`=`types`.`_tid` AND `types`.`parent` IN (SELECT `_tid` FROM `types` WHERE `parent`=1)";
+                        }
+                        $sql .= " ORDER BY `products`.`time` DESC";
                         $result = DB::getConnection()->query($sql);
                         if ($result->num_rows > 0) {
                             while ($value = $result->fetch_assoc()) {
                                 extract($value, EXTR_OVERWRITE) ?>
                 <div class="col s12 m6 l4 xl3 d-flex mx-auto">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="<?= $image ?>" class="grey lighten-3 full">
-                        </div>
-                        <div class="card-content">
-                            <h5 class="m-0 fw-500 truncate"><?= $title ?></h5>
-                            <?php $count = strlen($description); ?>
-                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                        </div>
+                    <div class="card w-100">
+                        <a href="product/<?=$url?>">
+                            <div class="card-image">
+                                <img src="<?= $image ?>" class="grey lighten-3 full">
+                            </div>
+                            <div class="card-content">
+                                <h6 class="m-0 fw-500 black-text"><?= $title ?></h6>
+                                <?php $count = strlen($description); ?>
+                                <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                            </div>
+                        </a>
                         <div class="fix"></div>
-                        <div class="card-action">
-                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
+                        <div class="card-action py-1">
+                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid LIMIT 1";
                                         $result2 = DB::getConnection()->query($sqlV);
                                         if ($result2->num_rows > 0) {
-                                            while ($valueV = $result2->fetch_assoc()) { ?>
-                            <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
+                                            $valueV = $result2->fetch_assoc(); ?>
+                            <div><span class="left fw-700">&#8377;
+                                    <?= $valueV['price'] ?>
                                     <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                <button class="btn right btn-small red"
+                                <button class="btn right btn-small red my-1"
                                     onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>
                             </div>
-                            <?php }
-                                        } ?>
                             <br clear="all" />
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -85,7 +107,13 @@ if (isset($_GET) and isset($_GET['url'])) {
             <div class="row enhanced products d-flex">
                 <?php
                         require_once "services/db.inc.php";
-                        $sql = "SELECT * FROM `products` WHERE `has_image`=0 AND `products`.`_tid`=$cat[_tid]";
+                        
+                        $sql = "SELECT * FROM `products` WHERE `has_image`=0";
+                        if($_GET['url'] != "all-cakes") {
+                            $sql .=" AND `products`.`_tid`=$cat[_tid]";
+                        } else {
+                            $sql ="SELECT * FROM `products`, `types` WHERE `has_image`=0 AND `products`.`_tid`=`types`.`_tid` AND `types`.`parent`=1";
+                        }
                         $result = DB::getConnection()->query($sql);
                         if ($result->num_rows > 0) {
                             while ($value = $result->fetch_assoc()) {
@@ -93,7 +121,7 @@ if (isset($_GET) and isset($_GET['url'])) {
                 <div class="col s12 m6 d-flex mx-auto">
                     <div class="card w-100">
                         <div class="card-content">
-                            <h5 class="fw-500 truncate m-0"><?= $title ?></h5>
+                            <h6 class="fw-500 truncate m-0"><?= $title ?></h6>
                             <?php $count = strlen($description); ?>
                             <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
                             <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
@@ -101,7 +129,7 @@ if (isset($_GET) and isset($_GET['url'])) {
                                         if ($result2->num_rows > 0) {
                                             while ($valueV = $result2->fetch_assoc()) { ?>
                             <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
+                                    <?= $valueV['price'] ?>
                                     <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
                                 <button class="btn right btn-small red"
                                     onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
@@ -132,10 +160,10 @@ if (isset($_GET) and isset($_GET['url'])) {
 
 </html>
 <?php } else {
-        header("Location: /gallery?ref=menu&url=500");
+        header("Location: /menu/cakes/all-cakes?ref=$_SERVER[HTTP_REFERER]&url=500");
     }
 } else {
-    header("Location: /gallery?ref=menu&url=404");
+    header("Location: /menu/cakes/all-cakes?ref=$_SERVER[HTTP_REFERER]&url=404");
 }
 
 ?>

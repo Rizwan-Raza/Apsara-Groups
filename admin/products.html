@@ -11,7 +11,7 @@ if (
 
 <head>
     <title>Products | Apsara Foods Admin </title>
-    <base href="../../" />
+    <base href="/" />
     <?php include "includes/head.inc.php"; ?>
     <!-- <link rel="stylesheet" href="admin/css/queries.css" /> -->
     <style>
@@ -66,21 +66,20 @@ if (
                 <h4 class="my-1">Products
                     <div class="right m-0"><select onchange="window.location.href='admin/products/'+this.value">
                             <option value="all">All</option>
-                            <?php $sql = "SELECT * FROM `types`";
+                            <?php $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid`";
                                 require "../services/db.inc.php";
                                 $conn = DB::getConnection();
                                 $result = $conn->query($sql);
                                 while ($nav = $result->fetch_assoc()) { ?>
                             <option value="<?= $nav['url'] ?>"
-                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>>
-                                <?= $nav['title'] ?></option>
+                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>><?= !empty($nav['parent_t']) ? "<small>".(($nav['parent_t'] != "Cakes") ? "Cakes > " : "") . $nav['parent_t'] . " > </small> " .$nav['title'] : $nav['title'] ?></option>
                             <?php } ?>
                         </select></div>
                 </h4>
             </div>
             <div class="border-top-1 grey-border border-lighten-2 mt-2"></div>
             <div class="grey lighten-3">
-                <?php $sql = "SELECT `products`.*, `types`.`title` AS `cat_title` FROM `products`, `types` WHERE `products`.`_tid`=`types`.`_tid` AND `types`.`url` LIKE '" . ((isset($_GET) and isset($_GET['url'])) ? ($_GET['url'] == "all" ? "%%" : $_GET['url']) : "%%") . "'";
+                <?php $sql = "SELECT `products`.*, `types`.`title` AS `cat_title` FROM `products`, `types` WHERE `products`.`_tid`=`types`.`_tid` AND `types`.`url` LIKE " . ((isset($_GET) and isset($_GET['url'])) ? ($_GET['url'] == "all" ? "'%%'" : ($_GET['url'] == "all-cakes" ? "'%%' AND `types`.`parent` IN (SELECT `_tid` FROM `types` WHERE `parent`=1)" : "'$_GET[url]'")) : "'%%'") . " ORDER BY `products`.`time` DESC";
                     require_once "../services/db.inc.php";
                     include "includes/functions.inc.php";
                     date_default_timezone_set("Asia/Kolkata");
@@ -174,12 +173,13 @@ if (
                 <div class="input-field">
                     <select name="cat_id" id="catId">
                         <option value="" disabled selected>Choose Category</option>
-                        <?php $sql = "SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid`";
+                        <?php $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid` AND `t1`.`url` != 'all-cakes'";
                             require_once "../services/db.inc.php";
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"><?= $user['title'] ?></option>
+                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
+                        </option>
                         <?php } ?>
                     </select>
                 </div>
@@ -264,12 +264,12 @@ if (
                 <div class="input-field">
                     <select name="cat_id" id="ecatId">
                         <option value="" disabled selected>Choose Category</option>
-                        <?php $sql = "SELECT * FROM `types`";
+                        <?php $sql = "SELECT *, NULL AS `parent_t` FROM `types` WHERE `have_child`=0 AND `parent`=0 UNION ALL SELECT `t1`.*, `t2`.`title` AS `parent_t` FROM `types` AS `t1`, `types` AS `t2` WHERE `t1`.`have_child`=0 AND `t1`.`parent`=`t2`.`_tid` AND `t1`.`url` != 'all-cakes'";
                             require_once "../services/db.inc.php";
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"><?= $user['title'] ?></option>
+                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?></option>
                         <?php } ?>
                     </select>
                 </div>

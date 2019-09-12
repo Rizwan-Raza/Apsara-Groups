@@ -8,8 +8,8 @@
 
 <!-- <link rel="stylesheet" href="css/materialize.slim.min.css"> -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<!-- <link rel="stylesheet" href="css/helper-classes.css" />
-<link rel="stylesheet" href="css/common.css" /> -->
+<!-- <link rel="stylesheet" href="css/helper-classes.css" /> -->
+<link rel="stylesheet" href="css/common.css" />
 <link rel="stylesheet" href="css/home.css" />
 <?php // require_once "includes/common.main.css.php"; 
 ?>

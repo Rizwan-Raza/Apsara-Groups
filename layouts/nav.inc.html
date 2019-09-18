@@ -1,42 +1,32 @@
 <nav class="white px-2 z-depth-0">
   <div class="nav-wrapper">
-    <div class="left ml-1"><a href="tel:+919876543210" class="black-text"><i class="material-icons left">phone</i>
-        011-9876543210</a></div>
+    <div class="left ml-1"><a href="tel:+919999423940" class="black-text"><i class="material-icons left">phone</i>
+        +91 9999423940</a></div>
 
     <ul class="right">
       <?php if (isset($_SESSION) and isset($_SESSION['u_id'])) { ?>
-      <li class="drop drop-right">
-        <a class="black-text fw-500">
-          <img src="images/photo.png" style="height: 24px;vertical-align:middle; margin-top: -4px">
-          <?= explode(" ", $_SESSION['u_name'])[0] ?></a>
-        <ul>
-          <li><a href="profile" class="fw-500">Profile</a></li>
-          <li><a href="orders" class="fw-500">My Order</a></li>
-          <li><a href="services/logout.php?log=true" class="fw-500">Logout</a></li>
-        </ul>
-      </li>
+        <li class="drop drop-right">
+          <a class="black-text fw-500">
+            <img src="images/photo.png" style="height: 24px;vertical-align:middle; margin-top: -4px">
+            <?= explode(" ", $_SESSION['u_name'])[0] ?></a>
+          <ul>
+            <li><a href="profile" class="fw-500">Profile</a></li>
+            <li><a href="orders" class="fw-500">My Order</a></li>
+            <li><a href="services/logout.php?log=true" class="fw-500">Logout</a></li>
+          </ul>
+        </li>
       <?php } else { ?>
-      <li><a class="modal-trigger btn" href="#signIn">Sign in</a></li>
+        <li><a class="modal-trigger btn" href="#signIn">Sign in</a></li>
       <?php } ?>
 
     </ul>
 
     <div class="right hide-on-med-and-down">
-      <a href="#" target="_blank"
-        class="btn-floating ml-2 waves-effect waves-circle transparent facebook btn-flat tooltipped"
-        data-tooltip="Facebook"><img src="images/socials/f.svg"></a>
-      <a href="https://www.instagram.com/apsarabakers/" target="_blank"
-        class="btn-floating ml-2 waves-effect waves-circle transparent instagram btn-flat tooltipped"
-        data-tooltip="Instagram"><img src="images/socials/i.svg"></a>
-      <a href="#" target="_blank"
-        class="btn-floating ml-2 waves-effect waves-circle transparent swiggy btn-flat tooltipped"
-        data-tooltip="Swiggy"><img src="images/socials/swiggy.svg"></a>
-      <a href="#" target="_blank"
-        class="btn-floating ml-2 waves-effect waves-circle transparent zomato btn-flat tooltipped"
-        data-tooltip="Zomato"><img src="images/socials/zomato.webp"></a>
-      <a href="#" target="_blank"
-        class="btn-floating ml-2 waves-effect waves-circle transparent dineout btn-flat tooltipped"
-        data-tooltip="DineOut"><img src="images/socials/dineout.png"></a>
+      <a href="#" target="_blank" class="btn-floating ml-2 waves-effect waves-circle transparent facebook btn-flat tooltipped" data-tooltip="Facebook"><img src="images/socials/f.svg"></a>
+      <a href="https://www.instagram.com/apsarabakers/" target="_blank" class="btn-floating ml-2 waves-effect waves-circle transparent instagram btn-flat tooltipped" data-tooltip="Instagram"><img src="images/socials/i.svg"></a>
+      <a href="#" target="_blank" class="btn-floating ml-2 waves-effect waves-circle transparent swiggy btn-flat tooltipped" data-tooltip="Swiggy"><img src="images/socials/swiggy.svg"></a>
+      <a href="#" target="_blank" class="btn-floating ml-2 waves-effect waves-circle transparent zomato btn-flat tooltipped" data-tooltip="Zomato"><img src="images/socials/zomato.svg"></a>
+      <a href="#" target="_blank" class="btn-floating ml-2 waves-effect waves-circle transparent dineout btn-flat tooltipped" data-tooltip="DineOut"><img src="images/socials/dineout.png"></a>
 
     </div>
     <form class="right hide-on-small-only" action="search">
@@ -65,20 +55,42 @@
   $result = DB::getConnection()->query($sql);
   $numrows = $result->num_rows;
   if ($numrows > 0) {  ?>
-  <li class="waves-effect w-100" onclick="popOut(this, <?= $numrows ?>)">
-    <a href="javascript:;"><i class="material-icons">local_dining</i>
-      Menu</a>
-    <ul class="small-drop">
-      <?php
+    <li class="waves-effect w-100" onclick="popOut(this, <?= $numrows ?>)">
+      <a href="javascript:;"><i class="material-icons">local_dining</i>
+        Menu</a>
+      <ul class="small-drop">
+        <?php
           while ($nav = $result->fetch_assoc()) { ?>
-      <li><a href="menu/<?= $nav['url'] ?>" class="truncate"><?= $nav['title'] ?></a>
-      </li>
-      <?php } ?>
-    </ul>
-  </li>
+          <li><a href="menu/<?= $nav['url'] ?>" class="truncate"><?= $nav['title'] ?></a>
+          </li>
+        <?php } ?>
+      </ul>
+    </li>
   <?php } ?>
-  <li class="waves-effect w-100">
-    <a href="gallery"><i class="material-icons">cake</i> Gallery</a>
+  <?php $in_sql = "SELECT * FROM `types` WHERE `parent`=1 AND `have_child`=1";
+  $in_result = DB::getConnection()->query($in_sql);
+  if ($in_result->num_rows > 0) {
+    $rows = 1;
+    $tobeEcho = "";
+    while ($in_nav = $in_result->fetch_assoc()) {
+      $tobeEcho .= '<li><a href="javascript:;" class="truncate">' . $in_nav['title'] . '</a></li>
+          <li class="divider"></li>';
+      $rows++;
+      $iin_sql = "SELECT * FROM `types` WHERE `parent`=$in_nav[_tid] AND `have_child`=0";
+      $iin_result = DB::getConnection()->query($iin_sql);
+      if ($iin_result->num_rows > 0) {
+        while ($iin_nav = $iin_result->fetch_assoc()) {
+          $rows++;
+          $tobeEcho .= '<li><a href="menu/' . $iin_nav['url'] . '" class="truncate">' . $iin_nav['title'] . '</a></li>';
+        }
+      }
+    }
+  } ?>
+  <li class="waves-effect w-100" onclick="popOut(this, <?= $rows ?>)">
+    <a href="javascript:;"><i class="material-icons">cake</i>Cakes</a>
+    <ul class="small-drop">
+      <?= $tobeEcho ?>
+    </ul>
   </li>
   <li class="waves-effect w-100">
     <a href="contact"><i class="material-icons">contact_mail</i> Contact Us</a>
@@ -88,13 +100,13 @@
     <a href="#" target="_blank"><img alt="Facebook" src="images/socials/f.svg"> Facebook</a>
   </li>
   <li class="waves-effect w-100">
-    <a href="#" target="_blank"><img alt="Instagram" src="images/socials/i.svg"> Instagram</a>
+    <a href="https://www.instagram.com/apsarabakers/" target="_blank"><img alt="Instagram" src="images/socials/i.svg"> Instagram</a>
   </li>
   <li class="waves-effect w-100">
     <a href="#" target="_blank"><img alt="Swiggy" src="images/socials/swiggy.svg"> Swiggy</a>
   </li>
   <li class="waves-effect w-100">
-    <a href="#" target="_blank"><img alt="Zomato" src="images/socials/zomato.webp"> Zomato</a>
+    <a href="#" target="_blank"><img alt="Zomato" src="images/socials/zomato.svg"> Zomato</a>
   </li>
   <li class="waves-effect w-100">
     <a href="#" target="_blank"><img alt="DineOut" src="images/socials/dineout.png"> DineOut</a>
@@ -103,8 +115,7 @@
 <div class="divider"></div>
 <nav class="white px-m-4" id="mainNav">
   <div class="nav-wrapper">
-    <a href="javascript:;" data-target="mobile-sidenav" class="sidenav-trigger"><i
-        class="material-icons black-text">menu</i></a>
+    <a href="javascript:;" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons black-text">menu</i></a>
     <a href="./" class="brand-logo"><img src="images/apsara.png" class="ml-4 brand-img" alt="Apsara" />
 
       <ul class="right hide-on-med-and-down">
@@ -115,16 +126,15 @@
         $sql = "SELECT * FROM `types` WHERE `parent`=0 AND `have_child`=0";
         $result = DB::getConnection()->query($sql);
         if ($result->num_rows > 0) {  ?>
-        <li class="drop">
-          <a class="black-text hover-text-primary fw-500" href="javascript:;">Menu</a>
-          <ul>
-            <?php
+          <li class="drop">
+            <a class="black-text hover-text-primary fw-500" href="javascript:;">Menu</a>
+            <ul>
+              <?php
                 while ($nav = $result->fetch_assoc()) { ?>
-            <li style="line-height: 32px;"><a href="menu/<?= $nav['url'] ?>"
-                style="line-height: 32px;"><?= $nav['title'] ?></a></li>
-            <?php } ?>
-          </ul>
-        </li>
+                <li style="line-height: 32px;"><a href="menu/<?= $nav['url'] ?>" style="line-height: 32px;"><?= $nav['title'] ?></a></li>
+              <?php } ?>
+            </ul>
+          </li>
         <?php } ?>
         <li class="drop" id="cakeList"><a href="javascript:;" class="black-text hover-text-primary fw-500">Cakes</a>
           <ul class="row">
@@ -132,25 +142,22 @@
             $in_result = DB::getConnection()->query($in_sql);
             if ($in_result->num_rows > 0) {
               while ($in_nav = $in_result->fetch_assoc()) { ?>
-            <div class="col s4 mb-2"><a href="javascript:;" class="black-text fw-500"
-                style="line-height: 32px;"><?= $in_nav['title'] ?></a>
-              <?php $iin_sql = "SELECT * FROM `types` WHERE `parent`=$in_nav[_tid] AND `have_child`=0";
+                <div class="col s4 mb-2"><a href="javascript:;" class="black-text fw-500" style="line-height: 32px;"><?= $in_nav['title'] ?></a>
+                  <?php $iin_sql = "SELECT * FROM `types` WHERE `parent`=$in_nav[_tid] AND `have_child`=0";
                       $iin_result = DB::getConnection()->query($iin_sql);
                       if ($iin_result->num_rows > 0) {
                         echo "<li class='divider'></li>";
                         while ($iin_nav = $iin_result->fetch_assoc()) { ?>
-              <li style="line-height: 32px;"><a href="menu/<?= $iin_nav['url'] ?>"
-                  style="line-height: 32px;"><?= $iin_nav['title'] ?></a></li>
-              <?php }
+                      <li style="line-height: 32px;"><a href="menu/<?= $iin_nav['url'] ?>" style="line-height: 32px;"><?= $iin_nav['title'] ?></a></li>
+                  <?php }
                       } ?>
-            </div>
+                </div>
             <?php }
             } ?>
           </ul>
         </li>
         <li><a href="contact" class="black-text hover-text-primary fw-500">Contact Us</a></li>
-        <li><a href="cart" class="black-text hover-text-primary fw-500 pos-rel cart"><i
-              class="material-icons left">shopping_cart</i> Cart <div class="num circle red white-text hide"></div></a>
+        <li><a href="cart" class="black-text hover-text-primary fw-500 pos-rel cart"><i class="material-icons left">shopping_cart</i> Cart <div class="num circle red white-text hide"></div></a>
         </li>
       </ul>
   </div>

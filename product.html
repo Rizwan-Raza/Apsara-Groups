@@ -35,7 +35,7 @@ if (isset($_GET) and isset($_GET['url'])) {
     <section class="py-4">
         <div class="container full px-4">
             <div class="row">
-                <div class="col s12 m5">
+                <div class="col s12 m5 mb-4">
                     <img src="<?= $cat['image'] ?>" alt="<?= $cat['title'] ?>" class="w-100">
                 </div>
                 <div class="col s12 m5">
@@ -80,13 +80,14 @@ if (isset($_GET) and isset($_GET['url'])) {
             let varient = $("#varient p").first();
             varient.find("input").prop("checked", true);
             $("#p_price span").text(varient.find("span b").text());
-            $("#cart_btn").attr("onclick", $("#cart_btn").attr("onclick").slice(0, -2) + varient.find("input").val() + ")");
+            $("#cart_btn").removeAttr("disabled");
+            $("#cart_btn").attr("onclick", $("#cart_btn").attr("onclick").slice(0, $("#cart_btn").attr("onclick").lastIndexOf(",")) + "," + varient.find("input").val() + ")");
 
             $("#varient input[name='varient']").change(function (e) {
                 $("#p_price span").text($(e.target).parent().find("span b").text());
                 let c_btn = $("#cart_btn");
                 c_btn.removeAttr("disabled");
-                c_btn.attr("onclick", c_btn.attr("onclick").slice(0, -2) + e.target.value + ")");
+                c_btn.attr("onclick", c_btn.attr("onclick").slice(0, c_btn.attr("onclick").lastIndexOf(",")) + "," + e.target.value + ")");
             });
 
         });

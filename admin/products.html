@@ -72,7 +72,9 @@ if (
                                 $result = $conn->query($sql);
                                 while ($nav = $result->fetch_assoc()) { ?>
                             <option value="<?= $nav['url'] ?>"
-                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>><?= !empty($nav['parent_t']) ? "<small>".(($nav['parent_t'] != "Cakes") ? "Cakes > " : "") . $nav['parent_t'] . " > </small> " .$nav['title'] : $nav['title'] ?></option>
+                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>
+                                ><?= !empty($nav['parent_t']) ? "<small>".(($nav['parent_t'] != "Cakes") ? "Cakes > " : "") . $nav['parent_t'] . " > </small> " .$nav['title'] : $nav['title'] ?>
+                            </option>
                             <?php } ?>
                         </select></div>
                 </h4>
@@ -178,7 +180,8 @@ if (
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
+                        <option value="<?= $user['_tid'] ?>"
+                            ><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
                         </option>
                         <?php } ?>
                     </select>
@@ -269,12 +272,14 @@ if (
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?></option>
+                        <option value="<?= $user['_tid'] ?>"
+                            ><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
+                        </option>
                         <?php } ?>
                     </select>
                 </div>
                 <div class="grey lighten-3 p-2" id="evariety">
-                    <input class="hide" value="1" name="varities" id="evarities" />
+                    <input class="hide" value="0" name="varities" id="evarities" />
                     <div class="varients">
                     </div>
                     <div class="center mx-auto add-btn">

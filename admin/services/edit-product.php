@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
                 return;
             }
         } else {
-            $removeImage = true;
+            $removeImage = false;
         }
     } else {
         $removeImage = true;

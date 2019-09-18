@@ -16,9 +16,9 @@ $(() => {
                 $("#cartPanel .loader").addClass("hide");
                 $("#pricePanel .loader").addClass("hide");
                 $(".cart-items").append(getCartItem(dataObj, elem.qty));
-                $(".price-brief").append(`<h6><span>${dataObj.title} x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
+                $(".price-brief").append(`<h6><span>${dataObj.title} (${dataObj.size}) x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
                 tPrice += elem.qty * dataObj.price;
-                localStorage.setItem("c_purpose", `${localStorage.getItem("c_purpose") != null ? localStorage.getItem("c_purpose") + ',' : ''} ${dataObj.title} x ${elem.qty}`);
+                localStorage.setItem("c_purpose", `${localStorage.getItem("c_purpose") != null ? localStorage.getItem("c_purpose") + ',' : ''} ${dataObj.title} (${dataObj.size}) x ${elem.qty}`);
                 localStorage.setItem("c_price", tPrice.toFixed(2).toLocaleString());
                 $(".t-price b").text(tPrice.toFixed(2).toLocaleString());
             });
@@ -186,6 +186,7 @@ function getCartItem(e, qty) {
                     <div class="col s9 row">
                         <div class="col s12 l8">
                             <h5 class="m-0 fw-500">${e.title}</h5>
+                            <span class="grey-text">${e.size}</span>
                             <p class="black-text">${e.description}</p>
                             <h6 class="fw-700">&#8377; ${(+e.price).toFixed(2).toLocaleString()}</h6>
                         </div>
@@ -193,7 +194,7 @@ function getCartItem(e, qty) {
                             <button class="btn-floating btn-small white waves-effect waves-dark remove" ${qty <= 1 ? 'disabled' : ''} onclick="changeQ(this, -1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">remove</i></button>
                             <input type="number" name="qty" class="cart-qty" value="${qty}" min="1" max="${e.qty}" onblur="check(this, ${e._pid})" />
                             <button class="btn-floating btn-small white waves-effect waves-dark add mr-2" ${qty >= e.qty ? 'disabled' : ''} onclick="changeQ(this, 1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">add</i></button>
-                            <button class="btn red waves-effect my-2" onclick="removeItem(${e._pid}, this)"><i class="material-icons left">delete</i>Remove</button>
+                            <button class="btn red waves-effect my-2" onclick="removeItem(${e._pid},${e._vid}, this)"><i class="material-icons left">delete</i>Remove</button>
                         </div>
                     </div>
                 </div>
@@ -247,12 +248,12 @@ function changeQ(elem, num, max, id) {
     changePricePanel();
 }
 
-function removeItem(id, elem) {
+function removeItem(id, vid, elem) {
     var list = localStorage.getItem("cart");
     list = JSON.parse(list);
     var done = false;
     list.forEach(item => {
-        if (item.id == id) {
+        if (item.id == id && (item.v == vid || item.v == -1)) {
             list.splice(list.indexOf(item), 1);
             localStorage.setItem("cart", JSON.stringify(list));
             $(".cart .num").text(list.length);
@@ -323,9 +324,9 @@ function changePricePanel() {
             $.get("services/get.php" + query, (data, status) => {
                 let dataObj = JSON.parse(data)[0];
                 $("#pricePanel .loader").addClass("hide");
-                $(".price-brief").append(`<h6><span>${dataObj.title} x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
+                $(".price-brief").append(`<h6><span>${dataObj.title} (${dataObj.size}) x ${elem.qty}</span><span class="right">&#8377; ${(elem.qty * dataObj.price).toFixed(2).toLocaleString()}</h6>`);
                 tPrice += elem.qty * dataObj.price;
-                localStorage.setItem("c_purpose", `${localStorage.getItem("c_purpose") != null ? localStorage.getItem("c_purpose") + ',' : ''} ${dataObj.title} x ${elem.qty}`);
+                localStorage.setItem("c_purpose", `${localStorage.getItem("c_purpose") != null ? localStorage.getItem("c_purpose") + ',' : ''} ${dataObj.title} (${dataObj.size}) x ${elem.qty}`);
                 localStorage.setItem("c_price", tPrice.toFixed(2).toLocaleString());
                 $(".t-price b").text(tPrice.toFixed(2).toLocaleString());
             });

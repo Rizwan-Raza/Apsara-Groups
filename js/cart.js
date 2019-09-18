@@ -179,18 +179,18 @@ $(() => {
 
 function getCartItem(e, qty) {
     return `<div class="py-4 cart-item">
-                <div class="row valign-wrapper m-0">
-                    <div class="col s3">
+                <div class="row m-0">
+                    <div class="col s12 m3 mb-2">
                         <img src="${e.has_image == 0 ? 'uploads/products/placeholder-' + e._tid + '.jpg' : e.image}" alt="${e.title}" class="responsive-img w-100 grey lighten-3" style="object-fit:${e.has_image == 0 ? 'contain' : 'cover'}" />
                     </div>
-                    <div class="col s9 row">
-                        <div class="col s12 l8">
+                    <div class="col s12 m9 mb-2 row">
+                        <div class="col s12 m9 l8">
                             <h5 class="m-0 fw-500">${e.title}</h5>
                             <span class="grey-text">${e.size}</span>
                             <p class="black-text">${e.description}</p>
                             <h6 class="fw-700">&#8377; ${(+e.price).toFixed(2).toLocaleString()}</h6>
                         </div>
-                        <div class="col s12 l4">
+                        <div class="col s12 m3 l4">
                             <button class="btn-floating btn-small white waves-effect waves-dark remove" ${qty <= 1 ? 'disabled' : ''} onclick="changeQ(this, -1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">remove</i></button>
                             <input type="number" name="qty" class="cart-qty" value="${qty}" min="1" max="${e.qty}" onblur="check(this, ${e._pid})" />
                             <button class="btn-floating btn-small white waves-effect waves-dark add mr-2" ${qty >= e.qty ? 'disabled' : ''} onclick="changeQ(this, 1, ${e.qty}, ${e._pid})"><i class="material-icons black-text">add</i></button>

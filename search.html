@@ -11,6 +11,21 @@ if (isset($_GET) and isset($_GET['q'])) { ?>
     <meta name="description" content=" " />
     <meta name="keywords" content=" " />
     <?php include "includes/head.inc.php"; ?>
+    <style>
+        .card-action.py-1 span {
+            line-height: 45px;
+        }
+
+        .card .card-action.py-1 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .card:hover {
+            -webkit-box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -36,30 +51,32 @@ if (isset($_GET) and isset($_GET['q'])) { ?>
                         while ($value = $result->fetch_assoc()) {
                             extract($value, EXTR_OVERWRITE) ?>
                 <div class="col s12 m6 l4 xl3 d-flex mx-auto">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="<?= $image ?>" class="grey lighten-3 full">
-                        </div>
-                        <div class="card-content">
-                            <h5 class="fw-500 truncate m-0"><?= $title ?></h5>
-                            <?php $count = strlen($description); ?>
-                            <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
-                        </div>
+                    <div class="card w-100">
+                        <a href="product/<?=$url?>">
+                            <div class="card-image">
+                                <img src="<?= $image ?>" class="grey lighten-3 full">
+                            </div>
+                            <div class="card-content">
+                                <h6 class="m-0 fw-500 black-text"><?= $title ?></h6>
+                                <?php $count = strlen($description); ?>
+                                <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
+                            </div>
+                        </a>
                         <div class="fix"></div>
-                        <div class="card-action">
-                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
-                                        $result2 = DB::getConnection()->query($sqlV);
-                                        if ($result2->num_rows > 0) {
-                                            while ($valueV = $result2->fetch_assoc()) { ?>
-                            <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
+                        <div class="card-action py-1">
+                            <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid LIMIT 1";
+                                                        $result2 = DB::getConnection()->query($sqlV);
+                                                        if ($result2->num_rows > 0) {
+                                                            $valueV = $result2->fetch_assoc(); ?>
+                            <div><span class="left fw-700">&#8377;
+                                    <?= $valueV['price'] ?>
                                     <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                <button class="btn right btn-small red my-1"
+                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>
                             </div>
-                            <?php }
-                                        } ?>
                             <br clear="all" />
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -81,24 +98,23 @@ if (isset($_GET) and isset($_GET['q'])) { ?>
                 <div class="col s12 m6 d-flex mx-auto">
                     <div class="card w-100">
                         <div class="card-content">
-                            <h5 class="fw-500 truncate m-0 mb-2"><?= $title ?><div class="chip right m-0">
-                                    <?= $cat_title ?></div>
-                            </h5>
+                            <h6 class="fw-500 truncate m-0"><?= $title ?></h6>
                             <?php $count = strlen($description); ?>
                             <p><?= substr($description, 0, 50) ?><?php echo $count > 50 ? '...' : ''; ?></p>
                             <?php $sqlV = "SELECT * FROM `varients` WHERE `_pid`=$_pid";
-                                        $result2 = DB::getConnection()->query($sqlV);
-                                        if ($result2->num_rows > 0) {
-                                            while ($valueV = $result2->fetch_assoc()) { ?>
+                                                        $result2 = DB::getConnection()->query($sqlV);
+                                                        if ($result2->num_rows > 0) {
+                                                            while ($valueV = $result2->fetch_assoc()) { ?>
                             <div class="my-1"><span class="left fw-700">&#8377;
-                                    <?= number_format($valueV['price'], 2) ?>
+                                    <?= $valueV['price'] ?>
                                     <?= (($valueV['size'] != 'Normal') ? "(" . $valueV['size'] . ")" : "") ?></span>
-                                <button class="btn right btn-small red" onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
+                                <button class="btn right btn-small red"
+                                    onclick="addToCart(<?= $_pid ?>, <?= $valueV['_vid'] ?>)">Add to
                                     Cart</button>
                                 <br clear="all" />
                             </div>
                             <?php }
-                                        } ?>
+                                                        } ?>
                         </div>
                     </div>
                 </div>

@@ -70,6 +70,11 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
         $result = $conn->query($sql);
         $num_ot = $result->fetch_assoc()['COUNT(`_oid`)'];
 
+        $sql = "SELECT COUNT(`_oid`) FROM `orders` WHERE `time` BETWEEN date_sub(now(),INTERVAL 1 WEEK) and now()"; 
+        $conn = DB::getConnection(); 
+        $result = $conn->query($sql);
+        $num_ow = $result->fetch_assoc()['COUNT(`_oid`)'];
+
         $sql = "SELECT `types`.*, COUNT(`products`.`_tid`) AS `count` FROM `types`, `products` WHERE `types`.`_tid`=`products`.`_tid` GROUP BY `types`.`_tid`"; 
         $conn = DB::getConnection(); 
         $resultTypes = $conn->query($sql);
@@ -166,6 +171,20 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                             <div class="card bg-primary m-0">
                                 <div class="card-content white-text">
                                     <h4 class="fw-500 center-align">
+                                        <?=$num_ow?>
+                                    </h4>
+                                </div>
+                                <div class="card-action center-align">
+                                    Orders / Week
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m6 l4 xl3 my-1">
+                        <a href="admin/orders" class="waves-effect waves-light w-full bg-primary border-radius-8">
+                            <div class="card bg-primary m-0">
+                                <div class="card-content white-text">
+                                    <h4 class="fw-500 center-align">
                                         <?=$num_ot?>
                                     </h4>
                                 </div>
@@ -203,27 +222,6 @@ if (isset($_SESSION['admin']) and $_SESSION['admin'] == true) {
                             </div>
                         </a>
                     </div>
-                    <?php
-                    while($cat = $resultTypes->fetch_assoc()) {
-                        ?>
-                    <div class="col s12 m6 l4 xl3 my-1">
-                        <a href="admin/products/<?=$cat['url']?>"
-                            class="waves-effect waves-light w-full bg-primary border-radius-8">
-                            <div class="card bg-primary m-0">
-                                <div class="card-content white-text">
-                                    <h4 class="fw-500 center-align">
-                                        <?=$cat['count']?>
-                                    </h4>
-                                </div>
-                                <div class="card-action center-align">
-                                    <?=$cat['title']?>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <?php
-                    }
-                     ?>
                     <div class="col s12 m6 l4 xl3 my-1">
                         <a href="admin/gallery" class="waves-effect waves-light w-full bg-primary border-radius-8">
                             <div class="card bg-primary m-0">

@@ -4,8 +4,8 @@ $(() => {
         M.updateTextFields();
     });
 
-    $("#categoryAdd form #etitle").keyup(() => {
-        $("#categoryAdd form #eurl").val($("#categoryAdd form #etitle").val().toLowerCase().replace(/ /g, "-"));
+    $("#categoryEdit form #etitle").keyup(() => {
+        $("#categoryEdit form #eurl").val($("#categoryEdit form #etitle").val().toLowerCase().replace(/ /g, "-"));
         M.updateTextFields();
     });
 

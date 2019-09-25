@@ -104,13 +104,13 @@ header img {
 }
 
 #explore .carousel {
-    height: 300px !important;
+    height: 340px !important;
 }
 
 #explore .carousel-item {
     width: 33%;
-    height: 250px;
-    min-height: 250px;
+    height: 300px;
+    min-height: 300px;
 }
 
 @media (max-width: 992px) {
@@ -146,7 +146,7 @@ header img {
 }
 
 #explore .card {
-    min-height: 250px;
+    min-height: 300px;
 }
 
 #explore .card.horizontal .card-stacked {

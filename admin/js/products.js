@@ -1,4 +1,24 @@
 $(() => {
+    $("#productAdd form #title").keyup(() => {
+        $("#productAdd form #url").val($("#productAdd form #title").val().toLowerCase().replace(/ /g, "-"));
+        M.updateTextFields();
+    });
+
+    $("#productEdit form #etitle").keyup(() => {
+        $("#productEdit form #eurl").val($("#productEdit form #etitle").val().trim().toLowerCase().replace(">", "").replace(/ /g, "-"));
+        M.updateTextFields();
+    });
+
+    $("#productAdd form #catId").change(() => {
+        $("#productAdd form #url").val($("#productAdd form #catId option:selected").text().trim().toLowerCase().replace(" > ", "/").replace(/ /g, "-") + "/" + $("#productAdd form #url").val());
+        M.updateTextFields();
+    });
+
+    $("#productEdit form #etitle").keyup(() => {
+        $("#productEdit form #eurl").val($("#productEdit form #ecatId option:selected").text().trim().toLowerCase().replace(" > ", "/").replace(/ /g, "-") + "/" + $("#productEdit form #eurl").val());
+        M.updateTextFields();
+    });
+
 
     $("#productAdd form").submit(e => {
         e.preventDefault();

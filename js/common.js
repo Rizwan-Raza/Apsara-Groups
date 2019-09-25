@@ -131,15 +131,31 @@ $(() => {
 
     var shrinked = false;
 
+    if ($(document).scrollTop() > 50) {
+        if (!shrinked) {
+            $("#cakeList .row").css("top", "64px");
+            $("#menuList .row").css("top", "64px");
+            shrinked = true;
+        }
+    } else if (0 < $(document).scrollTop() <= 50) {
+        if (shrinked) {
+            $("#cakeList .row").css("top", "initial");
+            $("#menuList .row").css("top", "initial");
+            shrinked = false;
+        }
+    }
+
     $(document).scroll((e) => {
         if ($(e.target).scrollTop() > 50) {
             if (!shrinked) {
                 $("#cakeList .row").css("top", "64px");
+                $("#menuList .row").css("top", "64px");
                 shrinked = true;
             }
         } else if (0 < $(e.target).scrollTop() <= 50) {
             if (shrinked) {
                 $("#cakeList .row").css("top", "initial");
+                $("#menuList .row").css("top", "initial");
                 shrinked = false;
             }
         }

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
     $title = htmlspecialchars($title);
     $desc = htmlspecialchars($desc);
 
-    $sql = "INSERT INTO `products` (`title`, `_tid`, `description`, `image`, `has_image`) VALUES('$title', $cat_id, '$desc', " . (isset($directory) ? "'$directory', 1" : "NULL, 0") . ")";
+    $sql = "INSERT INTO `products` (`title`, `_tid`, `url`, `description`, `image`, `has_image`) VALUES('$title', $cat_id, '$url', '$desc', " . (isset($directory) ? "'$directory', 1" : "NULL, 0") . ")";
 
     require '../../services/db.inc.php';
 
@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
         } else {
             $data = array("message" => "Product Added with issues delete it and try again", "status" => "success");
         }
+    } elseif (strpos($conn->error, "Duplicate entry") === 0) {
+        $data = array("message" => "Already Added, try something else", "status" => "duplicate_error");
     } else {
         $data = array("message" => "Something went wrong!", "status" => "server_error");
     }

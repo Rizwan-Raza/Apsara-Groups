@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
         $removeImage = true;
     }
 
-    $sql = "UPDATE `products` SET `title`='$title', `_tid` = $cat_id, `description`='$desc'" . (isset($directory) ? ", `image`='$directory', `has_image`=1" : ((isset($removeImage) and $removeImage) ? ", `has_image`=0" : "")) . " WHERE `_pid`=$pid";
+    $sql = "UPDATE `products` SET `title`='$title', `_tid` = $cat_id, `url`='$url', `description`='$desc'" . (isset($directory) ? ", `image`='$directory', `has_image`=1" : ((isset($removeImage) and $removeImage) ? ", `has_image`=0" : "")) . " WHERE `_pid`=$pid";
 
     require '../../services/db.inc.php';
 
@@ -49,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" and isset($_POST['title']) and isset($
             echo $sqlV;
             $data = array("message" => "Product Updated with issues, edit again", "status" => "success");
         }
+    } elseif (strpos($conn->error, "Duplicate entry") === 0) {
+        $data = array("message" => "Already Added, try something else", "status" => "duplicate_error");
     } else {
         $data = array("message" => "Something went wrong!", "status" => "server_error");
     }

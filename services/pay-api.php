@@ -25,7 +25,7 @@ try {
     ));
     $id = $conn->real_escape_string($response['id']);
     # print_r($response);
-    $sql = "UPDATE `orders` SET `paid`=1 WHERE `oid`=$oid";
+    $sql = "UPDATE `orders` SET `paid`=1 WHERE `_oid`=$oid";
     $conn->query($sql);
     header("Location:$response[longurl]");
 } catch (Exception $e) {

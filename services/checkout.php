@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         }
         $aid = $add_id;
         if (isset($aid)) {
-            $sql = "INSERT INTO `orders` (`_uid`, `_aid`) VALUES($uid, $aid)";
+            $sql = "INSERT INTO `orders` (`_uid`, `_aid`, `time`) VALUES($uid, $aid, , CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '+05:30'))";
             if ($conn->query($sql)) {
                 $oid = $conn->insert_id;
                 $sql = "";

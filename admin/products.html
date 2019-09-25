@@ -52,6 +52,18 @@ if (
             margin-top: -1px;
             margin-bottom: -1px;
         }
+
+        .input-field .pos-abs {
+            line-height: 42px;
+            font-size: 16px;
+            color: #888888;
+        }
+
+        .input-field #url,
+        .input-field #eurl {
+            padding-left: 170px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
@@ -72,8 +84,7 @@ if (
                                 $result = $conn->query($sql);
                                 while ($nav = $result->fetch_assoc()) { ?>
                             <option value="<?= $nav['url'] ?>"
-                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>
-                                ><?= !empty($nav['parent_t']) ? "<small>".(($nav['parent_t'] != "Cakes") ? "Cakes > " : "") . $nav['parent_t'] . " > </small> " .$nav['title'] : $nav['title'] ?>
+                                <?= ((isset($_GET['url']) and $_GET['url'] == $nav['url']) ? 'selected' : '') ?>><?= !empty($nav['parent_t']) ? "<small>". $nav['parent_t'] . " > </small> " .$nav['title'] : $nav['title'] ?>
                             </option>
                             <?php } ?>
                         </select></div>
@@ -97,7 +108,7 @@ if (
                             <th class="pl-4">#</th>
                             <th>Name</th>
                             <th>Category</th>
-                            <th>Description</th>
+                            <th>URL</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -116,7 +127,8 @@ if (
                                 <?= $prod['cat_title'] ?>
                             </td>
                             <td>
-                                <?= $prod['description'] ?>
+                                <a target="_blank"
+                                    href="product/<?= $prod['url'] ?>">apsarafoods.in/product/<?= $prod['url'] ?></a>
                             </td>
 
                             <td>
@@ -180,8 +192,7 @@ if (
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"
-                            ><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
+                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ?  $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
                         </option>
                         <?php } ?>
                     </select>
@@ -234,6 +245,10 @@ if (
                     </div>
                 </div>
                 <div class="input-field">
+                    <span class="pos-abs">apsarafoods.in/product/</span>
+                    <input id="url" type="text" class="validate" name="url" minlength="3">
+                </div>
+                <div class="input-field">
                     <textarea id="description" class="materialize-textarea" name="desc"></textarea>
                     <label for="description">Description</label>
                     <span class="helper-text">Optional</span>
@@ -272,8 +287,7 @@ if (
                             $conn = DB::getConnection();
                             $result = $conn->query($sql);
                             while ($user = $result->fetch_assoc()) { ?>
-                        <option value="<?= $user['_tid'] ?>"
-                            ><?= !empty($user['parent_t']) ? "Cakes > ". $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
+                        <option value="<?= $user['_tid'] ?>"><?= !empty($user['parent_t']) ? $user['parent_t'] . " > " .$user['title'] : $user['title'] ?>
                         </option>
                         <?php } ?>
                     </select>
@@ -310,6 +324,10 @@ if (
                             <img src="uploads/products/placeholder.jpg" id="eholder" class="w-full hide mx-auto" />
                         </div>
                     </div>
+                </div>
+                <div class="input-field">
+                    <span class="pos-abs">apsarafoods.in/product/</span>
+                    <input id="eurl" type="text" class="validate" name="url" required minlength="3">
                 </div>
                 <input name="prev_image" type="text" id="prev_image" class="hide" />
                 <div class="input-field">
